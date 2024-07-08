@@ -1,5 +1,5 @@
-#Test
-API_URL=http://118.67.217.203:8096/
+#----------Local Rony API--------------
+API_URL=http://192.168.50.40/
 #clents info
 GRANT_TYPE=client_credentials
 CLIENT_ID=MASTER_CLIENT

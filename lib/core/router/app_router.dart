@@ -9,6 +9,7 @@ import 'package:school_of_future/features/presentation/login/bloc/login_bloc.dar
 import 'package:school_of_future/features/presentation/login/view/login_screen.dart';
 import 'package:school_of_future/features/presentation/splash/bloc/splash_bloc.dart';
 import 'package:school_of_future/features/presentation/splash/view/splash.dart';
+import 'package:school_of_future/features/presentation/student/dashboard/view/student_dashboard_screen.dart';
 
 class AppRouter {
   Route<dynamic>? generateRoute(RouteSettings settings) {
@@ -29,6 +30,15 @@ class AppRouter {
             create: (context) => LoginBloc(getIt<IFlutterNavigator>(),
                 getIt<ApiRepo>(), getIt<LocalStorageRepo>()),
             child: LoginScreen(),
+          ),
+        );
+
+      case studentDashboard:
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (context) => LoginBloc(getIt<IFlutterNavigator>(),
+                getIt<ApiRepo>(), getIt<LocalStorageRepo>()),
+            child: const StudentDhasboard(),
           ),
         );
 

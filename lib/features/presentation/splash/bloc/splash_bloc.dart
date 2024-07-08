@@ -29,11 +29,9 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
 
       if (loginToken != null) {
         // _iFlutterNavigator.pushReplacement(OnBoardScreen.route());
-        print("object=======");
+        Navigator.popAndPushNamed(_iFlutterNavigator.context, login);
       } else {
         Navigator.popAndPushNamed(_iFlutterNavigator.context, login);
-
-        print("object=======");
       }
       //  _iFlutterNavigator.pushReplacement(HomeScreen.route());
     });

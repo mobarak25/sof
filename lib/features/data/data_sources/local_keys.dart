@@ -1,2 +1,2 @@
 const String tokenDB = 'tokenDB';
-const String flutterRepositoryDB = 'flutterRepositoryDB';
+const String userTypeDB = 'userTypeDB';

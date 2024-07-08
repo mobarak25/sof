@@ -1,19 +1,19 @@
 import 'dart:async';
-import 'dart:convert';
-
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:school_of_future/core/form_validator/validator.dart';
 import 'package:school_of_future/core/navigator/iflutter_navigator.dart';
+import 'package:school_of_future/core/navigator/navigator_key.dart';
+import 'package:school_of_future/core/router/route_constents.dart';
 import 'package:school_of_future/core/utils/enums.dart';
 import 'package:school_of_future/features/data/data_sources/local_keys.dart';
 import 'package:school_of_future/features/data/data_sources/remote_constants.dart';
 import 'package:school_of_future/features/data/model/login.dart';
 import 'package:school_of_future/features/domain/entities/login_response.dart';
+import 'package:school_of_future/features/domain/entities/me_response.dart';
 import 'package:school_of_future/features/domain/repositories/api_repo.dart';
 import 'package:school_of_future/features/domain/repositories/local_storage_repo.dart';
-import 'package:http/http.dart' as http;
 
 part 'login_event.dart';
 part 'login_state.dart';
@@ -25,6 +25,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<ChangeUserName>(_changeUserName);
     on<ChangePassword>(_changePassword);
     on<PressToLogin>(_pressToLogin);
+    on<GetMe>(_getMe);
   }
 
   final IFlutterNavigator _iFlutterNavigator;
@@ -51,20 +52,34 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       emit(state.copyWith(loading: true));
       final loginResponse = await _apiRepo.post<LoginResponse>(
         endpoint: loginEndPoint,
-        body: Login(
-          username: state.userName,
-          password: state.password,
-        ),
+        body: Login(username: state.userName, password: state.password),
       );
       if (loginResponse != null) {
-        //  _iFlutterNavigator.pushReplacement(OnBoardScreen.route());
         await _localStorageRepo.write(
             key: tokenDB, value: loginResponse.accessToken!);
-        print(loginResponse.accessToken);
+
+        add(GetMe());
       }
       emit(state.copyWith(loading: false));
     } else {
       emit(state.copyWith(forms: Forms.invalid));
+    }
+  }
+
+  FutureOr<void> _getMe(GetMe event, Emitter<LoginState> emit) async {
+    /*
+    Here Note:
+    We use user_ype = 3 as a student;
+    */
+    final meResponse = await _apiRepo.get<MeResponse>(endpoint: meEndPoint);
+    if (meResponse != null) {
+      if (meResponse.userType == 3) {
+        Navigator.pushReplacementNamed(
+            _iFlutterNavigator.context, studentDashboard);
+      }
+
+      await _localStorageRepo.write(
+          key: userTypeDB, value: meResponse.userType.toString());
     }
   }
 

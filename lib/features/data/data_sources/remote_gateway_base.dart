@@ -38,10 +38,9 @@ class RemoteGatewayBase {
 
   Future<T?> postMethod<T, K>(
       {required String endpoint, dynamic data, String? token}) async {
-    final body = json.encode(data);
     dynamic responseJson;
 
-    final headers = _createHeaders(token: token, body: body);
+    final headers = _createHeaders(token: token);
     try {
       final body = json.encode(data);
 
@@ -125,14 +124,10 @@ class RemoteGatewayBase {
     return null;
   }
 
-  Map<String, String>? _createHeaders({String? token, String? body}) {
+  Map<String, String>? _createHeaders({String? token}) {
     return <String, String>{
       'Content-Type': 'application/json',
-      //'Content-Length': '${body!.length}',
-      //'Host': '192.168.50.40',
-      //'Accept': '*/*',
-      // 'Accept-Encoding': 'gzip, deflate, br',
-      // 'Connection': 'keep-alive',
+      'Accept': 'application/json',
       'Authorization':
           'Bearer ${token ?? _localStorageRepo.read(key: tokenDB) ?? ''}',
     };
@@ -169,7 +164,8 @@ class RemoteGatewayBase {
         NotFoundException(error(body), navigator);
         break;
       case 401:
-        UnauthorizedException(error(body), navigator, _localStorageRepo);
+        //UnauthorizedException(error(body), navigator, _localStorageRepo);
+        InvalidInputException(error(body), navigator);
         break;
       case 403:
         UnauthorizedException(error(body), navigator, _localStorageRepo);

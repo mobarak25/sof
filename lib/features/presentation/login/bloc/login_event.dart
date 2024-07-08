@@ -27,3 +27,10 @@ class PressToLogin extends LoginEvent {
   final FocusNode userNameFocusNode;
   final FocusNode passwordFocusNode;
 }
+
+class GetMe extends LoginEvent {}
+
+class GoToDashboard extends LoginEvent {
+  const GoToDashboard({required this.userType});
+  final int userType;
+}

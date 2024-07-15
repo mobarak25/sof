@@ -26,10 +26,15 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
       IsLoggedInCheck event, Emitter<SplashState> emit) {
     Timer(const Duration(seconds: 2), () {
       final loginToken = _localStorageRepo.read(key: tokenDB);
+      final userType = _localStorageRepo.read(key: userTypeDB);
 
-      if (loginToken != null) {
-        // _iFlutterNavigator.pushReplacement(OnBoardScreen.route());
-        Navigator.popAndPushNamed(_iFlutterNavigator.context, login);
+      /*
+        Here Note:
+        We use user_ype = 3 as a student;
+      */
+
+      if (loginToken != null && userType == '3') {
+        Navigator.popAndPushNamed(_iFlutterNavigator.context, studentDashboard);
       } else {
         Navigator.popAndPushNamed(_iFlutterNavigator.context, login);
       }

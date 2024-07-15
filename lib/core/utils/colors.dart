@@ -9,6 +9,7 @@ const bGreen = Color(0xFF2BB673);
 const bJungleGreen = Color(0xFF22B39F);
 const bRed = Color(0xFFE31E18);
 const bGreenExtraLight = Color(0xFFDDF5EE);
+const bTransparentColor = Colors.transparent;
 
 //------------- gray color --------------
 const bGray = Color(0xFF8C8C8C);

@@ -9,6 +9,7 @@ import 'package:school_of_future/features/presentation/login/bloc/login_bloc.dar
 import 'package:school_of_future/features/presentation/login/view/login_screen.dart';
 import 'package:school_of_future/features/presentation/splash/bloc/splash_bloc.dart';
 import 'package:school_of_future/features/presentation/splash/view/splash.dart';
+import 'package:school_of_future/features/presentation/student/dashboard/bloc/student_dashboard_bloc.dart';
 import 'package:school_of_future/features/presentation/student/dashboard/view/student_dashboard_screen.dart';
 
 class AppRouter {
@@ -32,13 +33,15 @@ class AppRouter {
             child: LoginScreen(),
           ),
         );
-
       case studentDashboard:
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
-            create: (context) => LoginBloc(getIt<IFlutterNavigator>(),
-                getIt<ApiRepo>(), getIt<LocalStorageRepo>()),
-            child: const StudentDhasboard(),
+            create: (context) => StudentDashboardBloc(
+              getIt<ApiRepo>(),
+              getIt<IFlutterNavigator>(),
+              getIt<LocalStorageRepo>(),
+            ),
+            child: StudentDhasboard(),
           ),
         );
 

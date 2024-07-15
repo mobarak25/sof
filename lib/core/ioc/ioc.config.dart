@@ -18,6 +18,7 @@ import 'package:school_of_future/features/data/repositories/local_storage_repo_i
 import 'package:school_of_future/features/domain/repositories/api_repo.dart';
 import 'package:school_of_future/features/domain/repositories/get_location_repo.dart';
 import 'package:school_of_future/features/domain/repositories/local_storage_repo.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 /// initializes the registration of provided dependencies inside of [GetIt]
 
@@ -29,6 +30,7 @@ i1.GetIt $initGetIt(i1.GetIt sl,
 
   gh.lazySingleton(() => GetStorage());
   gh.lazySingleton(() => ImagePicker());
+  gh.lazySingleton(() => PanelController());
 
   gh.lazySingleton<LocalStorageRepo>(() => LocalStorageRepoImpl(sl()));
   gh.lazySingleton(() => InternetConnectionChecker());

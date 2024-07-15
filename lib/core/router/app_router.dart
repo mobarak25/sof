@@ -7,6 +7,8 @@ import 'package:school_of_future/features/domain/repositories/local_storage_repo
 import 'package:school_of_future/core/router/route_constents.dart';
 import 'package:school_of_future/features/presentation/login/bloc/login_bloc.dart';
 import 'package:school_of_future/features/presentation/login/view/login_screen.dart';
+import 'package:school_of_future/features/presentation/menu/bloc/menu_bloc.dart';
+import 'package:school_of_future/features/presentation/menu/view/menu_screen.dart';
 import 'package:school_of_future/features/presentation/splash/bloc/splash_bloc.dart';
 import 'package:school_of_future/features/presentation/splash/view/splash.dart';
 import 'package:school_of_future/features/presentation/student/dashboard/bloc/student_dashboard_bloc.dart';
@@ -42,6 +44,17 @@ class AppRouter {
               getIt<LocalStorageRepo>(),
             ),
             child: StudentDhasboard(),
+          ),
+        );
+      case menuScreen:
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (context) => MenuBloc(
+              getIt<ApiRepo>(),
+              getIt<IFlutterNavigator>(),
+              getIt<LocalStorageRepo>(),
+            ),
+            child: const MenuScreen(),
           ),
         );
 

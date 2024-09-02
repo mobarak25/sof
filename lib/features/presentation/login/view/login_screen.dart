@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:school_of_future/core/router/route_constents.dart';
 import 'package:school_of_future/core/utils/asset_image.dart';
 import 'package:school_of_future/core/utils/colors.dart';
 import 'package:school_of_future/core/utils/enums.dart';
@@ -45,7 +46,10 @@ class LoginScreen extends StatelessWidget {
                         mainAxisSize: MainAxisSize.max,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Image.asset(sofLogo),
+                          Image.asset(
+                            classTuneLogo,
+                            width: 200,
+                          ),
                           const SizedBox(height: 40),
                           const TextB(
                             text: "Sign In To Your Account",
@@ -111,12 +115,16 @@ class LoginScreen extends StatelessWidget {
                             children: [
                               InkWell(
                                 onTap: () {
-                                  // bloc.add(ForgotPassword());
+                                  Navigator.pushNamed(
+                                      context, forgotPasswordStep1);
                                 },
-                                child: const TextB(
-                                  text: "Forgot Password ?",
-                                  textStyle: bBody2M,
-                                  fontColor: bJungleGreen,
+                                child: const Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 10),
+                                  child: TextB(
+                                    text: "Forgot Password ?",
+                                    textStyle: bBody2M,
+                                    fontColor: bJungleGreen,
+                                  ),
                                 ),
                               ),
                             ],

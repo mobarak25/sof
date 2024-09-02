@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:school_of_future/core/utils/colors.dart';
 
 class Body extends StatelessWidget {
   const Body({
     super.key,
     this.child,
+    this.drawerChild,
     this.isFullScreen = false,
     this.horizontalPadding = 15,
     this.bottomNav,
@@ -11,6 +13,7 @@ class Body extends StatelessWidget {
   });
 
   final Widget? child;
+  final Widget? drawerChild;
   final bool isFullScreen;
   final double horizontalPadding;
   final Widget? bottomNav;
@@ -20,14 +23,13 @@ class Body extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: kScaffoldBGColor,
       appBar: appBar,
+      endDrawer: Drawer(child: drawerChild),
       body: Container(
         height: size.height,
         width: size.width,
         padding: EdgeInsets.only(
-          top: isFullScreen ? 0 : MediaQuery.of(context).padding.top,
-          bottom: isFullScreen ? 0 : MediaQuery.of(context).padding.bottom,
           left: isFullScreen ? 0 : horizontalPadding,
           right: isFullScreen ? 0 : horizontalPadding,
         ),

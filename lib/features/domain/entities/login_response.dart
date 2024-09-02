@@ -2,7 +2,7 @@ class LoginResponse {
   final String? accessToken;
   final String? refreshToken;
   final String? tokenType;
-  final int? expiresIn;
+  final num? expiresIn;
 
   const LoginResponse({
     this.accessToken,

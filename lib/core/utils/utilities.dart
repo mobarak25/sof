@@ -1,5 +1,5 @@
 //Date DateFormat===============
-import 'package:flutter/material.dart';
+
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
@@ -81,4 +81,23 @@ class TabItem {
   const TabItem({required this.title, required this.image});
   final String title;
   final String image;
+}
+
+T data<T>(T value) {
+  return value;
+}
+
+String buildUrl(String baseUrl, Map<String, dynamic> queryParams) {
+  final queryString = queryParams.entries
+      .where((entry) =>
+          entry.value.toString().isNotEmpty) // Only include non-empty values
+      .map((entry) =>
+          '${Uri.encodeComponent(entry.key)}=${Uri.encodeComponent(entry.value.toString())}')
+      .join('&');
+
+  return queryString.isNotEmpty ? '$baseUrl?$queryString' : baseUrl;
+}
+
+String getFileName(String path) {
+  return path.split('/').last;
 }

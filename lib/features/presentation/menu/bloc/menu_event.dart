@@ -10,3 +10,10 @@ sealed class MenuEvent extends Equatable {
 class LogOut extends MenuEvent {}
 
 class ConfirmedLogout extends MenuEvent {}
+
+class ChangeLanguage extends MenuEvent {
+  const ChangeLanguage({required this.context});
+  final BuildContext context;
+}
+
+class UserType extends MenuEvent {}

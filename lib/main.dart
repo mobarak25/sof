@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -19,13 +20,20 @@ Future<void> main() async {
     await dotenv.load(fileName: ".env");
   }
   WidgetsFlutterBinding.ensureInitialized();
-
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   configureDependencies();
-
   await initGetStorage();
-
-  runApp(const MyApp());
+  await EasyLocalization.ensureInitialized();
+  runApp(
+    EasyLocalization(
+      supportedLocales: const [Locale('bn', 'BD'), Locale('en', 'US')],
+      path: 'lib/core/translations',
+      fallbackLocale: const Locale('bn', 'BD'),
+      saveLocale: true,
+      startLocale: const Locale('bn', 'BD'),
+      child: const MyApp(),
+    ),
+  );
 }
 
 Future<void> initGetStorage() async {

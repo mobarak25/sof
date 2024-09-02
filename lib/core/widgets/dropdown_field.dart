@@ -16,6 +16,7 @@ class DropdownFieldB extends StatefulWidget {
       this.borderColor = bGray12,
       this.bgColor = bWhite,
       this.label = '',
+      this.labelColor = bGray,
       this.isMandatory = false,
       this.dropDownValue,
       this.hint = 'Select'});
@@ -26,7 +27,7 @@ class DropdownFieldB extends StatefulWidget {
   final Function selected;
   final bool setState;
   final String errorText;
-  final Color borderColor, bgColor;
+  final Color borderColor, bgColor, labelColor;
   final String label;
   final bool isMandatory;
   final dynamic dropDownValue;
@@ -62,7 +63,7 @@ class _DropdownFieldBState extends State<DropdownFieldB> {
                       maxLines: 1,
                       text: widget.label,
                       textStyle: bBody1,
-                      fontColor: bGray,
+                      fontColor: widget.labelColor,
                     ),
                   ),
                   const SizedBox(width: 5),

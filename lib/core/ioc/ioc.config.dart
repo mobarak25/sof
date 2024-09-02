@@ -5,11 +5,13 @@
 // InjectableConfigGenerator
 // **************************************************************************
 
+import 'package:flutter_quill/flutter_quill.dart';
 import 'package:get_it/get_it.dart' as i1;
 import 'package:image_picker/image_picker.dart';
 import 'package:injectable/injectable.dart' as i2;
 import 'package:get_storage/get_storage.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:school_of_future/core/file_picker/file_picker_service.dart';
 import 'package:school_of_future/core/navigator/flutter_navigator.dart';
 import 'package:school_of_future/core/navigator/iflutter_navigator.dart';
 import 'package:school_of_future/core/network_info/network_info.dart';
@@ -31,12 +33,14 @@ i1.GetIt $initGetIt(i1.GetIt sl,
   gh.lazySingleton(() => GetStorage());
   gh.lazySingleton(() => ImagePicker());
   gh.lazySingleton(() => PanelController());
+  gh.lazySingleton(() => QuillController.basic());
 
   gh.lazySingleton<LocalStorageRepo>(() => LocalStorageRepoImpl(sl()));
   gh.lazySingleton(() => InternetConnectionChecker());
   gh.lazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
   gh.lazySingleton<ApiRepo>(() => ApiRepoImpl(sl()));
   gh.lazySingleton<GetLocationRepo>(() => GetLocationRepoImpl());
+  gh.lazySingleton<FilePickerRepo>(() => FilePickerRepoImpl());
 
   return sl;
 }

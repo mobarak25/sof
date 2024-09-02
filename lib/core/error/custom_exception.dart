@@ -1,7 +1,7 @@
 import 'package:school_of_future/core/error/custom_error.dart';
 import 'package:school_of_future/core/navigator/iflutter_navigator.dart';
 import 'package:school_of_future/core/snackbar/show_snackbar.dart';
-import 'package:school_of_future/features/data/data_sources/local_keys.dart';
+import 'package:school_of_future/features/data/data_sources/local_db_keys.dart';
 import 'package:school_of_future/features/domain/repositories/local_storage_repo.dart';
 
 const String unknownError = 'Unknown Error';

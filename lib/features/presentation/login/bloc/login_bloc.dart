@@ -7,7 +7,7 @@ import 'package:school_of_future/core/navigator/iflutter_navigator.dart';
 import 'package:school_of_future/core/navigator/navigator_key.dart';
 import 'package:school_of_future/core/router/route_constents.dart';
 import 'package:school_of_future/core/utils/enums.dart';
-import 'package:school_of_future/features/data/data_sources/local_keys.dart';
+import 'package:school_of_future/features/data/data_sources/local_db_keys.dart';
 import 'package:school_of_future/features/data/data_sources/remote_constants.dart';
 import 'package:school_of_future/features/data/model/login.dart';
 import 'package:school_of_future/features/domain/entities/login_response.dart';
@@ -26,6 +26,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<ChangePassword>(_changePassword);
     on<PressToLogin>(_pressToLogin);
     on<GetMe>(_getMe);
+    on<GoToSelectChild>(_goToSelectChild);
   }
 
   final IFlutterNavigator _iFlutterNavigator;
@@ -68,19 +69,41 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   FutureOr<void> _getMe(GetMe event, Emitter<LoginState> emit) async {
     /*
-    Here Note:
-    We use user_ype = 3 as a student;
+      Here Note:
+      user_ype = 2 as a teacher;
+      user_ype = 3 as a student;
+      user_ype = 4 as a parent;
     */
     final meResponse = await _apiRepo.get<MeResponse>(endpoint: meEndPoint);
     if (meResponse != null) {
-      if (meResponse.userType == 3) {
-        Navigator.pushReplacementNamed(
-            _iFlutterNavigator.context, studentDashboard);
-      }
-
       await _localStorageRepo.write(
           key: userTypeDB, value: meResponse.userType.toString());
+
+      if (meResponse.student != null) {
+        await _localStorageRepo.write(
+            key: loginIdDB, value: meResponse.student!.id!.toString());
+      }
+      if (meResponse.employee != null) {
+        await _localStorageRepo.write(
+            key: loginIdDB, value: meResponse.employee!.id!.toString());
+      }
+      //get profile data=========
+
+      if (meResponse.userType == 3) {
+        // Navigator.pushReplacementNamed(
+        //     _iFlutterNavigator.context, studentDashboard);
+        _iFlutterNavigator.pushReplacementNamed(studentDashboard);
+      } else if (meResponse.userType == 4) {
+        add(GoToSelectChild());
+      } else if (meResponse.userType == 2) {
+        _iFlutterNavigator.pushReplacementNamed(studentDashboard);
+      }
     }
+  }
+
+  FutureOr<void> _goToSelectChild(
+      GoToSelectChild event, Emitter<LoginState> emit) {
+    _iFlutterNavigator.pushReplacementNamed(selectChild);
   }
 
   bool isValid(PressToLogin event) {

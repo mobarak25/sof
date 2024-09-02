@@ -27,7 +27,7 @@ class ButtonB extends StatelessWidget {
     super.key,
     required this.text,
     this.textColor = bWhite,
-    this.bgColor = bJungleGreen,
+    this.bgColor = bPrimaryColor,
     this.svgIcon = '',
     this.svgIconSize,
     this.borderColor = Colors.transparent,
@@ -94,6 +94,7 @@ class ButtonB extends StatelessWidget {
                 text: text!,
                 fontColor: textColor,
                 textStyle: bBody1M,
+                fontSize: fontSize,
               ),
               const SizedBox(width: 20),
               if (iconPosition == 'right')

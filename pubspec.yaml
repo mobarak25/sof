@@ -33,6 +33,18 @@ dependencies:
   dotted_border: ^2.1.0
   sliding_up_panel: ^2.0.0+1
   gap: ^3.0.1
+  easy_localization: ^3.0.7
+  youtube_player_flutter: ^9.0.1
+  url_launcher: ^6.3.0
+  flutter_markdown: ^0.7.3
+  html2md: ^1.3.2
+  flutter_html: ^3.0.0-beta.2
+  flutter_widget_from_html_core: ^0.15.1
+  package_info_plus: ^8.0.1
+  file_picker: ^8.0.3
+  webview_flutter: ^4.8.0
+  flutter_quill: ^9.2.3
+  quill_json_to_html: ^1.0.1
 
 dev_dependencies:
   flutter_test:
@@ -45,6 +57,12 @@ flutter:
 
   assets:
     - assets/images/
+    - assets/images/feature_icons/
+    - assets/images/feature_icons_svg/
+    - assets/images/subject_images_svgs/
+    # - assets/lottie/
+    # - assets/translations/
+    # - assets/webpages/
     - assets/images/svg/
     - lib/core/translations/
     - .env

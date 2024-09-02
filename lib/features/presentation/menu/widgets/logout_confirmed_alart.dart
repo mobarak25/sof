@@ -1,5 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:school_of_future/core/translations/local_keys.dart';
 import 'package:school_of_future/core/utils/colors.dart';
 import 'package:school_of_future/core/utils/text_styles.dart';
 import 'package:school_of_future/core/widgets/button.dart';
@@ -13,11 +15,11 @@ Future<void> showConfirmedDialog(BuildContext context,
     builder: (BuildContext context) {
       return AlertDialog(
         insetPadding: const EdgeInsets.all(10),
-        title: const TextB(
-          text: 'Logout',
+        title: TextB(
+          text: LocaleKeys.logout.tr(),
           textStyle: bHead6B,
         ),
-        content: const Text('Are you sure you want to logout? '),
+        content: Text('${LocaleKeys.logoutConfirm.tr()} ?'),
         actions: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -28,7 +30,7 @@ Future<void> showConfirmedDialog(BuildContext context,
                   borderColor: bJungleGreen,
                   textColor: bJungleGreen,
                   heigh: 60,
-                  text: "Cancel",
+                  text: LocaleKeys.cancel.tr(),
                   press: () {
                     Navigator.of(context).pop();
                   },
@@ -38,7 +40,7 @@ Future<void> showConfirmedDialog(BuildContext context,
               Expanded(
                 child: ButtonB(
                   heigh: 60,
-                  text: "Yes",
+                  text: LocaleKeys.yes.tr(),
                   press: () {
                     pressToYes();
                   },

@@ -1,10 +1,11 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:in_app_update/in_app_update.dart';
 import 'package:school_of_future/core/ioc/global.dart';
 import 'package:school_of_future/core/navigator/iflutter_navigator.dart';
 import 'package:school_of_future/core/router/app_router.dart';
 import 'package:school_of_future/core/router/route_constents.dart';
-import 'package:school_of_future/features/presentation/splash/view/splash.dart';
+import 'package:school_of_future/core/utils/colors.dart';
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -48,7 +49,17 @@ class _MyApp extends State<MyApp> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales,
+      locale: context.locale,
       theme: ThemeData(
+        primaryColor: bPrimaryColor,
+        appBarTheme: const AppBarTheme(
+          backgroundColor: bWhite,
+          elevation: 0,
+          centerTitle: true,
+          iconTheme: IconThemeData(color: bPrimaryColor),
+        ),
         fontFamily: 'ubuntu',
       ),
       title: 'School of future',

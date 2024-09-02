@@ -34,3 +34,5 @@ class GoToDashboard extends LoginEvent {
   const GoToDashboard({required this.userType});
   final int userType;
 }
+
+class GoToSelectChild extends LoginEvent {}

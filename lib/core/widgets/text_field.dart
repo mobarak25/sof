@@ -19,7 +19,7 @@ class TextFieldB extends StatefulWidget {
   final TextAlign? textAlign;
   final VoidCallback? onTouch;
   final Function onChanged;
-  final Color? bgColor, hintColor;
+  final Color? bgColor, hintColor, borderColor;
   final bool isMandatory;
   final double labelSize;
   final bool loading;
@@ -51,6 +51,7 @@ class TextFieldB extends StatefulWidget {
       this.isReadOnly = false,
       this.isMandatory = false,
       this.hintColor,
+      this.borderColor,
       this.labelSize = 16,
       this.loading = false,
       this.isDate = false});
@@ -169,7 +170,7 @@ class _TextField extends State<TextFieldB> {
                 borderRadius: BorderRadius.circular(7),
               ),
               enabledBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: bGray),
+                borderSide: BorderSide(color: widget.borderColor ?? bGray),
                 borderRadius: BorderRadius.circular(7),
               ),
             ),

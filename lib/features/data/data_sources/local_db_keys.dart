@@ -1,0 +1,9 @@
+const String tokenDB = 'tokenDB';
+const String userTypeDB = 'userTypeDB';
+const String loginIdDB = 'loginIdDB';
+const String isChildSelectDB = 'isChildSelectDB';
+const String profileDB = 'profileDB';
+const String profileAttendanceDB = 'profileAttendanceDB';
+const String subjectListDB = 'subjectListDB';
+const String dashboardNoticeDb = 'dashboardNoticeDb';
+const String dashboardDueTaskDB = 'dashboardDueTaskDB';

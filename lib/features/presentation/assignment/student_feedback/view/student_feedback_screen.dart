@@ -16,9 +16,15 @@ class StudentFeedbackScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scroll = ScrollController();
     return BlocBuilder<StudentFeedbackBloc, StudentFeedbackState>(
       builder: (context, state) {
         final bloc = context.read<StudentFeedbackBloc>();
+        scroll.addListener(() {
+          if (scroll.position.pixels == scroll.position.maxScrollExtent) {
+            bloc.add(PageIncrement());
+          }
+        });
         return Body(
           isFullScreen: true,
           appBar: FutureAppBar(
@@ -30,6 +36,7 @@ class StudentFeedbackScreen extends StatelessWidget {
             color: bWhite,
             child: state.feedback.data != null
                 ? ListView(
+                    controller: scroll,
                     children: state.feedback.data!.isEmpty
                         ? [
                             Center(
@@ -55,7 +62,6 @@ class StudentFeedbackScreen extends StatelessWidget {
                                         value: state
                                             .feedback.data![index].createdAt!,
                                         formate: "dd/MM/yyyy"),
-                                    // "11/04/2021 04:23pm",
                                     fontColor: bBlueColor,
                                   ),
                                   const Gap(10),
@@ -67,6 +73,22 @@ class StudentFeedbackScreen extends StatelessWidget {
                                 ],
                               ),
                             ),
+                            if (state.incrementLoader)
+                              const Padding(
+                                padding: EdgeInsets.only(top: 20, bottom: 30),
+                                child: CircularProgressIndicator(
+                                  color: kPrimaryColor,
+                                ),
+                              ),
+                            if (!state.incrementLoader && state.isEndList)
+                              const Padding(
+                                padding: EdgeInsets.only(top: 15, bottom: 30),
+                                child: TextB(
+                                  text: "End of the list",
+                                  textStyle: bBase2M,
+                                  fontColor: bRed,
+                                ),
+                              ),
                           ],
                   )
                 : const Center(
@@ -78,3 +100,5 @@ class StudentFeedbackScreen extends StatelessWidget {
     );
   }
 }
+
+//TODO: Add pagination

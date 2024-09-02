@@ -11,3 +11,5 @@ class GetFeedback extends StudentFeedbackEvent {
   const GetFeedback({required this.id});
   final int id;
 }
+
+class PageIncrement extends StudentFeedbackEvent {}

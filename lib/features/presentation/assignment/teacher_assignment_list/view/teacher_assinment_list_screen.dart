@@ -1,11 +1,12 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:school_of_future/core/router/route_constents.dart';
 import 'package:school_of_future/core/translations/local_keys.dart';
 import 'package:school_of_future/core/utils/colors.dart';
-import 'package:school_of_future/core/utils/utilities.dart';
+import 'package:school_of_future/core/utils/text_styles.dart';
 import 'package:school_of_future/core/widgets/app_bar.dart';
 import 'package:school_of_future/core/widgets/body.dart';
 import 'package:school_of_future/core/widgets/button.dart';
@@ -13,12 +14,13 @@ import 'package:school_of_future/core/widgets/date_picker.dart';
 import 'package:school_of_future/core/widgets/dropdown_field.dart';
 import 'package:school_of_future/core/widgets/text.dart';
 import 'package:school_of_future/core/widgets/text_field.dart';
-import 'package:school_of_future/features/presentation/assignment/student_assignment_list/bloc/student_assignment_list_bloc.dart';
 import 'package:school_of_future/core/widgets/custom_tab.dart';
 import 'package:school_of_future/features/presentation/assignment/student_assignment_list/widgets/assignment_item.dart';
+import 'package:school_of_future/features/presentation/assignment/teacher_assignment_list/bloc/teacher_assignment_list_bloc.dart';
+import 'package:school_of_future/features/presentation/assignment/teacher_assignment_list/widgets/assignment_card.dart';
 
-class StudentAssinmentListScreen extends StatelessWidget {
-  const StudentAssinmentListScreen({super.key});
+class TeacherAssinmentListScreen extends StatelessWidget {
+  const TeacherAssinmentListScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -27,9 +29,9 @@ class StudentAssinmentListScreen extends StatelessWidget {
     final startDateController = TextEditingController();
     final endDateController = TextEditingController();
 
-    return BlocBuilder<StudentAssignmentListBloc, StudentAssignmentListState>(
+    return BlocBuilder<TeacherAssignmentListBloc, TeacherAssignmentListState>(
       builder: (context, state) {
-        final bloc = context.read<StudentAssignmentListBloc>();
+        final bloc = context.read<TeacherAssignmentListBloc>();
         return Body(
           isFullScreen: true,
           appBar: FutureAppBar(
@@ -112,15 +114,58 @@ class StudentAssinmentListScreen extends StatelessWidget {
                   ),
                   const Gap(30),
                   DropdownFieldB(
-                    dropdownHeight: 55,
+                    dropdownHeight: 50,
+                    label: LocaleKeys.version.tr(),
+                    labelColor: bBlack,
+                    dropDownValue: state.selectedVersionId,
+                    selected: (dynamic type) {
+                      bloc.add(SelectVersionId(id: type));
+                    },
+                    items: state.versionList,
+                  ),
+                  const Gap(10),
+                  DropdownFieldB(
+                    dropdownHeight: 50,
+                    label: LocaleKeys.classStr.tr(),
+                    labelColor: bBlack,
+                    dropDownValue: null,
+                    selected: (dynamic type) {
+                      // bloc.add(SelectSubjectId(id: type));
+                    },
+                    items: const [],
+                  ),
+                  const Gap(10),
+                  DropdownFieldB(
+                    dropdownHeight: 50,
                     label: LocaleKeys.subject.tr(),
                     labelColor: bBlack,
-                    dropDownValue: state.selectedSubId,
+                    dropDownValue: null,
                     selected: (dynamic type) {
-                      bloc.add(SelectSubjectId(id: type));
+                      // bloc.add(SelectSubjectId(id: type));
                     },
-                    items: state.subjectList,
+                    items: const [],
                   ),
+                  const Gap(10),
+                  DropdownFieldB(
+                    dropdownHeight: 50,
+                    label: LocaleKeys.section.tr(),
+                    labelColor: bBlack,
+                    dropDownValue: null,
+                    selected: (dynamic type) {
+                      // bloc.add(SelectSubjectId(id: type));
+                    },
+                    items: const [],
+                  ),
+                  // DropdownFieldB(
+                  //   dropdownHeight: 55,
+                  //   label: LocaleKeys.subject.tr(),
+                  //   labelColor: bBlack,
+                  //   dropDownValue: state.selectedSubId,
+                  //   selected: (dynamic type) {
+                  //     bloc.add(SelectSubjectId(id: type));
+                  //   },
+                  //   items: state.subjectList,
+                  // ),
                   const Gap(30),
                   ButtonB(
                     heigh: 60,
@@ -140,9 +185,8 @@ class StudentAssinmentListScreen extends StatelessWidget {
             child: CustomTab(
               loading: state.loading,
               tabList: [
-                LocaleKeys.due.tr(),
-                LocaleKeys.submitted.tr(),
-                LocaleKeys.completed.tr()
+                LocaleKeys.published.tr(),
+                LocaleKeys.draft.tr(),
               ],
               onTabChanged: (int tabIndex) {
                 bloc.add(DataForTab(tabIndex: tabIndex.toString()));
@@ -151,47 +195,38 @@ class StudentAssinmentListScreen extends StatelessWidget {
                 bloc.add(ChangeSearch(searchText: value));
               },
               child: state.assignmentList.data != null
-                  ? ListView.builder(
-                      itemCount: state.assignmentList.data!.length,
-                      itemBuilder: (context, position) {
-                        final datalist = state.assignmentList.data!;
-                        return Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.of(context, rootNavigator: true)
-                                    .pushNamed(
-                                  studentAssignmentDetailsScreen,
-                                  arguments: datalist[position].id,
-                                );
-                              },
-                              child: StudentAssignmentItem(
-                                subjectGroupId: datalist[position]
-                                    .subject!
-                                    .subjectGroup!
-                                    .id!,
-                                subjectName:
-                                    datalist[position].subject!.name ?? '',
-                                topicName: datalist[position].title ?? '',
-                                dueDate: getDate(
-                                    value: datalist[position].dueAt!,
-                                    formate: "dd MMM yyyy"),
-                                totalMark: "${datalist[position].marks}".tr(),
-                                daysLeft: "${datalist[position].daysLeft}".tr(),
-                                submissionStatus:
-                                    datalist[position].submissionStatus,
-                                draftStatus: datalist[position].status == 0,
-                                submissionRequired:
-                                    datalist[position].isSubmitable!,
-                              ),
-                            ),
-                            const Gap(15),
-                          ],
-                        );
-                      },
+                  ? Column(
+                      children: [
+                        Expanded(
+                          child: ListView.builder(
+                            itemCount: state.assignmentList.data!.length,
+                            itemBuilder: (context, position) {
+                              final dataItem =
+                                  state.assignmentList.data![position];
+                              return Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      // Navigator.of(context, rootNavigator: true).pushNamed(
+                                      //   studentAssignmentDetailsScreen,
+                                      //   arguments: datalist[position].id,
+                                      // );
+                                    },
+                                    child: AssignmentItemCard(
+                                      item: dataItem,
+                                    ),
+                                  ),
+                                  const Gap(15),
+                                ],
+                              );
+                            },
+                          ),
+                        ),
+                        const Gap(65),
+                      ],
                     )
-                  : const TextB(text: "loading..."),
+                  : const SizedBox(),
             ),
           ),
         );

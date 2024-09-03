@@ -12,6 +12,7 @@ import 'package:school_of_future/features/domain/entities/profile_attendance_res
 import 'package:school_of_future/features/domain/entities/student_assignment_submissign_details_response.dart';
 import 'package:school_of_future/features/domain/entities/student_profile_response.dart';
 import 'package:school_of_future/features/domain/entities/subject_item_response.dart';
+import 'package:school_of_future/features/domain/entities/teacher_assignment_response.dart';
 import 'package:school_of_future/features/domain/entities/teacher_profile_response.dart';
 
 class EntityMap {
@@ -47,6 +48,8 @@ class EntityMap {
         return StudentAssignmentDetails.fromJson(json) as T;
       case const (AssignmentFeedback):
         return AssignmentFeedback.fromJson(json) as T;
+      case const (TeacherAssignment):
+        return TeacherAssignment.fromJson(json) as T;
       default:
         throw Exception('Unknown class');
     }

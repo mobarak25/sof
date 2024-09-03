@@ -25,3 +25,6 @@ const studentAssignmentSubmitScreen = "/student-assignment-submit-screen";
 const studentAssignmentSubmissionDetailsScreen =
     "/student_assignment_submission_details";
 const studentAssignmentFeedbackScreen = "/student_assignment_feedback";
+
+//Teacher routes
+const teacherAssignmentListScreen = "/teacher-assignment-screen";

@@ -37,7 +37,7 @@ class DashboardNotice extends StatelessWidget {
           ),
           const Gap(30),
           ...List.generate(
-            3,
+            notice.noticeList!.length,
             (index) => Container(
               padding: const EdgeInsets.only(bottom: 20),
               child: Material(

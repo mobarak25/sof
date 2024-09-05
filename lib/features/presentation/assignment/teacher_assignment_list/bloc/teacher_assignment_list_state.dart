@@ -10,9 +10,12 @@ class TeacherAssignmentListState extends Equatable {
     this.startDate = '',
     this.endDate = '',
     this.subjectId = '',
+    this.setClass = false,
     this.selectedVersionId = -1,
+    this.selectedClassId = -1,
     this.assignmentList = const TeacherAssignment(),
     this.versionList = const [DropdownItem(name: 'Select Subject', value: -1)],
+    this.classList = const [],
   });
 
   final int page;
@@ -22,10 +25,13 @@ class TeacherAssignmentListState extends Equatable {
   final String searchText;
   final String startDate;
   final String endDate;
+  final bool setClass;
   final dynamic selectedVersionId;
+  final dynamic selectedClassId;
   final String subjectId;
   final TeacherAssignment assignmentList;
   final List<DropdownItem> versionList;
+  final List<DropdownItem> classList;
 
   TeacherAssignmentListState copyWith({
     int? page,
@@ -36,9 +42,12 @@ class TeacherAssignmentListState extends Equatable {
     String? startDate,
     String? endDate,
     String? subjectId,
+    bool? setClass,
     dynamic selectedVersionId,
+    dynamic selectedClassId,
     TeacherAssignment? assignmentList,
     List<DropdownItem>? versionList,
+    List<DropdownItem>? classList,
   }) {
     return TeacherAssignmentListState(
       page: page ?? this.page,
@@ -49,9 +58,12 @@ class TeacherAssignmentListState extends Equatable {
       startDate: startDate ?? this.startDate,
       endDate: endDate ?? this.endDate,
       subjectId: subjectId ?? this.subjectId,
+      setClass: setClass ?? false,
       selectedVersionId: selectedVersionId ?? this.selectedVersionId,
+      selectedClassId: selectedClassId ?? this.selectedClassId,
       assignmentList: assignmentList ?? this.assignmentList,
       versionList: versionList ?? this.versionList,
+      classList: classList ?? this.classList,
     );
   }
 
@@ -66,8 +78,11 @@ class TeacherAssignmentListState extends Equatable {
         startDate,
         endDate,
         subjectId,
+        setClass,
         selectedVersionId,
+        selectedClassId,
         versionList,
+        classList,
       ];
 }
 

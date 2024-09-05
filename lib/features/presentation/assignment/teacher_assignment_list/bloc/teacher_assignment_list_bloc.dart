@@ -26,12 +26,13 @@ class TeacherAssignmentListBloc
     on<GetSearchedAssignment>(_getSearchedAssignment);
     on<SelectStartDate>(_selectStartDate);
     on<SelectEndDate>(_selectEndDate);
-    on<GetSubjectList>(_getSubjectList);
+    on<GetVersionList>(_getVersionList);
     on<SelectVersionId>(_selectVersionId);
+    on<SelectClassId>(_selectClassId);
     on<PressFilter>(_pressFilter);
 
     add(DataForTab(tabIndex: state.activeTab.toString()));
-    add(GetSubjectList());
+    add(GetVersionList());
   }
 
   final ApiRepo _apiRepo;
@@ -117,8 +118,8 @@ class TeacherAssignmentListBloc
     emit(state.copyWith(endDate: date));
   }
 
-  FutureOr<void> _getSubjectList(
-      GetSubjectList event, Emitter<TeacherAssignmentListState> emit) async {
+  FutureOr<void> _getVersionList(
+      GetVersionList event, Emitter<TeacherAssignmentListState> emit) async {
     List<DropdownItem> list = [
       const DropdownItem(name: "Select Subject", value: -1),
       const DropdownItem(name: "Bangla", value: 1),
@@ -130,7 +131,35 @@ class TeacherAssignmentListBloc
 
   FutureOr<void> _selectVersionId(
       SelectVersionId event, Emitter<TeacherAssignmentListState> emit) {
-    emit(state.copyWith(selectedVersionId: event.id));
+    //emit(state.copyWith(selectedVersionId: event.id));
+
+    if (event.id != state.selectedVersionId) {
+      emit(state.copyWith(
+        selectedVersionId: event.id,
+        setClass: true,
+        selectedClassId: -1,
+      ));
+      if (state.selectedVersionId == 1) {
+        //add(GetUpazilas());
+
+        emit(state.copyWith(classList: [
+          const DropdownItem(name: "Select", value: -1),
+          const DropdownItem(name: "Class1", value: 1),
+          const DropdownItem(name: "Class2", value: 2),
+        ]));
+      } else if (state.selectedVersionId == 2) {
+        emit(state.copyWith(classList: [
+          const DropdownItem(name: "Select", value: -1),
+          const DropdownItem(name: "Class3", value: 3),
+          const DropdownItem(name: "Class4", value: 4),
+        ]));
+      }
+    }
+  }
+
+  FutureOr<void> _selectClassId(
+      SelectClassId event, Emitter<TeacherAssignmentListState> emit) {
+    emit(state.copyWith(selectedClassId: event.id));
   }
 
   FutureOr<void> _pressFilter(

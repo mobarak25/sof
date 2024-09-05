@@ -11,3 +11,5 @@ class GetDetails extends StudentAssignmentDetailsEvent {
   const GetDetails({required this.assingmentId});
   final int assingmentId;
 }
+
+class CheckTeacher extends StudentAssignmentDetailsEvent {}

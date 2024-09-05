@@ -42,10 +42,15 @@ class SelectEndDate extends TeacherAssignmentListEvent {
   final TextEditingController endDateController;
 }
 
-class GetSubjectList extends TeacherAssignmentListEvent {}
+class GetVersionList extends TeacherAssignmentListEvent {}
 
 class SelectVersionId extends TeacherAssignmentListEvent {
   const SelectVersionId({required this.id});
+  final dynamic id;
+}
+
+class SelectClassId extends TeacherAssignmentListEvent {
+  const SelectClassId({required this.id});
   final dynamic id;
 }
 

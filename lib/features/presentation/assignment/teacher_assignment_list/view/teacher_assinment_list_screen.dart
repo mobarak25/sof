@@ -1,21 +1,17 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:school_of_future/core/router/route_constents.dart';
 import 'package:school_of_future/core/translations/local_keys.dart';
 import 'package:school_of_future/core/utils/colors.dart';
-import 'package:school_of_future/core/utils/text_styles.dart';
 import 'package:school_of_future/core/widgets/app_bar.dart';
 import 'package:school_of_future/core/widgets/body.dart';
 import 'package:school_of_future/core/widgets/button.dart';
 import 'package:school_of_future/core/widgets/date_picker.dart';
 import 'package:school_of_future/core/widgets/dropdown_field.dart';
-import 'package:school_of_future/core/widgets/text.dart';
 import 'package:school_of_future/core/widgets/text_field.dart';
 import 'package:school_of_future/core/widgets/custom_tab.dart';
-import 'package:school_of_future/features/presentation/assignment/student_assignment_list/widgets/assignment_item.dart';
 import 'package:school_of_future/features/presentation/assignment/teacher_assignment_list/bloc/teacher_assignment_list_bloc.dart';
 import 'package:school_of_future/features/presentation/assignment/teacher_assignment_list/widgets/assignment_card.dart';
 
@@ -126,13 +122,14 @@ class TeacherAssinmentListScreen extends StatelessWidget {
                   const Gap(10),
                   DropdownFieldB(
                     dropdownHeight: 50,
+                    setState: state.setClass,
                     label: LocaleKeys.classStr.tr(),
                     labelColor: bBlack,
-                    dropDownValue: null,
+                    dropDownValue: state.selectedClassId,
                     selected: (dynamic type) {
-                      // bloc.add(SelectSubjectId(id: type));
+                      bloc.add(SelectClassId(id: type));
                     },
-                    items: const [],
+                    items: state.classList,
                   ),
                   const Gap(10),
                   DropdownFieldB(
@@ -208,10 +205,11 @@ class TeacherAssinmentListScreen extends StatelessWidget {
                                 children: [
                                   GestureDetector(
                                     onTap: () {
-                                      // Navigator.of(context, rootNavigator: true).pushNamed(
-                                      //   studentAssignmentDetailsScreen,
-                                      //   arguments: datalist[position].id,
-                                      // );
+                                      Navigator.of(context, rootNavigator: true)
+                                          .pushNamed(
+                                        studentAssignmentDetailsScreen,
+                                        arguments: dataItem.id,
+                                      );
                                     },
                                     child: AssignmentItemCard(
                                       item: dataItem,

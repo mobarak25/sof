@@ -4,6 +4,7 @@ import 'package:school_of_future/core/utils/utilities.dart';
 
 abstract class ApiRepo {
   Future<T?> post<T>({required String endpoint, dynamic body, String? token});
+  Future<T?> put<T>({required String endpoint, dynamic body, String? token});
 
   Future<T?> postForList<T, K>(
       {required String endpoint, dynamic body, String? token});

@@ -28,5 +28,6 @@ String submitAssignmentDtlsEndPoint({required int submitId}) =>
     "${version1}assignment/submit-assignment/$submitId";
 String assignmentFeedbackEndPoint({required int submitId}) =>
     "${version1}assignment/feedback/$submitId";
-
 String teacherAssignmentEndPoint = "${version1}assignment";
+String assignmentMarkEntryEndPoint({required int id}) =>
+    "${version1}assignment/mark-entry/$id";

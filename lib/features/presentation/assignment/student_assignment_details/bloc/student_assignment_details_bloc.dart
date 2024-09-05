@@ -8,6 +8,7 @@ import 'package:school_of_future/features/data/data_sources/remote_constants.dar
 import 'package:school_of_future/features/domain/entities/assignment_details_response.dart';
 import 'package:school_of_future/features/domain/repositories/api_repo.dart';
 import 'package:school_of_future/features/domain/repositories/local_storage_repo.dart';
+import 'package:school_of_future/features/domain/usecases/local_data.dart';
 
 part 'student_assignment_details_event.dart';
 part 'student_assignment_details_state.dart';
@@ -18,6 +19,9 @@ class StudentAssignmentDetailsBloc
       this._apiRepo, this._iFlutterNavigator, this._localStorageRepo)
       : super(StudentAssignmentDetailsInitial()) {
     on<GetDetails>(_getDetails);
+    on<CheckTeacher>(_checkTeacher);
+
+    add(CheckTeacher());
   }
 
   final ApiRepo _apiRepo;
@@ -36,5 +40,12 @@ class StudentAssignmentDetailsBloc
     if (details != null) {
       emit(state.copyWith(details: details));
     }
+  }
+
+  FutureOr<void> _checkTeacher(
+      CheckTeacher event, Emitter<StudentAssignmentDetailsState> emit) async {
+    final teacher =
+        await LocalData.isTeacher(localStorageRepo: _localStorageRepo);
+    emit(state.copyWith(isTeacher: teacher));
   }
 }

@@ -12,6 +12,7 @@ import 'package:school_of_future/core/widgets/app_bar.dart';
 import 'package:school_of_future/core/widgets/body.dart';
 import 'package:school_of_future/core/widgets/button.dart';
 import 'package:school_of_future/core/widgets/text.dart';
+import 'package:school_of_future/features/domain/usecases/local_data.dart';
 import 'package:school_of_future/features/presentation/assignment/student_assignment_details/bloc/student_assignment_details_bloc.dart';
 import 'package:school_of_future/features/presentation/assignment/student_assignment_details/widgets/detail_description.dart';
 
@@ -202,7 +203,8 @@ class StudentAssignmentDetailsScreen extends StatelessWidget {
                         ),
                       ),
                       const Gap(10),
-                      if (data.assignStudent!.submissionStatus == 0)
+                      if (data.assignStudent != null &&
+                          data.assignStudent!.submissionStatus == 0)
                         Column(
                           children: [
                             ButtonB(
@@ -236,7 +238,8 @@ class StudentAssignmentDetailsScreen extends StatelessWidget {
                             ),
                           ],
                         ),
-                      if (data.assignStudent!.submissionStatus == null)
+                      if (data.assignStudent != null &&
+                          data.assignStudent!.submissionStatus == null)
                         ButtonB(
                           heigh: 55,
                           text: LocaleKeys.submitHomeWork.tr(),
@@ -249,6 +252,19 @@ class StudentAssignmentDetailsScreen extends StatelessWidget {
                                 "title": data.title,
                                 "subject": data.subject!.name,
                               },
+                            );
+                          },
+                        ),
+                      if (state.isTeacher)
+                        ButtonB(
+                          heigh: 55,
+                          text:
+                              "${LocaleKeys.viewSubmissions.tr()} (${data.countSubmittedByStudent})",
+                          press: () {
+                            Navigator.of(context, rootNavigator: true)
+                                .pushNamed(
+                              teacherAssignmentViewSubmissionScreen,
+                              arguments: data.id,
                             );
                           },
                         ),

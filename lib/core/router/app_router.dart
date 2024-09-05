@@ -14,6 +14,8 @@ import 'package:school_of_future/features/presentation/assignment/student_feedba
 import 'package:school_of_future/features/presentation/assignment/student_feedback/view/student_feedback_screen.dart';
 import 'package:school_of_future/features/presentation/assignment/student_submission_details/bloc/student_submission_details_bloc.dart';
 import 'package:school_of_future/features/presentation/assignment/student_submission_details/view/student_assignment_submission_details.dart';
+import 'package:school_of_future/features/presentation/assignment/teacher_view_submission/bloc/teacher_view_submission_bloc.dart';
+import 'package:school_of_future/features/presentation/assignment/teacher_view_submission/view/teacher_view_submission_screen.dart';
 import 'package:school_of_future/features/presentation/change_password/bloc/change_password_bloc.dart';
 import 'package:school_of_future/features/presentation/change_password/view/change_password_screen.dart';
 import 'package:school_of_future/features/presentation/forgot_password_1/bloc/forgot_password_bloc.dart';
@@ -156,6 +158,17 @@ class AppRouter {
                 getIt<IFlutterNavigator>(), getIt<LocalStorageRepo>())
               ..add(GetFeedback(id: assignmentSubmissionId)),
             child: const StudentFeedbackScreen(),
+          ),
+        );
+
+      case teacherAssignmentViewSubmissionScreen:
+        final id = settings.arguments as int;
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (context) => TeacherViewSubmissionBloc(getIt<ApiRepo>(),
+                getIt<IFlutterNavigator>(), getIt<LocalStorageRepo>())
+              ..add(GetAssignmentDtls(id: id)),
+            child: const TeacherViewSubmissionScreen(),
           ),
         );
 

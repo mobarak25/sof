@@ -62,6 +62,31 @@ class RemoteGatewayBase {
     return null;
   }
 
+  Future<T?> putMethod<T, K>(
+      {required String endpoint, dynamic data, String? token}) async {
+    dynamic responseJson;
+
+    final headers = _createHeaders(token: token);
+    try {
+      final body = json.encode(data);
+
+      final response =
+          await http.put(Uri.parse(endpoint), headers: headers, body: body);
+
+      responseJson = _handleHTTPResponse(response);
+
+      if (responseJson != null) {
+        return fromJson<T, K>(responseJson);
+      }
+    } on SocketException {
+      FetchDataException(
+          CustomError(message: fetchDataException), getIt<IFlutterNavigator>());
+      //Implement pending response system by push notification. Or we can send a GUID withing the api,
+      //and the GUID will store to local, while the connectivity available the api will call again
+    }
+    return null;
+  }
+
   Future<T?> multiPartMethod<T, K>(
       {required String endpoint,
       Map<String, String>? data,

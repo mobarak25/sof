@@ -34,6 +34,21 @@ class ApiRepoImpl extends RemoteGatewayBase implements ApiRepo {
   }
 
   @override
+  Future<T?> put<T>(
+      {required String endpoint, dynamic body, String? token}) async {
+    dynamic data;
+
+    if (await networkInfo.isConnected) {
+      data = await putMethod<T, void>(
+          endpoint: endpoint, data: body, token: token);
+    } else {
+      AppException(CustomError(message: noInternetConnection),
+          getIt<IFlutterNavigator>());
+    }
+    return data;
+  }
+
+  @override
   Future<T?> postForList<T, K>(
       {required String endpoint, dynamic body, String? token}) async {
     dynamic data;

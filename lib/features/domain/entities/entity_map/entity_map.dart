@@ -4,6 +4,7 @@ import 'package:school_of_future/features/domain/entities/assignment_list_respon
 import 'package:school_of_future/features/domain/entities/child_list_response.dart';
 import 'package:school_of_future/features/domain/entities/default_response.dart';
 import 'package:school_of_future/features/domain/entities/due_task_response.dart';
+import 'package:school_of_future/features/domain/entities/get_batch_as_section_response.dart';
 import 'package:school_of_future/features/domain/entities/login_response.dart';
 import 'package:school_of_future/features/domain/entities/me_response.dart';
 import 'package:school_of_future/features/domain/entities/notice_details_response.dart';
@@ -14,6 +15,7 @@ import 'package:school_of_future/features/domain/entities/student_profile_respon
 import 'package:school_of_future/features/domain/entities/subject_item_response.dart';
 import 'package:school_of_future/features/domain/entities/teacher_assignment_response.dart';
 import 'package:school_of_future/features/domain/entities/teacher_profile_response.dart';
+import 'package:school_of_future/features/domain/entities/teacher_summited_assinent_response.dart';
 
 class EntityMap {
   static T? fromJson<T, K>(dynamic json) {
@@ -50,6 +52,10 @@ class EntityMap {
         return AssignmentFeedback.fromJson(json) as T;
       case const (TeacherAssignment):
         return TeacherAssignment.fromJson(json) as T;
+      case const (TeacherSummitedAssinentView):
+        return TeacherSummitedAssinentView.fromJson(json) as T;
+      case const (GetBacthAsSections):
+        return GetBacthAsSections.fromJson(json) as T;
       default:
         throw Exception('Unknown class');
     }

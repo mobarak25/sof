@@ -50,7 +50,7 @@ class ButtonB extends StatelessWidget {
         onTap: press,
         child: Ink(
           height: heigh,
-          padding: EdgeInsets.symmetric(horizontal: horizontalPadding ?? 10),
+          padding: EdgeInsets.symmetric(horizontal: horizontalPadding ?? 0),
           decoration: BoxDecoration(
             color: bgColor,
             borderRadius: BorderRadius.circular(7),

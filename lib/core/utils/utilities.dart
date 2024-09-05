@@ -90,12 +90,15 @@ T data<T>(T value) {
 String buildUrl(String baseUrl, Map<String, dynamic> queryParams) {
   final queryString = queryParams.entries
       .where((entry) =>
-          entry.value.toString().isNotEmpty) // Only include non-empty values
+          entry.value.toString().isNotEmpty &&
+          entry.value.toString() != '-1') // Only include non-empty values
       .map((entry) =>
           '${Uri.encodeComponent(entry.key)}=${Uri.encodeComponent(entry.value.toString())}')
       .join('&');
 
-  return queryString.isNotEmpty ? '$baseUrl?$queryString' : baseUrl;
+  return queryString.isNotEmpty && queryString != "-1"
+      ? '$baseUrl?$queryString'
+      : baseUrl;
 }
 
 String getFileName(String path) {

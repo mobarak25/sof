@@ -31,3 +31,5 @@ String assignmentFeedbackEndPoint({required int submitId}) =>
 String teacherAssignmentEndPoint = "${version1}assignment";
 String assignmentMarkEntryEndPoint({required int id}) =>
     "${version1}assignment/mark-entry/$id";
+
+String getBatchAsSectionsEndPoint = "${version1}common/get-batch-as-sections";

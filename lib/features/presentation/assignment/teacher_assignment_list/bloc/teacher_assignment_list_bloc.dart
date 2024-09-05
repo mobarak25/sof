@@ -6,9 +6,8 @@ import 'package:intl/intl.dart';
 import 'package:school_of_future/core/navigator/iflutter_navigator.dart';
 import 'package:school_of_future/core/utils/debounce.dart';
 import 'package:school_of_future/core/utils/utilities.dart';
-import 'package:school_of_future/features/data/data_sources/local_db_keys.dart';
 import 'package:school_of_future/features/data/data_sources/remote_constants.dart';
-import 'package:school_of_future/features/domain/entities/subject_item_response.dart';
+import 'package:school_of_future/features/domain/entities/get_batch_as_section_response.dart';
 import 'package:school_of_future/features/domain/entities/teacher_assignment_response.dart';
 import 'package:school_of_future/features/domain/repositories/api_repo.dart';
 import 'package:school_of_future/features/domain/repositories/local_storage_repo.dart';
@@ -29,6 +28,8 @@ class TeacherAssignmentListBloc
     on<GetVersionList>(_getVersionList);
     on<SelectVersionId>(_selectVersionId);
     on<SelectClassId>(_selectClassId);
+    on<SelectSubjectId>(_selectSubjectId);
+    on<SelectSectionId>(_selectSectionId);
     on<PressFilter>(_pressFilter);
 
     add(DataForTab(tabIndex: state.activeTab.toString()));
@@ -54,7 +55,9 @@ class TeacherAssignmentListBloc
       "search": state.searchText,
       "start_date": state.startDate,
       "end_date": state.endDate,
-      "subject_id": state.subjectId,
+      "class_id": state.selectedClassId,
+      "subject_id": state.selectedSubjectId,
+      "section_id": state.selectSectionId,
     };
 
     final assignment = await _apiRepo.get<TeacherAssignment>(
@@ -87,7 +90,9 @@ class TeacherAssignmentListBloc
       "search": state.searchText,
       "start_date": state.startDate,
       "end_date": state.endDate,
-      "subject_id": state.subjectId,
+      "class_id": state.selectedClassId,
+      "subject_id": state.selectedSubjectId,
+      "section_id": state.selectSectionId,
     };
 
     final searchAssignment = await _apiRepo.get<TeacherAssignment>(
@@ -120,46 +125,137 @@ class TeacherAssignmentListBloc
 
   FutureOr<void> _getVersionList(
       GetVersionList event, Emitter<TeacherAssignmentListState> emit) async {
+    final versionList = await _apiRepo.get<GetBacthAsSections>(
+        endpoint: getBatchAsSectionsEndPoint);
+
     List<DropdownItem> list = [
-      const DropdownItem(name: "Select Subject", value: -1),
-      const DropdownItem(name: "Bangla", value: 1),
-      const DropdownItem(name: "English", value: 2),
+      const DropdownItem(name: "Select", value: -1),
     ];
 
-    emit(state.copyWith(versionList: list));
+    if (versionList != null) {
+      for (int i = 0; i < versionList.data!.length; i++) {
+        list.add(
+          DropdownItem(
+              name: versionList.data![i].versionName!,
+              value: versionList.data![i].versionId),
+        );
+      }
+
+      emit(state.copyWith(versionList: list, bacthAsSection: versionList));
+    }
   }
 
   FutureOr<void> _selectVersionId(
       SelectVersionId event, Emitter<TeacherAssignmentListState> emit) {
-    //emit(state.copyWith(selectedVersionId: event.id));
+    final data = state.bacthAsSection.data!;
+    List<DropdownItem> classList = [
+      const DropdownItem(name: "Select", value: -1),
+    ];
 
     if (event.id != state.selectedVersionId) {
+      for (int i = 0; i < data.length; i++) {
+        if (data[i].versionId == event.id) {
+          for (int j = 0; j < data[i].classes!.length; j++) {
+            classList.add(DropdownItem(
+                name: data[i].classes![j].className!,
+                value: data[i].classes![j].classId!));
+          }
+        }
+      }
+
       emit(state.copyWith(
         selectedVersionId: event.id,
         setClass: true,
+        setSubject: true,
+        setSection: true,
         selectedClassId: -1,
+        selectedSubjectId: -1,
+        selectSectionId: -1,
+        classList: classList,
+        subjectList: [
+          const DropdownItem(name: "Select", value: -1),
+        ],
+        sectionList: [
+          const DropdownItem(name: "Select", value: -1),
+        ],
       ));
-      if (state.selectedVersionId == 1) {
-        //add(GetUpazilas());
-
-        emit(state.copyWith(classList: [
-          const DropdownItem(name: "Select", value: -1),
-          const DropdownItem(name: "Class1", value: 1),
-          const DropdownItem(name: "Class2", value: 2),
-        ]));
-      } else if (state.selectedVersionId == 2) {
-        emit(state.copyWith(classList: [
-          const DropdownItem(name: "Select", value: -1),
-          const DropdownItem(name: "Class3", value: 3),
-          const DropdownItem(name: "Class4", value: 4),
-        ]));
-      }
     }
   }
 
   FutureOr<void> _selectClassId(
       SelectClassId event, Emitter<TeacherAssignmentListState> emit) {
-    emit(state.copyWith(selectedClassId: event.id));
+    final data = state.bacthAsSection.data!;
+    List<DropdownItem> subjectList = [
+      const DropdownItem(name: "Select", value: -1),
+    ];
+
+    if (event.id != state.selectedClassId) {
+      for (int i = 0; i < data.length; i++) {
+        if (data[i].versionId == state.selectedVersionId) {
+          for (int j = 0; j < data[i].classes!.length; j++) {
+            if (data[i].classes![j].classId == event.id) {
+              for (int k = 0; k < data[i].classes![j].subjects!.length; k++) {
+                subjectList.add(DropdownItem(
+                    name: data[i].classes![j].subjects![k].subjectName!,
+                    value: data[i].classes![j].subjects![k].subjectId!));
+              }
+            }
+          }
+        }
+      }
+
+      emit(state.copyWith(
+        selectedClassId: event.id,
+        setSubject: true,
+        setSection: true,
+        selectedSubjectId: -1,
+        selectSectionId: -1,
+        subjectList: subjectList,
+        sectionList: [
+          const DropdownItem(name: "Select", value: -1),
+        ],
+      ));
+    }
+  }
+
+  FutureOr<void> _selectSubjectId(
+      SelectSubjectId event, Emitter<TeacherAssignmentListState> emit) {
+    final data = state.bacthAsSection.data!;
+    List<DropdownItem> sectionList = [
+      const DropdownItem(name: "Select", value: -1),
+    ];
+
+    if (event.id != state.selectedSubjectId) {
+      for (int i = 0; i < data.length; i++) {
+        if (data[i].versionId == state.selectedVersionId) {
+          for (int j = 0; j < data[i].classes!.length; j++) {
+            if (data[i].classes![j].classId == state.selectedClassId) {
+              for (int k = 0; k < data[i].classes![j].subjects!.length; k++) {
+                if (data[i].classes![j].subjects![k].subjectId == event.id) {
+                  final sections = data[i].classes![j].subjects![k].sections!;
+                  for (int l = 0; l < sections.length; l++) {
+                    sectionList.add(DropdownItem(
+                        name: sections[l].sectionName!,
+                        value: sections[l].batchId));
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      emit(state.copyWith(
+        selectedSubjectId: event.id,
+        setSection: true,
+        selectSectionId: -1,
+        sectionList: sectionList,
+      ));
+    }
+  }
+
+  FutureOr<void> _selectSectionId(
+      SelectSectionId event, Emitter<TeacherAssignmentListState> emit) {
+    emit(state.copyWith(selectSectionId: event.id));
   }
 
   FutureOr<void> _pressFilter(
@@ -170,7 +266,9 @@ class TeacherAssignmentListBloc
       "search": state.searchText,
       "start_date": state.startDate,
       "end_date": state.endDate,
-      "subject_id": state.subjectId,
+      "class_id": state.selectedClassId,
+      "subject_id": state.selectedSubjectId,
+      "section_id": state.selectSectionId,
     };
 
     final flterAssignment = await _apiRepo.get<TeacherAssignment>(

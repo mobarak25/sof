@@ -136,33 +136,25 @@ class TeacherAssinmentListScreen extends StatelessWidget {
                     dropdownHeight: 50,
                     label: LocaleKeys.subject.tr(),
                     labelColor: bBlack,
-                    dropDownValue: null,
+                    setState: state.setSubject,
+                    dropDownValue: state.selectedSubjectId,
                     selected: (dynamic type) {
-                      // bloc.add(SelectSubjectId(id: type));
+                      bloc.add(SelectSubjectId(id: type));
                     },
-                    items: const [],
+                    items: state.subjectList,
                   ),
                   const Gap(10),
                   DropdownFieldB(
                     dropdownHeight: 50,
                     label: LocaleKeys.section.tr(),
                     labelColor: bBlack,
-                    dropDownValue: null,
+                    setState: state.setSection,
+                    dropDownValue: state.selectSectionId,
                     selected: (dynamic type) {
-                      // bloc.add(SelectSubjectId(id: type));
+                      bloc.add(SelectSectionId(id: type));
                     },
-                    items: const [],
+                    items: state.sectionList,
                   ),
-                  // DropdownFieldB(
-                  //   dropdownHeight: 55,
-                  //   label: LocaleKeys.subject.tr(),
-                  //   labelColor: bBlack,
-                  //   dropDownValue: state.selectedSubId,
-                  //   selected: (dynamic type) {
-                  //     bloc.add(SelectSubjectId(id: type));
-                  //   },
-                  //   items: state.subjectList,
-                  // ),
                   const Gap(30),
                   ButtonB(
                     heigh: 60,

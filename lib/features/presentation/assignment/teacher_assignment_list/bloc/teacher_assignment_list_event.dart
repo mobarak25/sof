@@ -54,4 +54,14 @@ class SelectClassId extends TeacherAssignmentListEvent {
   final dynamic id;
 }
 
+class SelectSubjectId extends TeacherAssignmentListEvent {
+  const SelectSubjectId({required this.id});
+  final dynamic id;
+}
+
+class SelectSectionId extends TeacherAssignmentListEvent {
+  const SelectSectionId({required this.id});
+  final dynamic id;
+}
+
 class PressFilter extends TeacherAssignmentListEvent {}

@@ -163,21 +163,22 @@ class AssignmentItemCard extends StatelessWidget {
             ],
           ),
         ),
-        Positioned(
-          right: 0,
-          child: PopupMenuButton(
-            icon: SvgPicture.asset('assets/images/three_dots.svg'),
-            itemBuilder: (context) {
-              return ["Edit", "Delete"].map((action) {
-                return PopupMenuItem(
-                  value: action,
-                  child: Text(action),
-                );
-              }).toList();
-            },
-            onSelected: (_) {},
-          ),
-        )
+        if (item.countSubmittedByStudent! == 0)
+          Positioned(
+            right: 0,
+            child: PopupMenuButton(
+              icon: SvgPicture.asset('assets/images/three_dots.svg'),
+              itemBuilder: (context) {
+                return ["Edit", "Delete"].map((action) {
+                  return PopupMenuItem(
+                    value: action,
+                    child: Text(action),
+                  );
+                }).toList();
+              },
+              onSelected: (_) {},
+            ),
+          )
       ],
     );
   }

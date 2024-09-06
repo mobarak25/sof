@@ -41,6 +41,7 @@ abstract class LocaleKeys {
   static const viewSubmissions = 'View Submissions';
   static const markObtained = 'Mark Obtained';
   static const viewFeedBack = 'View Feedback';
+  static const enterFeedBack = 'Enter Feedback';
   static const subDetails = 'Submission Details';
   static const feedback = 'Feedback';
   static const teacherName = 'Teacher Name';

@@ -16,14 +16,3 @@ class GetSubmissionList extends TeacherViewSubmissionEvent {
   const GetSubmissionList({required this.id});
   final int id;
 }
-
-class UpdateMarkes extends TeacherViewSubmissionEvent {
-  const UpdateMarkes({
-    required this.submissionId,
-    required this.marks,
-    required this.status,
-  });
-  final int submissionId;
-  final String marks;
-  final int status;
-}

@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:school_of_future/core/router/route_constents.dart';
 import 'package:school_of_future/core/translations/local_keys.dart';
 import 'package:school_of_future/core/utils/colors.dart';
 import 'package:school_of_future/core/utils/text_styles.dart';
@@ -22,9 +23,8 @@ class TeacherViewSubmissionScreen extends StatelessWidget {
     return BlocBuilder<TeacherViewSubmissionBloc, TeacherViewSubmissionState>(
       builder: (context, state) {
         final bloc = context.read<TeacherViewSubmissionBloc>();
-        final entryMarkController = TextEditingController();
         final entryMarkFocusNode = FocusNode();
-        // final data = state.details.data;
+
         return Body(
           isFullScreen: true,
           appBar: FutureAppBar(
@@ -114,19 +114,13 @@ class TeacherViewSubmissionScreen extends StatelessWidget {
                                           height: 55,
                                           paddingHeight: 10,
                                           paddingWidth: 5,
+                                          isReadOnly: true,
                                           hintText:
                                               state.controllers[index].text,
                                           textAlign: TextAlign.center,
                                           focusNode: entryMarkFocusNode,
                                           controller: state.controllers[index],
-                                          onChanged: (String value) {
-                                            bloc.add(UpdateMarkes(
-                                              submissionId: state.submittedList
-                                                  .data![index].submission!.id!,
-                                              marks: value,
-                                              status: 1,
-                                            ));
-                                          },
+                                          onChanged: (String value) {},
                                         ),
                                       ),
                                       const Gap(10),
@@ -134,7 +128,15 @@ class TeacherViewSubmissionScreen extends StatelessWidget {
                                         horizontalPadding: 0,
                                         heigh: 43,
                                         text: LocaleKeys.view.tr(),
-                                        press: () {},
+                                        press: () {
+                                          Navigator.of(context,
+                                                  rootNavigator: true)
+                                              .pushNamed(
+                                            studentAssignmentSubmissionDetailsScreen,
+                                            arguments: state.submittedList
+                                                .data![index].submission!.id,
+                                          );
+                                        },
                                       ),
                                     ],
                                   ),

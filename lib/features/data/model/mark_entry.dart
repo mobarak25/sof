@@ -3,10 +3,10 @@ class MarkEntry {
   final String marks;
   final String? content;
 
-  MarkEntry({
+  const MarkEntry({
     required this.status,
     required this.marks,
-    this.content,
+    required this.content,
   });
 
   factory MarkEntry.fromJson(Map<String, dynamic> json) => MarkEntry(

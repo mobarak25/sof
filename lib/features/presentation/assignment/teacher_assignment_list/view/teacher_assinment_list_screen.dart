@@ -163,7 +163,8 @@ class TeacherAssinmentListScreen extends StatelessWidget {
                       Navigator.pop(context);
                       bloc.add(PressFilter());
                     },
-                  )
+                  ),
+                  const Gap(70),
                 ],
               ),
             ),

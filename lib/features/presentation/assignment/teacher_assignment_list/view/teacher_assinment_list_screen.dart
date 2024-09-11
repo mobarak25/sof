@@ -2,14 +2,18 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:school_of_future/core/navigator/navigator_key.dart';
 import 'package:school_of_future/core/router/route_constents.dart';
 import 'package:school_of_future/core/translations/local_keys.dart';
 import 'package:school_of_future/core/utils/colors.dart';
+import 'package:school_of_future/core/utils/text_styles.dart';
 import 'package:school_of_future/core/widgets/app_bar.dart';
 import 'package:school_of_future/core/widgets/body.dart';
 import 'package:school_of_future/core/widgets/button.dart';
 import 'package:school_of_future/core/widgets/date_picker.dart';
 import 'package:school_of_future/core/widgets/dropdown_field.dart';
+import 'package:school_of_future/core/widgets/floating_button.dart';
+import 'package:school_of_future/core/widgets/text.dart';
 import 'package:school_of_future/core/widgets/text_field.dart';
 import 'package:school_of_future/core/widgets/custom_tab.dart';
 import 'package:school_of_future/features/presentation/assignment/teacher_assignment_list/bloc/teacher_assignment_list_bloc.dart';
@@ -24,10 +28,16 @@ class TeacherAssinmentListScreen extends StatelessWidget {
     final endDateFocusnode = FocusNode();
     final startDateController = TextEditingController();
     final endDateController = TextEditingController();
+    final scroll = ScrollController();
 
     return BlocBuilder<TeacherAssignmentListBloc, TeacherAssignmentListState>(
       builder: (context, state) {
         final bloc = context.read<TeacherAssignmentListBloc>();
+        scroll.addListener(() {
+          if (scroll.position.pixels == scroll.position.maxScrollExtent) {
+            bloc.add(PageIncrement());
+          }
+        });
         return Body(
           isFullScreen: true,
           appBar: FutureAppBar(
@@ -169,56 +179,103 @@ class TeacherAssinmentListScreen extends StatelessWidget {
               ),
             ),
           ),
-          child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 13, horizontal: 15),
-            color: bInnerBg,
-            child: CustomTab(
-              loading: state.loading,
-              tabList: [
-                LocaleKeys.published.tr(),
-                LocaleKeys.draft.tr(),
-              ],
-              onTabChanged: (int tabIndex) {
-                bloc.add(DataForTab(tabIndex: tabIndex.toString()));
-              },
-              search: (String value) {
-                bloc.add(ChangeSearch(searchText: value));
-              },
-              child: state.assignmentList.data != null
-                  ? Column(
-                      children: [
-                        Expanded(
-                          child: ListView.builder(
-                            itemCount: state.assignmentList.data!.length,
-                            itemBuilder: (context, position) {
-                              final dataItem =
-                                  state.assignmentList.data![position];
-                              return Column(
-                                mainAxisSize: MainAxisSize.min,
+          child: Stack(
+            children: [
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 13, horizontal: 15),
+                color: bInnerBg,
+                child: CustomTab(
+                  loading: state.loading,
+                  tabList: [
+                    LocaleKeys.published.tr(),
+                    LocaleKeys.draft.tr(),
+                  ],
+                  onTabChanged: (int tabIndex) {
+                    bloc.add(DataForTab(tabIndex: tabIndex.toString()));
+                  },
+                  search: (String value) {
+                    bloc.add(ChangeSearch(searchText: value));
+                  },
+                  child: state.assignmentList.data != null
+                      ? Column(
+                          children: [
+                            Expanded(
+                              child: ListView(
+                                controller: scroll,
                                 children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      Navigator.of(context, rootNavigator: true)
-                                          .pushNamed(
-                                        studentAssignmentDetailsScreen,
-                                        arguments: dataItem.id,
-                                      );
-                                    },
-                                    child: AssignmentItemCard(
-                                      item: dataItem,
+                                  ...List.generate(
+                                      state.assignmentList.data!.length,
+                                      (position) {
+                                    final dataItem =
+                                        state.assignmentList.data![position];
+                                    return Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            Navigator.of(context,
+                                                    rootNavigator: true)
+                                                .pushNamed(
+                                              studentAssignmentDetailsScreen,
+                                              arguments: dataItem.id,
+                                            );
+                                          },
+                                          child: AssignmentItemCard(
+                                            item: dataItem,
+                                            pressTo: (String pressTo, int id) {
+                                              bloc.add(PressToDelEdit(
+                                                  type: pressTo, id: id));
+                                            },
+                                          ),
+                                        ),
+                                        const Gap(15),
+                                      ],
+                                    );
+                                  }),
+                                  if (state.assignmentList.data!.isEmpty)
+                                    TextB(
+                                      text: LocaleKeys.noResultFound.tr(),
+                                      textStyle: bBody1B,
+                                      fontColor: bRed,
+                                      alignMent: TextAlign.center,
                                     ),
-                                  ),
-                                  const Gap(15),
+                                  if (!state.incrementLoader && state.isEndList)
+                                    const Padding(
+                                      padding:
+                                          EdgeInsets.only(top: 15, bottom: 30),
+                                      child: TextB(
+                                        text: "End of the list",
+                                        textStyle: bBase2M,
+                                        fontColor: bRed,
+                                      ),
+                                    ),
                                 ],
-                              );
-                            },
-                          ),
-                        ),
-                        const Gap(65),
-                      ],
-                    )
-                  : const SizedBox(),
-            ),
+                              ),
+                            ),
+                            if (state.incrementLoader)
+                              const Center(
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 20),
+                                  child: CircularProgressIndicator(),
+                                ),
+                              ),
+                            const Gap(65),
+                          ],
+                        )
+                      : const SizedBox(),
+                ),
+              ),
+              FloatingButton(
+                press: () {
+                  // Navigator.pushNamed(navigatorKey.currentState!.context,
+                  //     teacherAssignmentCreateScreen);
+
+                  Navigator.of(context, rootNavigator: true)
+                      .pushNamed(teacherAssignmentCreateScreen);
+                },
+              )
+            ],
           ),
         );
       },

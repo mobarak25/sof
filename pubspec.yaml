@@ -46,6 +46,7 @@ dependencies:
   flutter_quill: ^9.2.3
   quill_json_to_html: ^1.0.1
   flutter_datetime_picker_plus: ^2.2.0
+  dropdown_textfield: ^1.2.0
 
 dev_dependencies:
   flutter_test:

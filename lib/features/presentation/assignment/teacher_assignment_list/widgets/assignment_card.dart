@@ -11,9 +11,14 @@ import 'package:school_of_future/core/widgets/text.dart';
 import 'package:school_of_future/features/domain/entities/teacher_assignment_response.dart';
 
 class AssignmentItemCard extends StatelessWidget {
-  const AssignmentItemCard({super.key, required this.item});
+  const AssignmentItemCard({
+    super.key,
+    required this.item,
+    required this.pressTo,
+  });
 
   final AssignmentItem item;
+  final Function pressTo;
 
   @override
   Widget build(BuildContext context) {
@@ -176,7 +181,9 @@ class AssignmentItemCard extends StatelessWidget {
                   );
                 }).toList();
               },
-              onSelected: (_) {},
+              onSelected: (String value) {
+                pressTo(value, item.id);
+              },
             ),
           )
       ],

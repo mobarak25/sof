@@ -166,7 +166,7 @@ class _TextField extends State<TextFieldB> {
               fillColor: widget.bgColor ?? bWhite,
               filled: true,
               focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: bGreen),
+                borderSide: const BorderSide(color: kPrimaryColor),
                 borderRadius: BorderRadius.circular(7),
               ),
               enabledBorder: OutlineInputBorder(

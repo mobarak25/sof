@@ -3,9 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:school_of_future/core/file_picker/file_picker_service.dart';
 import 'package:school_of_future/core/ioc/global.dart';
 import 'package:school_of_future/core/navigator/iflutter_navigator.dart';
+import 'package:school_of_future/features/domain/entities/batch_wise_student.dart';
 import 'package:school_of_future/features/domain/repositories/api_repo.dart';
 import 'package:school_of_future/features/domain/repositories/local_storage_repo.dart';
 import 'package:school_of_future/core/router/route_constents.dart';
+import 'package:school_of_future/features/presentation/assignment/selected_students/bloc/select_students_bloc.dart';
+import 'package:school_of_future/features/presentation/assignment/selected_students/view/selected_students_screen.dart';
 import 'package:school_of_future/features/presentation/assignment/student_assignment_details/bloc/student_assignment_details_bloc.dart';
 import 'package:school_of_future/features/presentation/assignment/student_assignment_details/view/student_assignment_details_screen.dart';
 import 'package:school_of_future/features/presentation/assignment/student_assignment_submit/bloc/student_assignment_submit_bloc.dart';
@@ -14,6 +17,8 @@ import 'package:school_of_future/features/presentation/assignment/student_feedba
 import 'package:school_of_future/features/presentation/assignment/student_feedback/view/student_feedback_screen.dart';
 import 'package:school_of_future/features/presentation/assignment/student_submission_details/bloc/student_submission_details_bloc.dart';
 import 'package:school_of_future/features/presentation/assignment/student_submission_details/view/student_assignment_submission_details.dart';
+import 'package:school_of_future/features/presentation/assignment/teacher_assignment_create/bloc/assignment_create_bloc.dart';
+import 'package:school_of_future/features/presentation/assignment/teacher_assignment_create/view/assignment_create_screen.dart';
 import 'package:school_of_future/features/presentation/assignment/teacher_view_submission/bloc/teacher_view_submission_bloc.dart';
 import 'package:school_of_future/features/presentation/assignment/teacher_view_submission/view/teacher_view_submission_screen.dart';
 import 'package:school_of_future/features/presentation/change_password/bloc/change_password_bloc.dart';
@@ -169,6 +174,30 @@ class AppRouter {
                 getIt<IFlutterNavigator>(), getIt<LocalStorageRepo>())
               ..add(GetAssignmentDtls(id: id)),
             child: const TeacherViewSubmissionScreen(),
+          ),
+        );
+
+      case teacherAssignmentCreateScreen:
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (BuildContext context) => BlocProvider(
+            create: (context) => AssignmentCreateBloc(
+                getIt<ApiRepo>(),
+                getIt<IFlutterNavigator>(),
+                getIt<LocalStorageRepo>(),
+                getIt<FilePickerRepo>()),
+            child: const AssignmentCreateScreen(),
+          ),
+        );
+
+      case selectedStudentsScreen:
+        final students = settings.arguments as BatchWiseStudent;
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (BuildContext context) => BlocProvider(
+            create: (context) => SelectStudentsBloc()
+              ..add(GetInitialStudents(students: students)),
+            child: const SelectedStudentsScreen(),
           ),
         );
 

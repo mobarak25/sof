@@ -4,9 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:school_of_future/core/navigator/iflutter_navigator.dart';
+import 'package:school_of_future/core/navigator/navigator_key.dart';
+import 'package:school_of_future/core/router/route_constents.dart';
+import 'package:school_of_future/core/snackbar/show_snackbar.dart';
 import 'package:school_of_future/core/utils/debounce.dart';
 import 'package:school_of_future/core/utils/utilities.dart';
+import 'package:school_of_future/core/widgets/confirm_delete_dialog.dart';
 import 'package:school_of_future/features/data/data_sources/remote_constants.dart';
+import 'package:school_of_future/features/domain/entities/default_response.dart';
 import 'package:school_of_future/features/domain/entities/get_batch_as_section_response.dart';
 import 'package:school_of_future/features/domain/entities/teacher_assignment_response.dart';
 import 'package:school_of_future/features/domain/repositories/api_repo.dart';
@@ -31,6 +36,9 @@ class TeacherAssignmentListBloc
     on<SelectSubjectId>(_selectSubjectId);
     on<SelectSectionId>(_selectSectionId);
     on<PressFilter>(_pressFilter);
+    on<PressToDelEdit>(_pressToDelEdit);
+    on<DeleteAssignment>(_deleteAssignment);
+    on<PageIncrement>(_pageIncrement);
 
     add(DataForTab(tabIndex: state.activeTab.toString()));
     add(GetVersionList());
@@ -42,7 +50,7 @@ class TeacherAssignmentListBloc
 
   FutureOr<void> _dataForTab(
       DataForTab event, Emitter<TeacherAssignmentListState> emit) async {
-    emit(state.copyWith(loading: true));
+    emit(state.copyWith(loading: true, isEndList: false));
 
     if (event.tabIndex == '0') {
       emit(state.copyWith(activeTab: '1', loading: true));
@@ -260,7 +268,7 @@ class TeacherAssignmentListBloc
 
   FutureOr<void> _pressFilter(
       PressFilter event, Emitter<TeacherAssignmentListState> emit) async {
-    emit(state.copyWith(page: 1, loading: true));
+    emit(state.copyWith(page: 1, isEndList: false, loading: true));
     final queryParams = {
       "status": state.activeTab,
       "search": state.searchText,
@@ -278,5 +286,67 @@ class TeacherAssignmentListBloc
       emit(state.copyWith(assignmentList: flterAssignment));
     }
     emit(state.copyWith(loading: false));
+  }
+
+  FutureOr<void> _pressToDelEdit(
+      PressToDelEdit event, Emitter<TeacherAssignmentListState> emit) {
+    if (event.type == "Delete") {
+      showConfirmDeleteDialog(_iFlutterNavigator.context, pressToYes: () {
+        add(DeleteAssignment(assignmentId: event.id));
+      });
+    }
+  }
+
+  FutureOr<void> _deleteAssignment(
+      DeleteAssignment event, Emitter<TeacherAssignmentListState> emit) async {
+    final delete = await _apiRepo.post<DefaultResponse>(
+        endpoint: deleteAssignmentEndPoint(
+          id: event.assignmentId,
+        ),
+        body: {"_method": "delete"});
+
+    if (delete != null) {
+      _iFlutterNavigator.pop();
+      navigatorKey.currentState!.pushNamedAndRemoveUntil(
+          teacherAssignmentListScreen, ModalRoute.withName('/'));
+      ShowSnackBar(message: delete.message!, navigator: _iFlutterNavigator);
+    }
+  }
+
+  FutureOr<void> _pageIncrement(
+      PageIncrement event, Emitter<TeacherAssignmentListState> emit) async {
+    int totalPage = state.page + 1;
+
+    final queryParams = {
+      "status": state.activeTab,
+      "search": state.searchText,
+      "start_date": state.startDate,
+      "end_date": state.endDate,
+      "class_id": state.selectedClassId,
+      "subject_id": state.selectedSubjectId,
+      "section_id": state.selectSectionId,
+    };
+
+    if (totalPage <= state.assignmentList.lastPage!) {
+      if (!state.incrementLoader) {
+        emit(state.copyWith(page: totalPage, incrementLoader: true));
+
+        final assignment = await _apiRepo.get<TeacherAssignment>(
+          endpoint: buildUrl(teacherAssignmentEndPoint, queryParams),
+        );
+
+        emit(state.copyWith(page: totalPage, incrementLoader: false));
+
+        if (assignment != null) {
+          emit(state.copyWith(
+              assignmentList: TeacherAssignment(
+            data: state.assignmentList.data! + assignment.data!,
+            lastPage: assignment.lastPage,
+          )));
+        }
+      }
+    } else if (!state.incrementLoader) {
+      emit(state.copyWith(isEndList: true));
+    }
   }
 }

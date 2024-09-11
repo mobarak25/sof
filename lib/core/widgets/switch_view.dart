@@ -25,12 +25,11 @@ class _SwitchViewState extends State<SwitchView> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 27,
       child: FittedBox(
         child: CupertinoSwitch(
           value: value,
-          activeColor: bRed,
-          trackColor: bGreen,
+          activeColor: bGreen,
+          trackColor: bGray32,
           onChanged: (bool val) {
             setState(() {
               value = val;

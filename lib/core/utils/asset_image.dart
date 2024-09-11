@@ -9,5 +9,6 @@ const menuIcon = "${pngRoot}menu_icon.png";
 const classtuneLogo = "${pngRoot}classtune_logo.png";
 
 //Svg images======
-const svgRoot = "assets/images/svg/";
-const fileUploadSvg = "${svgRoot}file_upload.svg";
+const svgRoot = "assets/images/";
+const fileUploadSvg = "${svgRoot}svg/file_upload.svg";
+const fileAttachSvg = "${svgRoot}file_attach_icon.svg";

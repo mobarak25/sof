@@ -64,4 +64,17 @@ class SelectSectionId extends TeacherAssignmentListEvent {
   final dynamic id;
 }
 
+class PressToDelEdit extends TeacherAssignmentListEvent {
+  const PressToDelEdit({required this.id, required this.type});
+  final int id;
+  final String type;
+}
+
 class PressFilter extends TeacherAssignmentListEvent {}
+
+class DeleteAssignment extends TeacherAssignmentListEvent {
+  const DeleteAssignment({required this.assignmentId});
+  final int assignmentId;
+}
+
+class PageIncrement extends TeacherAssignmentListEvent {}

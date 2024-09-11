@@ -1,6 +1,7 @@
 import 'package:school_of_future/features/domain/entities/assignment_details_response.dart';
 import 'package:school_of_future/features/domain/entities/assignment_feedback_response.dart';
 import 'package:school_of_future/features/domain/entities/assignment_list_response.dart';
+import 'package:school_of_future/features/domain/entities/batch_wise_student.dart';
 import 'package:school_of_future/features/domain/entities/child_list_response.dart';
 import 'package:school_of_future/features/domain/entities/default_response.dart';
 import 'package:school_of_future/features/domain/entities/due_task_response.dart';
@@ -56,6 +57,8 @@ class EntityMap {
         return TeacherSummitedAssinentView.fromJson(json) as T;
       case const (GetBacthAsSections):
         return GetBacthAsSections.fromJson(json) as T;
+      case const (BatchWiseStudent):
+        return BatchWiseStudent.fromJson(json) as T;
       default:
         throw Exception('Unknown class');
     }

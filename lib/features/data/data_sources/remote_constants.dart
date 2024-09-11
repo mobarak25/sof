@@ -33,3 +33,9 @@ String assignmentMarkEntryEndPoint({required int id}) =>
     "${version1}assignment/mark-entry/$id";
 
 String getBatchAsSectionsEndPoint = "${version1}common/get-batch-as-sections";
+String deleteAssignmentEndPoint({required int id}) =>
+    "${version1}assignment/$id";
+
+String getBatchWiseStudentsEndpoint(
+        {required int subjectId, required int batchId}) =>
+    "${version1}common/get-batch-wise-students?subject_id=$subjectId&batch_id=$batchId";

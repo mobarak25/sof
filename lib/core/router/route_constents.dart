@@ -31,3 +31,5 @@ const teacherAssignmentViewSubmissionScreen =
 
 //Teacher routes
 const teacherAssignmentListScreen = "/teacher-assignment-screen";
+const teacherAssignmentCreateScreen = "/teacher-assignment-create-screen";
+const selectedStudentsScreen = "/selected-students-screen";

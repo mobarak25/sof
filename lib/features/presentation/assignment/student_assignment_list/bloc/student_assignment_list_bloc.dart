@@ -30,6 +30,7 @@ class StudentAssignmentListBloc
     on<GetSubjectList>(_getSubjectList);
     on<SelectSubjectId>(_selectSubjectId);
     on<PressFilter>(_pressFilter);
+    on<PageIncrement>(_pageIncrement);
 
     add(DataForTab(tabIndex: state.activeTab.toString()));
     add(GetSubjectList());
@@ -41,7 +42,7 @@ class StudentAssignmentListBloc
 
   FutureOr<void> _dataForTab(
       DataForTab event, Emitter<StudentAssignmentListState> emit) async {
-    emit(state.copyWith(loading: true));
+    emit(state.copyWith(page: 1, loading: true, isEndList: false));
 
     if (event.tabIndex == '0') {
       emit(state.copyWith(activeTab: '', loading: true));
@@ -52,6 +53,7 @@ class StudentAssignmentListBloc
     }
 
     final queryParams = {
+      "page": state.page,
       "submission_status": state.activeTab,
       "search": state.searchText,
       "start_date": state.startDate,
@@ -86,8 +88,9 @@ class StudentAssignmentListBloc
 
   FutureOr<void> _getSearchedAssignment(GetSearchedAssignment event,
       Emitter<StudentAssignmentListState> emit) async {
-    emit(state.copyWith(page: 1, loading: true));
+    emit(state.copyWith(page: 1, loading: true, isEndList: false));
     final queryParams = {
+      "page": state.page,
       "submission_status": state.activeTab,
       "search": state.searchText,
       "start_date": state.startDate,
@@ -151,8 +154,9 @@ class StudentAssignmentListBloc
 
   FutureOr<void> _pressFilter(
       PressFilter event, Emitter<StudentAssignmentListState> emit) async {
-    emit(state.copyWith(page: 1, loading: true));
+    emit(state.copyWith(page: 1, loading: true, isEndList: false));
     final queryParams = {
+      "page": state.page,
       "submission_status": state.activeTab,
       "search": state.searchText,
       "start_date": state.startDate,
@@ -170,5 +174,44 @@ class StudentAssignmentListBloc
       emit(state.copyWith(assignmentList: flterAssignment));
     }
     emit(state.copyWith(loading: false));
+  }
+
+  FutureOr<void> _pageIncrement(
+      PageIncrement event, Emitter<StudentAssignmentListState> emit) async {
+    int totalPage = state.page + 1;
+
+    if (totalPage <= state.assignmentList.lastPage!) {
+      if (!state.incrementLoader) {
+        emit(state.copyWith(page: totalPage, incrementLoader: true));
+
+        final queryParams = {
+          "page": state.page,
+          "submission_status": state.activeTab,
+          "search": state.searchText,
+          "start_date": state.startDate,
+          "end_date": state.endDate,
+          "subject_id": state.subjectId,
+        };
+
+        final assignment = await _apiRepo.get<AssignmentResponse>(
+          endpoint: buildUrl(
+              studentAssignmentEndPoint(
+                  sId: _localStorageRepo.read(key: loginIdDB)!),
+              queryParams),
+        );
+
+        emit(state.copyWith(page: totalPage, incrementLoader: false));
+
+        if (assignment != null) {
+          emit(state.copyWith(
+              assignmentList: AssignmentResponse(
+            data: state.assignmentList.data! + assignment.data!,
+            lastPage: assignment.lastPage,
+          )));
+        }
+      }
+    } else if (!state.incrementLoader) {
+      emit(state.copyWith(isEndList: true));
+    }
   }
 }

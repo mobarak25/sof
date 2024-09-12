@@ -142,6 +142,8 @@ class RemoteGatewayBase {
 
       final body = json.encode(data);
 
+      print("body=============$body");
+
       final response =
           await http.post(Uri.parse(endpoint), headers: headers, body: body);
 

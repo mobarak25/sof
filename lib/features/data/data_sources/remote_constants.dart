@@ -33,6 +33,7 @@ String assignmentMarkEntryEndPoint({required int id}) =>
     "${version1}assignment/mark-entry/$id";
 
 String getBatchAsSectionsEndPoint = "${version1}common/get-batch-as-sections";
+String assignmentCreateEndPoint = "${version1}assignment";
 String deleteAssignmentEndPoint({required int id}) =>
     "${version1}assignment/$id";
 

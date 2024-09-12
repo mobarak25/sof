@@ -8,10 +8,14 @@ class CheckboxB extends StatefulWidget {
     required this.label,
     required this.press,
     required this.defaultValue,
+    this.fontSize,
+    this.fontColor,
   });
   final String label;
   final Function press;
   final bool defaultValue;
+  final double? fontSize;
+  final Color? fontColor;
 
   @override
   State<CheckboxB> createState() => _CheckboxBState();
@@ -56,10 +60,13 @@ class _CheckboxBState extends State<CheckboxB> {
             });
             widget.press(_isChecked);
           },
-          child: TextB(
-            text: widget.label,
-            fontSize: 16,
-            fontColor: bGray100,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 5),
+            child: TextB(
+              text: widget.label,
+              fontSize: widget.fontSize ?? 16,
+              fontColor: widget.fontColor ?? bGray52,
+            ),
           ),
         )
       ],

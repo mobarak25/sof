@@ -3,6 +3,7 @@ part of 'assignment_create_bloc.dart';
 class AssignmentCreateState extends Equatable {
   const AssignmentCreateState({
     this.loading = false,
+    this.forms = Forms.initial,
     this.batchLoading = false,
     this.title = '',
     this.fileList = const [],
@@ -29,9 +30,11 @@ class AssignmentCreateState extends Equatable {
     this.selecteClassName = '',
     this.batchWiseStudent = const [],
     //End dependable
+    this.tempBatchWiseStudent = const [],
   });
 
   final bool loading, batchLoading;
+  final Forms forms;
   final String title;
   final List<File> fileList;
   final bool isSubmitable;
@@ -60,9 +63,11 @@ class AssignmentCreateState extends Equatable {
   final List<String> selectedBatchName;
   final String selecteClassName;
   final List<BatchWiseStudent> batchWiseStudent;
+  final List<BatchWiseStudent> tempBatchWiseStudent;
 
   AssignmentCreateState copyWith({
     bool? loading,
+    Forms? forms,
     bool? batchLoading,
     List<File>? fileList,
     String? title,
@@ -89,9 +94,11 @@ class AssignmentCreateState extends Equatable {
     List<String>? selectedBatchName,
     String? selecteClassName,
     List<BatchWiseStudent>? batchWiseStudent,
+    List<BatchWiseStudent>? tempBatchWiseStudent,
   }) {
     return AssignmentCreateState(
       loading: loading ?? this.loading,
+      forms: forms ?? this.forms,
       batchLoading: batchLoading ?? this.batchLoading,
       title: title ?? this.title,
       fileList: fileList ?? this.fileList,
@@ -118,12 +125,14 @@ class AssignmentCreateState extends Equatable {
       selectedBatchName: selectedBatchName ?? this.selectedBatchName,
       selecteClassName: selecteClassName ?? this.selecteClassName,
       batchWiseStudent: batchWiseStudent ?? this.batchWiseStudent,
+      tempBatchWiseStudent: tempBatchWiseStudent ?? this.tempBatchWiseStudent,
     );
   }
 
   @override
   List<Object> get props => [
         loading,
+        forms,
         batchLoading,
         title,
         fileList,
@@ -150,6 +159,7 @@ class AssignmentCreateState extends Equatable {
         selectedBatchName,
         selecteClassName,
         batchWiseStudent,
+        tempBatchWiseStudent,
       ];
 }
 

@@ -36,7 +36,7 @@ class BachCard extends StatelessWidget {
                   Flexible(
                     child: TextB(
                       text:
-                          "All students from $selecteClassName-${selectedBatchName[index]} is selected",
+                          "Students from $selecteClassName-${selectedBatchName[index]} is selected",
                       textStyle: bBody2,
                     ),
                   ),

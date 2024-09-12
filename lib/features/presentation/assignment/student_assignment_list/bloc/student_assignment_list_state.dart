@@ -5,6 +5,7 @@ class StudentAssignmentListState extends Equatable {
     this.page = 1,
     this.loading = false,
     this.isEndList = false,
+    this.incrementLoader = false,
     this.activeTab = '',
     this.searchText = '',
     this.startDate = '',
@@ -18,6 +19,7 @@ class StudentAssignmentListState extends Equatable {
   final int page;
   final bool loading;
   final bool isEndList;
+  final bool incrementLoader;
   final String activeTab;
   final String searchText;
   final String startDate;
@@ -31,6 +33,7 @@ class StudentAssignmentListState extends Equatable {
     int? page,
     bool? loading,
     bool? isEndList,
+    bool? incrementLoader,
     String? activeTab,
     String? searchText,
     String? startDate,
@@ -44,6 +47,7 @@ class StudentAssignmentListState extends Equatable {
       page: page ?? this.page,
       loading: loading ?? this.loading,
       isEndList: isEndList ?? this.isEndList,
+      incrementLoader: incrementLoader ?? this.incrementLoader,
       activeTab: activeTab ?? this.activeTab,
       searchText: searchText ?? this.searchText,
       startDate: startDate ?? this.startDate,
@@ -60,6 +64,7 @@ class StudentAssignmentListState extends Equatable {
         page,
         loading,
         isEndList,
+        incrementLoader,
         activeTab,
         searchText,
         assignmentList,

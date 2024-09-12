@@ -50,7 +50,7 @@ class TeacherAssignmentListBloc
 
   FutureOr<void> _dataForTab(
       DataForTab event, Emitter<TeacherAssignmentListState> emit) async {
-    emit(state.copyWith(loading: true, isEndList: false));
+    emit(state.copyWith(page: 1, loading: true, isEndList: false));
 
     if (event.tabIndex == '0') {
       emit(state.copyWith(activeTab: '1', loading: true));
@@ -59,6 +59,7 @@ class TeacherAssignmentListBloc
     }
 
     final queryParams = {
+      "page": state.page,
       "status": state.activeTab,
       "search": state.searchText,
       "start_date": state.startDate,
@@ -92,8 +93,9 @@ class TeacherAssignmentListBloc
 
   FutureOr<void> _getSearchedAssignment(GetSearchedAssignment event,
       Emitter<TeacherAssignmentListState> emit) async {
-    emit(state.copyWith(page: 1, loading: true));
+    emit(state.copyWith(page: 1, loading: true, isEndList: false));
     final queryParams = {
+      "page": state.page,
       "status": state.activeTab,
       "search": state.searchText,
       "start_date": state.startDate,
@@ -270,6 +272,7 @@ class TeacherAssignmentListBloc
       PressFilter event, Emitter<TeacherAssignmentListState> emit) async {
     emit(state.copyWith(page: 1, isEndList: false, loading: true));
     final queryParams = {
+      "page": state.page,
       "status": state.activeTab,
       "search": state.searchText,
       "start_date": state.startDate,
@@ -317,19 +320,20 @@ class TeacherAssignmentListBloc
       PageIncrement event, Emitter<TeacherAssignmentListState> emit) async {
     int totalPage = state.page + 1;
 
-    final queryParams = {
-      "status": state.activeTab,
-      "search": state.searchText,
-      "start_date": state.startDate,
-      "end_date": state.endDate,
-      "class_id": state.selectedClassId,
-      "subject_id": state.selectedSubjectId,
-      "section_id": state.selectSectionId,
-    };
-
     if (totalPage <= state.assignmentList.lastPage!) {
       if (!state.incrementLoader) {
         emit(state.copyWith(page: totalPage, incrementLoader: true));
+
+        final queryParams = {
+          "page": state.page,
+          "status": state.activeTab,
+          "search": state.searchText,
+          "start_date": state.startDate,
+          "end_date": state.endDate,
+          "class_id": state.selectedClassId,
+          "subject_id": state.selectedSubjectId,
+          "section_id": state.selectSectionId,
+        };
 
         final assignment = await _apiRepo.get<TeacherAssignment>(
           endpoint: buildUrl(teacherAssignmentEndPoint, queryParams),

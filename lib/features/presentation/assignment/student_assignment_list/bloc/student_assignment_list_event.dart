@@ -50,3 +50,5 @@ class SelectSubjectId extends StudentAssignmentListEvent {
 }
 
 class PressFilter extends StudentAssignmentListEvent {}
+
+class PageIncrement extends StudentAssignmentListEvent {}

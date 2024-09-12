@@ -8,7 +8,7 @@ class CreateAssignment {
   final String isMarkable;
   final List<int> assignToStudent;
   final String? marks;
-  final List<String> assignToBatch;
+  final List<int> assignToBatch;
   final int submissionRequired;
   final List<String> assignmentAttachmentUrl;
 
@@ -42,7 +42,7 @@ class CreateAssignment {
         marks: json["marks"],
         assignToBatch: json["assign_to_batch"] == null
             ? []
-            : List<String>.from(json["assign_to_batch"]!.map((x) => x)),
+            : List<int>.from(json["assign_to_batch"]!.map((x) => x)),
         submissionRequired: json["submission_required"],
         assignmentAttachmentUrl: json["assignment_attachment__url"] == null
             ? []

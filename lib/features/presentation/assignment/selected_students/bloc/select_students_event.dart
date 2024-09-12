@@ -11,3 +11,14 @@ class GetInitialStudents extends SelectStudentsEvent {
   const GetInitialStudents({required this.students});
   final BatchWiseStudent students;
 }
+
+class ToggleCheckbox extends SelectStudentsEvent {
+  const ToggleCheckbox({required this.value, required this.index});
+  final bool value;
+  final int index;
+}
+
+class ToggleSelectAll extends SelectStudentsEvent {
+  const ToggleSelectAll({required this.value});
+  final bool value;
+}

@@ -1,7 +1,6 @@
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:gap/gap.dart';
@@ -10,6 +9,7 @@ import 'package:school_of_future/core/router/route_constents.dart';
 import 'package:school_of_future/core/translations/local_keys.dart';
 import 'package:school_of_future/core/utils/asset_image.dart';
 import 'package:school_of_future/core/utils/colors.dart';
+import 'package:school_of_future/core/utils/enums.dart';
 import 'package:school_of_future/core/utils/text_styles.dart';
 import 'package:school_of_future/core/widgets/app_bar.dart';
 import 'package:school_of_future/core/widgets/body.dart';
@@ -33,13 +33,11 @@ class AssignmentCreateScreen extends StatelessWidget {
     final markFocusnode = FocusNode();
     final startDateFocusnode = FocusNode();
     final endDateFocusnode = FocusNode();
-    final descriptionFocusnode = FocusNode();
 
     final titleController = TextEditingController();
     final markController = TextEditingController();
     final startController = TextEditingController();
     final endController = TextEditingController();
-    final descriptionController = TextEditingController();
 
     QuillController qController = QuillController.basic();
     MultiValueDropDownController cntMulti = MultiValueDropDownController();
@@ -71,6 +69,10 @@ class AssignmentCreateScreen extends StatelessWidget {
                       onChanged: (String value) {
                         bloc.add(ChangeTitle(title: value));
                       },
+                      errorText:
+                          state.forms == Forms.invalid && state.title.isEmpty
+                              ? LocaleKeys.enterTitle.tr()
+                              : '',
                     ),
                     const Gap(20),
                     TextB(
@@ -115,13 +117,6 @@ class AssignmentCreateScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-
-                    // if (state.forms == Forms.invalid &&
-                    //     state.content == '<br> ')
-                    //   TextB(
-                    //     text: LocaleKeys.enterDescription.tr(),
-                    //     fontColor: bRed,
-                    //   ),
                     Column(
                       children: [
                         const Gap(15),
@@ -133,7 +128,6 @@ class AssignmentCreateScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-
                     const Gap(10),
                     DottedButtonB(
                       title: LocaleKeys.attachment.tr(),
@@ -189,8 +183,12 @@ class AssignmentCreateScreen extends StatelessWidget {
                       onChanged: (String value) {
                         bloc.add(ChangeMark(mark: value));
                       },
+                      errorText: state.forms == Forms.invalid &&
+                              state.isAssessment &&
+                              state.mark.isEmpty
+                          ? LocaleKeys.enterMark.tr()
+                          : '',
                     ),
-
                     const Gap(20),
                     TextFieldB(
                       isMandatory: true,
@@ -213,6 +211,11 @@ class AssignmentCreateScreen extends StatelessWidget {
                         bloc.add(StartDate(startDate: startController.text));
                       },
                     ),
+                    if (state.forms == Forms.invalid && state.startDate.isEmpty)
+                      TextB(
+                        text: LocaleKeys.noStartDate.tr(),
+                        fontColor: bRed,
+                      ),
                     const Gap(20),
                     TextFieldB(
                       isMandatory: true,
@@ -234,6 +237,11 @@ class AssignmentCreateScreen extends StatelessWidget {
                         bloc.add(EndDate(endDate: endController.text));
                       },
                     ),
+                    if (state.forms == Forms.invalid && state.endDate.isEmpty)
+                      TextB(
+                        text: LocaleKeys.noEndDate.tr(),
+                        fontColor: bRed,
+                      ),
                     const Gap(20),
                     DropdownFieldB(
                       dropdownHeight: 50,
@@ -270,23 +278,11 @@ class AssignmentCreateScreen extends StatelessWidget {
                       },
                       items: state.subjectList,
                     ),
-                    //const Gap(10),
-                    // DropdownFieldB(
-                    //   dropdownHeight: 50,
-                    //   label: LocaleKeys.section.tr(),
-                    //   labelColor: bBlack,
-                    //   setState: state.setSection,
-                    //   dropDownValue: state.selectSectionId,
-                    //   selected: (dynamic type) {
-                    //     bloc.add(SelectSectionId(id: type));
-                    //   },
-                    //   items: state.sectionList,
-                    // ),
+                    if (state.forms == Forms.invalid &&
+                        state.selectedSubjectId == -1)
+                      TextB(text: LocaleKeys.subject.tr(), fontColor: bRed),
                     const Gap(10),
-                    TextB(
-                      text: LocaleKeys.section.tr(),
-                      textStyle: bBody1,
-                    ),
+                    TextB(text: LocaleKeys.section.tr(), textStyle: bBody1),
                     SizedBox(
                       height: 50,
                       child: DropDownTextField.multiSelection(
@@ -326,6 +322,9 @@ class AssignmentCreateScreen extends StatelessWidget {
                         },
                       ),
                     ),
+                    if (state.forms == Forms.invalid &&
+                        state.assignToBatchId.isEmpty)
+                      TextB(text: LocaleKeys.section.tr(), fontColor: bRed),
                     const Gap(10),
                     if (state.batchWiseStudent.isNotEmpty &&
                         !state.batchLoading)
@@ -334,22 +333,21 @@ class AssignmentCreateScreen extends StatelessWidget {
                         selectedBatchName: state.selectedBatchName,
                         selecteClassName: state.selecteClassName,
                         press: (int index) {
-                          print(index);
                           Navigator.of(context, rootNavigator: true)
                               .pushNamed(selectedStudentsScreen,
                                   arguments: state.batchWiseStudent[index])
                               .then((value) {
-                            final name = value as String;
-                            print(name);
+                            final backWithUnselected = value as List<bool>;
+
+                            bloc.add(BackWithUnselected(
+                                students: backWithUnselected, index: index));
                           });
                         },
                       ),
-
                     if (state.batchLoading)
                       const Center(
                         child: CircularProgressIndicator(),
                       ),
-
                     const Gap(30),
                     ButtonB(
                       heigh: 60,
@@ -361,7 +359,13 @@ class AssignmentCreateScreen extends StatelessWidget {
 
                         final htmlContent =
                             QuillJsonToHTML.encodeJson(jsonContent);
-                        // bloc.add(PressToSumit(work: htmlContent));
+                        bloc.add(
+                          PressToCreate(
+                            content: htmlContent,
+                            titleFocusnode: titleFocusnode,
+                            markFocusnode: markFocusnode,
+                          ),
+                        );
                       },
                     ),
                     const Gap(20),

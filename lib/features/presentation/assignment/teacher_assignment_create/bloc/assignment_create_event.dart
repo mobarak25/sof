@@ -71,5 +71,21 @@ class SelectSectionList extends AssignmentCreateEvent {
   const SelectSectionList({required this.sectionList});
   final List<dynamic> sectionList;
 }
-
 //end dropdown
+
+class BackWithUnselected extends AssignmentCreateEvent {
+  const BackWithUnselected({required this.students, required this.index});
+  final List<bool> students;
+  final int index;
+}
+
+class PressToCreate extends AssignmentCreateEvent {
+  const PressToCreate({
+    required this.content,
+    required this.titleFocusnode,
+    required this.markFocusnode,
+  });
+  final String content;
+  final FocusNode titleFocusnode;
+  final FocusNode markFocusnode;
+}

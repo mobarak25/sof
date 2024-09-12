@@ -4,12 +4,17 @@ import 'dart:io';
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:equatable/equatable.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:school_of_future/core/file_picker/file_picker_service.dart';
+import 'package:school_of_future/core/form_validator/validator.dart';
 import 'package:school_of_future/core/navigator/iflutter_navigator.dart';
+import 'package:school_of_future/core/utils/enums.dart';
 import 'package:school_of_future/core/utils/utilities.dart';
 import 'package:school_of_future/features/data/data_sources/remote_constants.dart';
+import 'package:school_of_future/features/data/model/create_assignment.dart';
 import 'package:school_of_future/features/domain/entities/batch_wise_student.dart';
+import 'package:school_of_future/features/domain/entities/default_response.dart';
 import 'package:school_of_future/features/domain/entities/get_batch_as_section_response.dart';
 import 'package:school_of_future/features/domain/repositories/api_repo.dart';
 import 'package:school_of_future/features/domain/repositories/local_storage_repo.dart';
@@ -36,7 +41,8 @@ class AssignmentCreateBloc
     on<SelectSubjectId>(_selectSubjectId);
     on<SelectSectionId>(_selectSectionId);
     on<SelectSectionList>(_selectSectionList);
-
+    on<BackWithUnselected>(_backWithUnselected);
+    on<PressToCreate>(_pressToCreate);
     add(GetVersionList());
   }
 
@@ -271,9 +277,82 @@ class AssignmentCreateBloc
     }
     emit(state.copyWith(
       batchWiseStudent: batchWiseStudentList,
+      tempBatchWiseStudent: batchWiseStudentList,
       batchLoading: false,
     ));
+  }
 
-    print(state.batchWiseStudent.length);
+  FutureOr<void> _backWithUnselected(
+      BackWithUnselected event, Emitter<AssignmentCreateState> emit) {
+    BatchWiseStudent list = state.tempBatchWiseStudent[event.index];
+    if (list.data != null) {
+      for (int i = 0; i < event.students.length; i++) {
+        if (event.students[i] == false) {
+          list.data!.removeAt(i);
+        }
+      }
+    }
+
+    emit(state.copyWith(
+        tempBatchWiseStudent: List.from(state.tempBatchWiseStudent)
+          ..removeAt(event.index)
+          ..add(list)));
+  }
+
+  FutureOr<void> _pressToCreate(
+      PressToCreate event, Emitter<AssignmentCreateState> emit) async {
+    List<int> studentList = [];
+    for (int i = 0; i < state.tempBatchWiseStudent.length; i++) {
+      for (int j = 0; j < state.tempBatchWiseStudent[i].data!.length; j++) {
+        studentList.add(state.tempBatchWiseStudent[i].data![j].id!);
+      }
+    }
+
+    if (isValid(event) && !state.loading) {
+      emit(state.copyWith(loading: true));
+      final create = await _apiRepo.appMultipart<DefaultResponse, void>(
+        endpoint: assignmentCreateEndPoint,
+        body: {
+          "status": 1,
+          "title": state.title,
+          "description": event.content,
+          "published_at": state.startDate,
+          "due_at": state.endDate,
+          "subject_id": state.selectedSubjectId,
+          "is_markable": state.isAssessment ? '1' : '0',
+          "assign_to_student": studentList,
+          "marks": state.mark,
+          "assign_to_batch": state.assignToBatchId,
+          "submission_required": state.isSubmitable ? 1 : 0,
+        },
+        fileFieldName: "assignment_attachment__url",
+        files: state.fileList,
+      );
+
+      if (create != null) {
+        print("Successful");
+      }
+      emit(state.copyWith(loading: false));
+    } else {
+      emit(state.copyWith(forms: Forms.invalid));
+    }
+  }
+
+  bool isValid(PressToCreate event) {
+    final validate = Validator.isValidated(items: [
+      FormItem(text: state.title, focusNode: event.titleFocusnode),
+      FormItem(text: state.mark, focusNode: event.markFocusnode),
+    ], navigator: _iFlutterNavigator);
+
+    if (!validate) return false;
+    if (state.title.isEmpty ||
+        state.startDate.isEmpty ||
+        state.endDate.isEmpty ||
+        state.isAssessment && state.mark.isEmpty ||
+        state.selectedSubjectId == -1 ||
+        state.assignToBatchId.isEmpty) {
+      return false;
+    }
+    return true;
   }
 }

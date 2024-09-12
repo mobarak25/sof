@@ -78,6 +78,7 @@ class StudentAssignmentItem extends StatelessWidget {
                               text: LocaleKeys.subReqAssignment.tr(),
                               fontSize: 9,
                               fontColor: bWhite,
+                              alignMent: TextAlign.center,
                             ),
                           ),
                         if (submissionStatus == 0)

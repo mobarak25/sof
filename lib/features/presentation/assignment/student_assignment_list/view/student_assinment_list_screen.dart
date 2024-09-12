@@ -26,10 +26,16 @@ class StudentAssinmentListScreen extends StatelessWidget {
     final endDateFocusnode = FocusNode();
     final startDateController = TextEditingController();
     final endDateController = TextEditingController();
+    final scroll = ScrollController();
 
     return BlocBuilder<StudentAssignmentListBloc, StudentAssignmentListState>(
       builder: (context, state) {
         final bloc = context.read<StudentAssignmentListBloc>();
+        scroll.addListener(() {
+          if (scroll.position.pixels == scroll.position.maxScrollExtent) {
+            bloc.add(PageIncrement());
+          }
+        });
         return Body(
           isFullScreen: true,
           appBar: FutureAppBar(
@@ -151,45 +157,70 @@ class StudentAssinmentListScreen extends StatelessWidget {
                 bloc.add(ChangeSearch(searchText: value));
               },
               child: state.assignmentList.data != null
-                  ? ListView.builder(
-                      itemCount: state.assignmentList.data!.length,
-                      itemBuilder: (context, position) {
-                        final datalist = state.assignmentList.data!;
-                        return Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.of(context, rootNavigator: true)
-                                    .pushNamed(
-                                  studentAssignmentDetailsScreen,
-                                  arguments: datalist[position].id,
-                                );
-                              },
-                              child: StudentAssignmentItem(
-                                subjectGroupId: datalist[position]
-                                    .subject!
-                                    .subjectGroup!
-                                    .id!,
-                                subjectName:
-                                    datalist[position].subject!.name ?? '',
-                                topicName: datalist[position].title ?? '',
-                                dueDate: getDate(
-                                    value: datalist[position].dueAt!,
-                                    formate: "dd MMM yyyy"),
-                                totalMark: "${datalist[position].marks}".tr(),
-                                daysLeft: "${datalist[position].daysLeft}".tr(),
-                                submissionStatus:
-                                    datalist[position].submissionStatus,
-                                draftStatus: datalist[position].status == 0,
-                                submissionRequired:
-                                    datalist[position].isSubmitable!,
-                              ),
+                  ? ListView(
+                      controller: scroll,
+                      children: [
+                        ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: state.assignmentList.data!.length,
+                          itemBuilder: (context, position) {
+                            final datalist = state.assignmentList.data!;
+                            return Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.of(context, rootNavigator: true)
+                                        .pushNamed(
+                                      studentAssignmentDetailsScreen,
+                                      arguments: datalist[position].id,
+                                    );
+                                  },
+                                  child: StudentAssignmentItem(
+                                    subjectGroupId: datalist[position]
+                                        .subject!
+                                        .subjectGroup!
+                                        .id!,
+                                    subjectName:
+                                        datalist[position].subject!.name ?? '',
+                                    topicName: datalist[position].title ?? '',
+                                    dueDate: getDate(
+                                        value: datalist[position].dueAt!,
+                                        formate: "dd MMM yyyy"),
+                                    totalMark:
+                                        "${datalist[position].marks}".tr(),
+                                    daysLeft:
+                                        "${datalist[position].daysLeft}".tr(),
+                                    submissionStatus:
+                                        datalist[position].submissionStatus,
+                                    draftStatus: datalist[position].status == 0,
+                                    submissionRequired:
+                                        datalist[position].isSubmitable!,
+                                  ),
+                                ),
+                                const Gap(15),
+                              ],
+                            );
+                          },
+                        ),
+                        if (state.incrementLoader)
+                          const Padding(
+                            padding: EdgeInsets.only(bottom: 90, top: 10),
+                            child: Center(
+                              child: CircularProgressIndicator(),
                             ),
-                            const Gap(15),
-                          ],
-                        );
-                      },
+                          ),
+                        if (!state.incrementLoader && state.isEndList)
+                          Container(
+                            padding: const EdgeInsets.only(bottom: 90, top: 10),
+                            child: const TextB(
+                              text: "End of the list",
+                              fontColor: bRed,
+                              alignMent: TextAlign.center,
+                            ),
+                          )
+                      ],
                     )
                   : const TextB(text: "loading..."),
             ),

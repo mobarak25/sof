@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:school_of_future/core/file_picker/file_picker_service.dart';
 import 'package:school_of_future/core/ioc/global.dart';
 import 'package:school_of_future/core/navigator/iflutter_navigator.dart';
+import 'package:school_of_future/core/utils/utilities.dart';
 import 'package:school_of_future/features/domain/entities/batch_wise_student.dart';
 import 'package:school_of_future/features/domain/repositories/api_repo.dart';
 import 'package:school_of_future/features/domain/repositories/local_storage_repo.dart';
@@ -191,7 +192,7 @@ class AppRouter {
         );
 
       case selectedStudentsScreen:
-        final students = settings.arguments as BatchWiseStudent;
+        final students = settings.arguments as List<CheckUncheckStudents>;
         return MaterialPageRoute(
           settings: settings,
           builder: (BuildContext context) => BlocProvider(

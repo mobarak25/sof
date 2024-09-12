@@ -1,16 +1,14 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:school_of_future/core/translations/local_keys.dart';
 import 'package:school_of_future/core/utils/colors.dart';
-import 'package:school_of_future/core/utils/text_styles.dart';
 import 'package:school_of_future/core/widgets/app_bar.dart';
 import 'package:school_of_future/core/widgets/body.dart';
 import 'package:school_of_future/core/widgets/button.dart';
-import 'package:school_of_future/core/widgets/check_box.dart';
 import 'package:school_of_future/core/widgets/text.dart';
+import 'package:school_of_future/core/widgets/text_field.dart';
 import 'package:school_of_future/features/presentation/assignment/selected_students/bloc/select_students_bloc.dart';
 
 class SelectedStudentsScreen extends StatelessWidget {
@@ -18,6 +16,9 @@ class SelectedStudentsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final searchFocusNode = FocusNode();
+    final searchController = TextEditingController();
+
     return BlocBuilder<SelectStudentsBloc, SelectStudentsState>(
       builder: (context, state) {
         final bloc = context.read<SelectStudentsBloc>();
@@ -30,9 +31,23 @@ class SelectedStudentsScreen extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.only(top: 10),
             color: bWhite,
-            child: state.allStudents.data != null
+            child: state.allStudents.isNotEmpty
                 ? Column(
                     children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 15, vertical: 10),
+                        child: TextFieldB(
+                          focusNode: searchFocusNode,
+                          controller: searchController,
+                          borderColor: bGray12,
+                          hintText: LocaleKeys.search.tr(),
+                          prefixIcon: const Icon(Icons.search),
+                          onChanged: (String value) {
+                            bloc.add(ChageSearch(search: value));
+                          },
+                        ),
+                      ),
                       Container(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 10, vertical: 10),
@@ -56,14 +71,6 @@ class SelectedStudentsScreen extends StatelessWidget {
                                 },
                               ),
                             ),
-                            // CheckboxB(
-                            //   label: "Student Name",
-                            //   fontColor: bBlack,
-                            //   press: (bool value) {
-                            //     bloc.add(ToggleSelectAll(value: value));
-                            //   },
-                            //   defaultValue: state.selectAll,
-                            // ),
                             const TextB(
                               text: "Roll",
                               fontSize: 16,
@@ -77,23 +84,12 @@ class SelectedStudentsScreen extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 15, vertical: 10),
                           children: [
-                            ...List.generate(state.allStudents.data!.length,
+                            ...List.generate(state.allStudents.length,
                                 (position) {
                               return Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  // CheckboxB(
-                                  //   fontSize: 13,
-                                  //   label:
-                                  //       state.allStudents.data![position].name!,
-                                  //   press: (bool value) {
-                                  //     bloc.add(ToggleCheckbox(
-                                  //         value: value, index: position));
-                                  //   },
-                                  //   defaultValue:
-                                  //       state.selectedOptions[position],
-                                  // ),
                                   Expanded(
                                     child: CheckboxListTile(
                                       contentPadding: EdgeInsets.zero,
@@ -101,21 +97,20 @@ class SelectedStudentsScreen extends StatelessWidget {
                                       controlAffinity:
                                           ListTileControlAffinity.leading,
                                       title: TextB(
-                                        text: state
-                                            .allStudents.data![position].name!,
+                                        text: state.allStudents[position].name,
                                         fontSize: 13,
                                       ),
-                                      value: state.selectedOptions[position],
+                                      value:
+                                          state.allStudents[position].isChecked,
                                       onChanged: (bool? value) {
-                                        print(value);
                                         bloc.add(ToggleCheckbox(
                                             value: value!, index: position));
                                       },
                                     ),
                                   ),
                                   TextB(
-                                    text: state.allStudents.data![position]
-                                        .admissionNumber!,
+                                    text: state
+                                        .allStudents[position].admissionRoll,
                                     fontSize: 13,
                                   )
                                 ],
@@ -133,7 +128,7 @@ class SelectedStudentsScreen extends StatelessWidget {
                           heigh: 60,
                           text: "Save",
                           press: () {
-                            Navigator.pop(context, state.selectedOptions);
+                            Navigator.pop(context, state.allStudents);
                           },
                         ),
                       ),

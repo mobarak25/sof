@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:dropdown_textfield/dropdown_textfield.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:school_of_future/core/file_picker/file_picker_service.dart';
 import 'package:school_of_future/core/form_validator/validator.dart';
 import 'package:school_of_future/core/navigator/iflutter_navigator.dart';
+import 'package:school_of_future/core/navigator/navigator_key.dart';
+import 'package:school_of_future/core/router/route_constents.dart';
+import 'package:school_of_future/core/snackbar/show_snackbar.dart';
 import 'package:school_of_future/core/utils/enums.dart';
 import 'package:school_of_future/core/utils/utilities.dart';
 import 'package:school_of_future/features/data/data_sources/remote_constants.dart';
@@ -264,6 +268,8 @@ class AssignmentCreateBloc
     ));
 
     List<BatchWiseStudent> batchWiseStudentList = [];
+    List<List<CheckUncheckStudents>> listCheckUncheck = [];
+    List<CheckUncheckStudents> checkUncheck = [];
 
     for (int i = 0; i < state.assignToBatchId.length; i++) {
       final student = await _apiRepo.get<BatchWiseStudent>(
@@ -273,38 +279,47 @@ class AssignmentCreateBloc
 
       if (student != null) {
         batchWiseStudentList.add(student);
-      }
-    }
-    emit(state.copyWith(
-      batchWiseStudent: batchWiseStudentList,
-      tempBatchWiseStudent: batchWiseStudentList,
-      batchLoading: false,
-    ));
-  }
-
-  FutureOr<void> _backWithUnselected(
-      BackWithUnselected event, Emitter<AssignmentCreateState> emit) {
-    BatchWiseStudent list = state.tempBatchWiseStudent[event.index];
-    if (list.data != null) {
-      for (int i = 0; i < event.students.length; i++) {
-        if (event.students[i] == false) {
-          list.data!.removeAt(i);
+        if (student.data != null) {
+          for (int j = 0; j < student.data!.length; j++) {
+            checkUncheck.add(CheckUncheckStudents(
+              id: student.data![j].id!,
+              isChecked: true,
+              name: student.data![j].name!,
+              admissionRoll: student.data![j].admissionNumber!,
+            ));
+          }
+          listCheckUncheck.add(checkUncheck);
+          checkUncheck = [];
         }
       }
     }
 
     emit(state.copyWith(
-        tempBatchWiseStudent: List.from(state.tempBatchWiseStudent)
-          ..removeAt(event.index)
-          ..add(list)));
+      batchWiseStudent: batchWiseStudentList,
+      tempBatchWiseStudent: batchWiseStudentList,
+      batchLoading: false,
+      listOfCheckUncheckStudent: listCheckUncheck,
+    ));
+  }
+
+  FutureOr<void> _backWithUnselected(
+      BackWithUnselected event, Emitter<AssignmentCreateState> emit) {
+    List<List<CheckUncheckStudents>> updateStudents =
+        state.listOfCheckUncheckStudent;
+
+    updateStudents[event.index] = event.students;
+    emit(state.copyWith(listOfCheckUncheckStudent: updateStudents));
   }
 
   FutureOr<void> _pressToCreate(
       PressToCreate event, Emitter<AssignmentCreateState> emit) async {
     List<int> studentList = [];
-    for (int i = 0; i < state.tempBatchWiseStudent.length; i++) {
-      for (int j = 0; j < state.tempBatchWiseStudent[i].data!.length; j++) {
-        studentList.add(state.tempBatchWiseStudent[i].data![j].id!);
+
+    for (int i = 0; i < state.listOfCheckUncheckStudent.length; i++) {
+      for (int j = 0; j < state.listOfCheckUncheckStudent[i].length; j++) {
+        if (state.listOfCheckUncheckStudent[i][j].isChecked) {
+          studentList.add(state.listOfCheckUncheckStudent[i][j].id);
+        }
       }
     }
 
@@ -330,7 +345,10 @@ class AssignmentCreateBloc
       );
 
       if (create != null) {
-        print("Successful");
+        _iFlutterNavigator.pop();
+        navigatorKey.currentState!.pushNamedAndRemoveUntil(
+            teacherAssignmentListScreen, ModalRoute.withName('/'));
+        ShowSnackBar(message: create.message!, navigator: _iFlutterNavigator);
       }
       emit(state.copyWith(loading: false));
     } else {

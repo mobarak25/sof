@@ -31,6 +31,7 @@ class AssignmentCreateState extends Equatable {
     this.batchWiseStudent = const [],
     //End dependable
     this.tempBatchWiseStudent = const [],
+    this.listOfCheckUncheckStudent = const [],
   });
 
   final bool loading, batchLoading;
@@ -65,6 +66,8 @@ class AssignmentCreateState extends Equatable {
   final List<BatchWiseStudent> batchWiseStudent;
   final List<BatchWiseStudent> tempBatchWiseStudent;
 
+  final List<List<CheckUncheckStudents>> listOfCheckUncheckStudent;
+
   AssignmentCreateState copyWith({
     bool? loading,
     Forms? forms,
@@ -95,6 +98,7 @@ class AssignmentCreateState extends Equatable {
     String? selecteClassName,
     List<BatchWiseStudent>? batchWiseStudent,
     List<BatchWiseStudent>? tempBatchWiseStudent,
+    List<List<CheckUncheckStudents>>? listOfCheckUncheckStudent,
   }) {
     return AssignmentCreateState(
       loading: loading ?? this.loading,
@@ -126,6 +130,8 @@ class AssignmentCreateState extends Equatable {
       selecteClassName: selecteClassName ?? this.selecteClassName,
       batchWiseStudent: batchWiseStudent ?? this.batchWiseStudent,
       tempBatchWiseStudent: tempBatchWiseStudent ?? this.tempBatchWiseStudent,
+      listOfCheckUncheckStudent:
+          listOfCheckUncheckStudent ?? this.listOfCheckUncheckStudent,
     );
   }
 
@@ -160,6 +166,7 @@ class AssignmentCreateState extends Equatable {
         selecteClassName,
         batchWiseStudent,
         tempBatchWiseStudent,
+        listOfCheckUncheckStudent,
       ];
 }
 

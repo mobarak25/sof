@@ -104,3 +104,17 @@ String buildUrl(String baseUrl, Map<String, dynamic> queryParams) {
 String getFileName(String path) {
   return path.split('/').last;
 }
+
+class CheckUncheckStudents {
+  const CheckUncheckStudents({
+    required this.id,
+    required this.isChecked,
+    required this.name,
+    required this.admissionRoll,
+  });
+
+  final int id;
+  final bool isChecked;
+  final String name;
+  final String admissionRoll;
+}

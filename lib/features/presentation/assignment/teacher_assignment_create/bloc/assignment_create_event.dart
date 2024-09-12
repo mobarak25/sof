@@ -75,7 +75,7 @@ class SelectSectionList extends AssignmentCreateEvent {
 
 class BackWithUnselected extends AssignmentCreateEvent {
   const BackWithUnselected({required this.students, required this.index});
-  final List<bool> students;
+  final List<CheckUncheckStudents> students;
   final int index;
 }
 

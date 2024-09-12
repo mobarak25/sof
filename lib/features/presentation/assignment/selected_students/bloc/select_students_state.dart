@@ -3,17 +3,17 @@ part of 'select_students_bloc.dart';
 class SelectStudentsState extends Equatable {
   const SelectStudentsState({
     this.selectAll = true,
-    this.allStudents = const BatchWiseStudent(),
+    this.allStudents = const [],
     this.selectedOptions = const [],
   });
 
   final bool selectAll;
-  final BatchWiseStudent allStudents;
+  final List<CheckUncheckStudents> allStudents;
   final List<bool> selectedOptions;
 
   SelectStudentsState copyWith({
     bool? selectAll,
-    BatchWiseStudent? allStudents,
+    List<CheckUncheckStudents>? allStudents,
     List<bool>? selectedOptions,
   }) {
     return SelectStudentsState(

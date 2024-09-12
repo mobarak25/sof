@@ -11,6 +11,7 @@ import 'package:school_of_future/core/utils/asset_image.dart';
 import 'package:school_of_future/core/utils/colors.dart';
 import 'package:school_of_future/core/utils/enums.dart';
 import 'package:school_of_future/core/utils/text_styles.dart';
+import 'package:school_of_future/core/utils/utilities.dart';
 import 'package:school_of_future/core/widgets/app_bar.dart';
 import 'package:school_of_future/core/widgets/body.dart';
 import 'package:school_of_future/core/widgets/button.dart';
@@ -50,6 +51,7 @@ class AssignmentCreateScreen extends StatelessWidget {
           appBar: FutureAppBar(
             actions: const [SizedBox()],
             title: LocaleKeys.createHomeWork.tr(),
+            isLoading: state.loading,
           ),
           child: Container(
             padding: const EdgeInsets.symmetric(vertical: 13, horizontal: 15),
@@ -335,9 +337,11 @@ class AssignmentCreateScreen extends StatelessWidget {
                         press: (int index) {
                           Navigator.of(context, rootNavigator: true)
                               .pushNamed(selectedStudentsScreen,
-                                  arguments: state.batchWiseStudent[index])
+                                  arguments:
+                                      state.listOfCheckUncheckStudent[index])
                               .then((value) {
-                            final backWithUnselected = value as List<bool>;
+                            final backWithUnselected =
+                                value as List<CheckUncheckStudents>;
 
                             bloc.add(BackWithUnselected(
                                 students: backWithUnselected, index: index));
@@ -375,7 +379,6 @@ class AssignmentCreateScreen extends StatelessWidget {
                           child: ButtonB(
                             heigh: 60,
                             fontSize: 15,
-                            loading: state.loading,
                             bgColor: kSecondaryColor,
                             horizontalPadding: 5,
                             text: LocaleKeys.saveAsDraft.tr(),

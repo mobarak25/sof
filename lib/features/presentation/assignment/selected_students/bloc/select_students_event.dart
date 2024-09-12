@@ -9,7 +9,7 @@ sealed class SelectStudentsEvent extends Equatable {
 
 class GetInitialStudents extends SelectStudentsEvent {
   const GetInitialStudents({required this.students});
-  final BatchWiseStudent students;
+  final List<CheckUncheckStudents> students;
 }
 
 class ToggleCheckbox extends SelectStudentsEvent {
@@ -21,4 +21,9 @@ class ToggleCheckbox extends SelectStudentsEvent {
 class ToggleSelectAll extends SelectStudentsEvent {
   const ToggleSelectAll({required this.value});
   final bool value;
+}
+
+class ChageSearch extends SelectStudentsEvent {
+  const ChageSearch({required this.search});
+  final String search;
 }

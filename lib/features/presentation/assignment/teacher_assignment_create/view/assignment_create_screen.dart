@@ -30,6 +30,7 @@ class AssignmentCreateScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bloc = context.read<AssignmentCreateBloc>();
     final titleFocusnode = FocusNode();
     final markFocusnode = FocusNode();
     final startDateFocusnode = FocusNode();
@@ -45,7 +46,26 @@ class AssignmentCreateScreen extends StatelessWidget {
 
     return BlocBuilder<AssignmentCreateBloc, AssignmentCreateState>(
       builder: (context, state) {
-        final bloc = context.read<AssignmentCreateBloc>();
+        if (state.isFirstTime && state.assingmentDtls.data != null) {
+          final data = state.assingmentDtls.data!;
+          bloc.add(AddData(
+            title: data.title!,
+            description: data.description!,
+            mark: data.marks!,
+            startDate: data.publishedAt!,
+            endDate: data.dueAt!,
+            selectedVersionId: data.subject!.versionId!,
+            selectedClassId: data.subject!.classId!,
+            selectedSubjectId: data.subject!.id,
+            assignToBatchId: const [1],
+          ));
+        }
+
+        titleController.text = state.title;
+        markController.text = state.mark;
+        startController.text = state.startDate;
+        endController.text = state.endDate;
+
         return Body(
           isFullScreen: true,
           appBar: FutureAppBar(
@@ -208,8 +228,10 @@ class AssignmentCreateScreen extends StatelessWidget {
                       ),
                       onChanged: (String value) {},
                       onTouch: () async {
-                        startController.text =
-                            await showDateTimePickerDialog(context) ?? '';
+                        startController.text = await showDateTimePickerDialog(
+                                context,
+                                initialdate: state.startDate) ??
+                            '';
                         bloc.add(StartDate(startDate: startController.text));
                       },
                     ),
@@ -234,8 +256,10 @@ class AssignmentCreateScreen extends StatelessWidget {
                       ),
                       onChanged: (String value) {},
                       onTouch: () async {
-                        endController.text =
-                            await showDateTimePickerDialog(context) ?? '';
+                        endController.text = await showDateTimePickerDialog(
+                                context,
+                                initialdate: state.endDate) ??
+                            '';
                         bloc.add(EndDate(endDate: endController.text));
                       },
                     ),
@@ -356,15 +380,16 @@ class AssignmentCreateScreen extends StatelessWidget {
                     ButtonB(
                       heigh: 60,
                       text: LocaleKeys.create.tr(),
-                      loading: state.loading,
                       press: () {
                         List jsonContent =
                             qController.document.toDelta().toJson();
 
                         final htmlContent =
                             QuillJsonToHTML.encodeJson(jsonContent);
+
                         bloc.add(
                           PressToCreate(
+                            isDraft: false,
                             content: htmlContent,
                             titleFocusnode: titleFocusnode,
                             markFocusnode: markFocusnode,
@@ -388,7 +413,14 @@ class AssignmentCreateScreen extends StatelessWidget {
 
                               final htmlContent =
                                   QuillJsonToHTML.encodeJson(jsonContent);
-                              //  bloc.add(PressToDraft(work: htmlContent));
+                              bloc.add(
+                                PressToCreate(
+                                  isDraft: true,
+                                  content: htmlContent,
+                                  titleFocusnode: titleFocusnode,
+                                  markFocusnode: markFocusnode,
+                                ),
+                              );
                             },
                           ),
                         ),
@@ -400,7 +432,7 @@ class AssignmentCreateScreen extends StatelessWidget {
                             textColor: kTextAnotherColor,
                             text: LocaleKeys.cancel.tr(),
                             press: () {
-                              // bloc.add(PressToCancel());
+                              bloc.add(PressToCancel());
                             },
                           ),
                         ),

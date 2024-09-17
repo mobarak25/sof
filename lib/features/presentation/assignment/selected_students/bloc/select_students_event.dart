@@ -13,9 +13,9 @@ class GetInitialStudents extends SelectStudentsEvent {
 }
 
 class ToggleCheckbox extends SelectStudentsEvent {
-  const ToggleCheckbox({required this.value, required this.index});
+  const ToggleCheckbox({required this.value, required this.id});
   final bool value;
-  final int index;
+  final int id;
 }
 
 class ToggleSelectAll extends SelectStudentsEvent {

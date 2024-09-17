@@ -179,6 +179,7 @@ class AppRouter {
         );
 
       case teacherAssignmentCreateScreen:
+        final id = settings.arguments as int;
         return MaterialPageRoute(
           settings: settings,
           builder: (BuildContext context) => BlocProvider(
@@ -186,8 +187,9 @@ class AppRouter {
                 getIt<ApiRepo>(),
                 getIt<IFlutterNavigator>(),
                 getIt<LocalStorageRepo>(),
-                getIt<FilePickerRepo>()),
-            child: const AssignmentCreateScreen(),
+                getIt<FilePickerRepo>())
+              ..add(AssignmentIdForEdit(assignmentId: id)),
+            child: AssignmentCreateScreen(),
           ),
         );
 

@@ -272,7 +272,7 @@ class TeacherAssinmentListScreen extends StatelessWidget {
                   //     teacherAssignmentCreateScreen);
 
                   Navigator.of(context, rootNavigator: true)
-                      .pushNamed(teacherAssignmentCreateScreen);
+                      .pushNamed(teacherAssignmentCreateScreen, arguments: -1);
                 },
               )
             ],

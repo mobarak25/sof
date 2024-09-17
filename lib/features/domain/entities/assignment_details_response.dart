@@ -29,6 +29,7 @@ class Data {
   final String? dueAt;
   final int? daysLeft;
   final dynamic isMarkable;
+  final dynamic isSubmitable;
   final Subject? subject;
   final List<Attachment>? attachments;
   final List<Section>? sections;
@@ -48,6 +49,7 @@ class Data {
     this.dueAt,
     this.daysLeft,
     this.isMarkable,
+    this.isSubmitable,
     this.subject,
     this.attachments,
     this.sections,
@@ -68,6 +70,7 @@ class Data {
         dueAt: json["due_at"],
         daysLeft: json["days_left"],
         isMarkable: json["is_markable"],
+        isSubmitable: json["is_submitable"],
         subject:
             json["subject"] == null ? null : Subject.fromJson(json["subject"]),
         attachments: json["attachments"] == null
@@ -97,6 +100,7 @@ class Data {
         "due_at": dueAt,
         "days_left": daysLeft,
         "is_markable": isMarkable,
+        "is_submitable": isSubmitable,
         "subject": subject?.toJson(),
         "attachments": attachments == null
             ? []
@@ -242,6 +246,8 @@ class Subject {
   final String? imageUrl;
   final int? subjectGroupId;
   final Section? subjectGroup;
+  final int? classId;
+  final int? versionId;
 
   Subject({
     this.id,
@@ -250,6 +256,8 @@ class Subject {
     this.imageUrl,
     this.subjectGroupId,
     this.subjectGroup,
+    this.classId,
+    this.versionId,
   });
 
   factory Subject.fromJson(Map<String, dynamic> json) => Subject(
@@ -258,6 +266,8 @@ class Subject {
         code: json["code"],
         imageUrl: json["image_url"],
         subjectGroupId: json["subject_group_id"],
+        classId: json["class_id"],
+        versionId: json["version_id"],
         subjectGroup: json["subject_group"] == null
             ? null
             : Section.fromJson(json["subject_group"]),
@@ -269,6 +279,8 @@ class Subject {
         "code": code,
         "image_url": imageUrl,
         "subject_group_id": subjectGroupId,
+        "class_id": classId,
+        "version_id": versionId,
         "subject_group": subjectGroup?.toJson(),
       };
 }

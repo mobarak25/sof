@@ -42,7 +42,11 @@ class SelectedStudentsScreen extends StatelessWidget {
                           controller: searchController,
                           borderColor: bGray12,
                           hintText: LocaleKeys.search.tr(),
-                          prefixIcon: const Icon(Icons.search),
+                          prefixIcon: const Icon(
+                            Icons.search,
+                            size: 25,
+                            color: kPrimaryColor,
+                          ),
                           onChanged: (String value) {
                             bloc.add(ChageSearch(search: value));
                           },
@@ -84,40 +88,82 @@ class SelectedStudentsScreen extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 15, vertical: 10),
                           children: [
-                            ...List.generate(state.allStudents.length,
-                                (position) {
-                              return Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Expanded(
-                                    child: CheckboxListTile(
-                                      contentPadding: EdgeInsets.zero,
-                                      visualDensity: VisualDensity.compact,
-                                      controlAffinity:
-                                          ListTileControlAffinity.leading,
-                                      title: TextB(
-                                        text: state.allStudents[position].name,
-                                        fontSize: 13,
+                            if (state.copyStudents.isEmpty)
+                              ...List.generate(state.allStudents.length,
+                                  (position) {
+                                return Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      child: CheckboxListTile(
+                                        contentPadding: EdgeInsets.zero,
+                                        visualDensity: VisualDensity.compact,
+                                        controlAffinity:
+                                            ListTileControlAffinity.leading,
+                                        title: TextB(
+                                          text:
+                                              state.allStudents[position].name,
+                                          fontSize: 13,
+                                        ),
+                                        value: state
+                                            .allStudents[position].isChecked,
+                                        onChanged: (bool? value) {
+                                          bloc.add(ToggleCheckbox(
+                                              value: value!,
+                                              id: state
+                                                  .allStudents[position].id));
+                                        },
                                       ),
-                                      value:
-                                          state.allStudents[position].isChecked,
-                                      onChanged: (bool? value) {
-                                        bloc.add(ToggleCheckbox(
-                                            value: value!, index: position));
-                                      },
                                     ),
-                                  ),
-                                  TextB(
-                                    text: state
-                                        .allStudents[position].admissionRoll,
-                                    fontSize: 13,
-                                  )
-                                ],
-                              );
+                                    TextB(
+                                      text: state
+                                          .allStudents[position].admissionRoll,
+                                      fontSize: 13,
+                                    )
+                                  ],
+                                );
 
-                              // TextB(text: students.data![position].name!);
-                            })
+                                // TextB(text: students.data![position].name!);
+                              })
+                            else
+                              ...List.generate(state.copyStudents.length,
+                                  (position) {
+                                return Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      child: CheckboxListTile(
+                                        contentPadding: EdgeInsets.zero,
+                                        visualDensity: VisualDensity.compact,
+                                        controlAffinity:
+                                            ListTileControlAffinity.leading,
+                                        title: TextB(
+                                          text:
+                                              state.copyStudents[position].name,
+                                          fontSize: 13,
+                                        ),
+                                        value: state
+                                            .copyStudents[position].isChecked,
+                                        onChanged: (bool? value) {
+                                          bloc.add(ToggleCheckbox(
+                                              value: value!,
+                                              id: state
+                                                  .copyStudents[position].id));
+                                        },
+                                      ),
+                                    ),
+                                    TextB(
+                                      text: state
+                                          .copyStudents[position].admissionRoll,
+                                      fontSize: 13,
+                                    )
+                                  ],
+                                );
+
+                                // TextB(text: students.data![position].name!);
+                              })
                           ],
                         ),
                       ),

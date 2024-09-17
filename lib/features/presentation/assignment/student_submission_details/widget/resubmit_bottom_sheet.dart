@@ -38,8 +38,10 @@ Future<dynamic> openResubmitSheet(BuildContext context,
                     controller: dateController,
                     onTouch: () {
                       myState(() async {
-                        dateController.text =
-                            await showDateTimePickerDialog(context) ?? '';
+                        dateController.text = await showDateTimePickerDialog(
+                                context,
+                                initialdate: '') ??
+                            '';
                       });
                     },
                     onChanged: (String mark) {},

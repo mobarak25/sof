@@ -1,5 +1,5 @@
-//Date DateFormat===============
-
+import 'package:flutter_quill/flutter_quill.dart';
+import 'package:flutter_quill/quill_delta.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
@@ -117,4 +117,9 @@ class CheckUncheckStudents {
   final bool isChecked;
   final String name;
   final String admissionRoll;
+}
+
+Delta markdownToDelta(String markdownContent) {
+  dynamic doc = Document.fromHtml(markdownContent);
+  return doc.toDelta();
 }

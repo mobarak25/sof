@@ -12,7 +12,6 @@ import 'package:school_of_future/core/widgets/app_bar.dart';
 import 'package:school_of_future/core/widgets/body.dart';
 import 'package:school_of_future/core/widgets/button.dart';
 import 'package:school_of_future/core/widgets/text.dart';
-import 'package:school_of_future/features/domain/usecases/local_data.dart';
 import 'package:school_of_future/features/presentation/assignment/student_assignment_details/bloc/student_assignment_details_bloc.dart';
 import 'package:school_of_future/features/presentation/assignment/student_assignment_details/widgets/detail_description.dart';
 

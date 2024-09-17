@@ -19,21 +19,40 @@ class SelectStudentsBloc
   FutureOr<void> _getInitialStudents(
       GetInitialStudents event, Emitter<SelectStudentsState> emit) {
     bool selectAll = event.students.every((item) => item.isChecked);
-    emit(state.copyWith(allStudents: event.students, selectAll: selectAll));
+    emit(state.copyWith(
+      allStudents: event.students,
+      selectAll: selectAll,
+    ));
   }
 
   FutureOr<void> _toggleCheckbox(
       ToggleCheckbox event, Emitter<SelectStudentsState> emit) {
-    final updatedOptions = List<CheckUncheckStudents>.from(state.allStudents);
+    final updatedCopyOptions = state.copyStudents.map((student) {
+      if (student.id == event.id) {
+        return CheckUncheckStudents(
+          id: student.id,
+          isChecked: event.value,
+          name: student.name, // Update name here
+          admissionRoll: student.admissionRoll,
+        );
+      }
+      return student; // Return the student as-is if no update
+    }).toList();
 
-    updatedOptions[event.index] = CheckUncheckStudents(
-      id: updatedOptions[event.index].id,
-      isChecked: event.value,
-      name: updatedOptions[event.index].name,
-      admissionRoll: updatedOptions[event.index].admissionRoll,
-    );
+    final updatedOptions = state.allStudents.map((student) {
+      if (student.id == event.id) {
+        return CheckUncheckStudents(
+          id: student.id,
+          isChecked: event.value,
+          name: student.name, // Update name here
+          admissionRoll: student.admissionRoll,
+        );
+      }
+      return student; // Return the student as-is if no update
+    }).toList();
 
-    emit(state.copyWith(allStudents: updatedOptions));
+    emit(state.copyWith(
+        allStudents: updatedOptions, copyStudents: updatedCopyOptions));
 
     bool selectAll = state.allStudents.every((item) => item.isChecked);
     emit(state.copyWith(selectAll: selectAll));
@@ -61,10 +80,12 @@ class SelectStudentsBloc
       ChageSearch event, Emitter<SelectStudentsState> emit) {
     if (event.search.isNotEmpty) {
       emit(state.copyWith(
-          allStudents: state.allStudents
+          copyStudents: state.allStudents
               .where((item) =>
                   item.name.toLowerCase().contains(event.search.toLowerCase()))
               .toList()));
+    } else {
+      emit(state.copyWith(copyStudents: []));
     }
   }
 }

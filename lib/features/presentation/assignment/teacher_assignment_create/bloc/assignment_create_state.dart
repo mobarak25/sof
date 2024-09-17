@@ -32,6 +32,8 @@ class AssignmentCreateState extends Equatable {
     //End dependable
     this.tempBatchWiseStudent = const [],
     this.listOfCheckUncheckStudent = const [],
+    this.assingmentDtls = const AssignmentDetails(),
+    this.isFirstTime = true,
   });
 
   final bool loading, batchLoading;
@@ -65,8 +67,10 @@ class AssignmentCreateState extends Equatable {
   final String selecteClassName;
   final List<BatchWiseStudent> batchWiseStudent;
   final List<BatchWiseStudent> tempBatchWiseStudent;
-
   final List<List<CheckUncheckStudents>> listOfCheckUncheckStudent;
+  final AssignmentDetails assingmentDtls;
+
+  final bool isFirstTime;
 
   AssignmentCreateState copyWith({
     bool? loading,
@@ -99,6 +103,8 @@ class AssignmentCreateState extends Equatable {
     List<BatchWiseStudent>? batchWiseStudent,
     List<BatchWiseStudent>? tempBatchWiseStudent,
     List<List<CheckUncheckStudents>>? listOfCheckUncheckStudent,
+    AssignmentDetails? assingmentDtls,
+    bool? isFirstTime,
   }) {
     return AssignmentCreateState(
       loading: loading ?? this.loading,
@@ -132,6 +138,8 @@ class AssignmentCreateState extends Equatable {
       tempBatchWiseStudent: tempBatchWiseStudent ?? this.tempBatchWiseStudent,
       listOfCheckUncheckStudent:
           listOfCheckUncheckStudent ?? this.listOfCheckUncheckStudent,
+      assingmentDtls: assingmentDtls ?? this.assingmentDtls,
+      isFirstTime: isFirstTime ?? this.isFirstTime,
     );
   }
 
@@ -167,6 +175,8 @@ class AssignmentCreateState extends Equatable {
         batchWiseStudent,
         tempBatchWiseStudent,
         listOfCheckUncheckStudent,
+        assingmentDtls,
+        isFirstTime,
       ];
 }
 

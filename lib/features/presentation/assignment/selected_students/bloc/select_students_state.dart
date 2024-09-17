@@ -4,27 +4,27 @@ class SelectStudentsState extends Equatable {
   const SelectStudentsState({
     this.selectAll = true,
     this.allStudents = const [],
-    this.selectedOptions = const [],
+    this.copyStudents = const [],
   });
 
   final bool selectAll;
   final List<CheckUncheckStudents> allStudents;
-  final List<bool> selectedOptions;
+  final List<CheckUncheckStudents> copyStudents;
 
   SelectStudentsState copyWith({
     bool? selectAll,
     List<CheckUncheckStudents>? allStudents,
-    List<bool>? selectedOptions,
+    List<CheckUncheckStudents>? copyStudents,
   }) {
     return SelectStudentsState(
       selectAll: selectAll ?? this.selectAll,
       allStudents: allStudents ?? this.allStudents,
-      selectedOptions: selectedOptions ?? this.selectedOptions,
+      copyStudents: copyStudents ?? this.copyStudents,
     );
   }
 
   @override
-  List<Object> get props => [selectAll, allStudents, selectedOptions];
+  List<Object> get props => [selectAll, allStudents, copyStudents];
 }
 
 final class SelectStudentsInitial extends SelectStudentsState {}

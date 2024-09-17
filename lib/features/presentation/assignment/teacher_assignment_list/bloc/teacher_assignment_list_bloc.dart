@@ -297,6 +297,9 @@ class TeacherAssignmentListBloc
       showConfirmDeleteDialog(_iFlutterNavigator.context, pressToYes: () {
         add(DeleteAssignment(assignmentId: event.id));
       });
+    } else if (event.type == "Edit") {
+      Navigator.of(_iFlutterNavigator.context, rootNavigator: true)
+          .pushNamed(teacherAssignmentCreateScreen, arguments: event.id);
     }
   }
 

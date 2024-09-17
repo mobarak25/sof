@@ -45,6 +45,8 @@ dependencies:
   webview_flutter: ^4.8.0
   flutter_quill: ^9.2.3
   quill_json_to_html: ^1.0.1
+  flutter_quill_delta_from_html: ^1.2.0
+
   flutter_datetime_picker_plus: ^2.2.0
   dropdown_textfield: ^1.2.0
 

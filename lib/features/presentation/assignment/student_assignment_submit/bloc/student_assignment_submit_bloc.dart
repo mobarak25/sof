@@ -15,7 +15,7 @@ import 'package:school_of_future/features/data/data_sources/remote_constants.dar
 import 'package:school_of_future/features/domain/entities/default_response.dart';
 import 'package:school_of_future/features/domain/repositories/api_repo.dart';
 import 'package:school_of_future/features/domain/repositories/local_storage_repo.dart';
-import 'package:school_of_future/features/presentation/assignment/student_assignment_submit/widgets/cancel_dialog.dart';
+import 'package:school_of_future/core/widgets/confirm_cancel_dialog.dart';
 
 part 'student_assignment_submit_event.dart';
 part 'student_assignment_submit_state.dart';

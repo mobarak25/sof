@@ -7,6 +7,11 @@ sealed class AssignmentCreateEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class AssignmentIdForEdit extends AssignmentCreateEvent {
+  const AssignmentIdForEdit({required this.assignmentId});
+  final int assignmentId;
+}
+
 class ChangeTitle extends AssignmentCreateEvent {
   const ChangeTitle({required this.title});
   final String title;
@@ -84,8 +89,36 @@ class PressToCreate extends AssignmentCreateEvent {
     required this.content,
     required this.titleFocusnode,
     required this.markFocusnode,
+    required this.isDraft,
   });
+
+  final bool isDraft;
   final String content;
   final FocusNode titleFocusnode;
   final FocusNode markFocusnode;
+}
+
+class PressToCancel extends AssignmentCreateEvent {}
+
+class AddData extends AssignmentCreateEvent {
+  const AddData({
+    required this.title,
+    required this.description,
+    required this.mark,
+    required this.startDate,
+    required this.endDate,
+    required this.selectedVersionId,
+    required this.selectedClassId,
+    required this.selectedSubjectId,
+    required this.assignToBatchId,
+  });
+  final String title;
+  final String description;
+  final int mark;
+  final String startDate;
+  final String endDate;
+  final dynamic selectedVersionId;
+  final dynamic selectedClassId;
+  final dynamic selectedSubjectId;
+  final List<int> assignToBatchId;
 }

@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:dropdown_textfield/dropdown_textfield.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -15,8 +14,10 @@ import 'package:school_of_future/core/router/route_constents.dart';
 import 'package:school_of_future/core/snackbar/show_snackbar.dart';
 import 'package:school_of_future/core/utils/enums.dart';
 import 'package:school_of_future/core/utils/utilities.dart';
+import 'package:school_of_future/core/widgets/confirm_cancel_dialog.dart';
+import 'package:school_of_future/features/data/data_sources/local_db_keys.dart';
 import 'package:school_of_future/features/data/data_sources/remote_constants.dart';
-import 'package:school_of_future/features/data/model/create_assignment.dart';
+import 'package:school_of_future/features/domain/entities/assignment_details_response.dart';
 import 'package:school_of_future/features/domain/entities/batch_wise_student.dart';
 import 'package:school_of_future/features/domain/entities/default_response.dart';
 import 'package:school_of_future/features/domain/entities/get_batch_as_section_response.dart';
@@ -31,6 +32,7 @@ class AssignmentCreateBloc
   AssignmentCreateBloc(this._apiRepo, this._iFlutterNavigator,
       this._localStorageRepo, this._filePickerRepo)
       : super(AssignmentCreateInitial()) {
+    on<AssignmentIdForEdit>(_assignmentIdForEdit);
     on<ChangeTitle>(_changeTitle);
     on<GetFile>(_getFile);
     on<RemoveFile>(_removeFile);
@@ -43,10 +45,13 @@ class AssignmentCreateBloc
     on<SelectVersionId>(_selectVersionId);
     on<SelectClassId>(_selectClassId);
     on<SelectSubjectId>(_selectSubjectId);
-    on<SelectSectionId>(_selectSectionId);
+    // on<SelectSectionId>(_selectSectionId);
     on<SelectSectionList>(_selectSectionList);
     on<BackWithUnselected>(_backWithUnselected);
     on<PressToCreate>(_pressToCreate);
+    on<PressToCancel>(_pressToCancel);
+    on<AddData>(_addData);
+
     add(GetVersionList());
   }
 
@@ -54,6 +59,24 @@ class AssignmentCreateBloc
   final IFlutterNavigator _iFlutterNavigator;
   final LocalStorageRepo _localStorageRepo;
   final FilePickerRepo _filePickerRepo;
+
+  FutureOr<void> _assignmentIdForEdit(
+      AssignmentIdForEdit event, Emitter<AssignmentCreateState> emit) async {
+    if (event.assignmentId != -1) {
+      final details = await _apiRepo.get<AssignmentDetails>(
+        endpoint: assignmentDetailsEndPoint(
+            dId: event.assignmentId,
+            sId: _localStorageRepo.read(key: loginIdDB)!),
+      );
+
+      if (details != null) {
+        emit(state.copyWith(assingmentDtls: details));
+        add(SelectVersionId(id: details.data!.subject!.versionId!));
+        add(SelectClassId(id: details.data!.subject!.classId!));
+        add(SelectSubjectId(id: details.data!.subject!.id!));
+      }
+    }
+  }
 
   FutureOr<void> _changeTitle(
       ChangeTitle event, Emitter<AssignmentCreateState> emit) {
@@ -248,10 +271,10 @@ class AssignmentCreateBloc
     }
   }
 
-  FutureOr<void> _selectSectionId(
-      SelectSectionId event, Emitter<AssignmentCreateState> emit) {
-    emit(state.copyWith(selectSectionId: event.id));
-  }
+  // FutureOr<void> _selectSectionId(
+  //     SelectSectionId event, Emitter<AssignmentCreateState> emit) {
+  //   emit(state.copyWith(selectSectionId: event.id));
+  // }
 
   FutureOr<void> _selectSectionList(
       SelectSectionList event, Emitter<AssignmentCreateState> emit) async {
@@ -279,6 +302,7 @@ class AssignmentCreateBloc
 
       if (student != null) {
         batchWiseStudentList.add(student);
+
         if (student.data != null) {
           for (int j = 0; j < student.data!.length; j++) {
             checkUncheck.add(CheckUncheckStudents(
@@ -328,7 +352,7 @@ class AssignmentCreateBloc
       final create = await _apiRepo.appMultipart<DefaultResponse, void>(
         endpoint: assignmentCreateEndPoint,
         body: {
-          "status": 1,
+          "status": event.isDraft ? 0 : 1,
           "title": state.title,
           "description": event.content,
           "published_at": state.startDate,
@@ -372,5 +396,29 @@ class AssignmentCreateBloc
       return false;
     }
     return true;
+  }
+
+  FutureOr<void> _pressToCancel(
+      PressToCancel event, Emitter<AssignmentCreateState> emit) {
+    showCancelDialog(_iFlutterNavigator.context, pressToYes: () {
+      _iFlutterNavigator.pop();
+      navigatorKey.currentState!.pushNamedAndRemoveUntil(
+          teacherAssignmentListScreen, ModalRoute.withName('/'));
+    });
+  }
+
+  FutureOr<void> _addData(AddData event, Emitter<AssignmentCreateState> emit) {
+    if (state.isFirstTime) {
+      emit(state.copyWith(
+        title: event.title,
+        mark: event.mark.toString(),
+        startDate: event.startDate,
+        endDate: event.endDate,
+        selectedVersionId: event.selectedVersionId,
+        selectedClassId: event.selectedClassId,
+        selectedSubjectId: event.selectedSubjectId,
+        isFirstTime: false,
+      ));
+    }
   }
 }

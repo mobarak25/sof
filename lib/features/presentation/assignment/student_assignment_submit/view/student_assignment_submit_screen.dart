@@ -95,14 +95,11 @@ class StudentAssignmentSubmitScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-                    QuillToolbar.simple(
-                      configurations: QuillSimpleToolbarConfigurations(
-                        // sharedConfigurations: const QuillSharedConfigurations(
-                        //   locale: Locale('de'),
-                        // ),
-                        controller: qController,
+                    QuillSimpleToolbar(
+                      controller: qController,
+                      configurations: const QuillSimpleToolbarConfigurations(
                         multiRowsDisplay: false,
-                        toolbarSize: 60,
+                        toolbarSize: 45,
                       ),
                     ),
                     Container(
@@ -114,16 +111,11 @@ class StudentAssignmentSubmitScreen extends StatelessWidget {
                       height: 200,
                       child: Expanded(
                         child: QuillEditor.basic(
-                          configurations: QuillEditorConfigurations(
-                              controller: qController,
-                              padding: const EdgeInsets.all(10),
-                              readOnly: false,
-                              showCursor: true
-
-                              // sharedConfigurations: const QuillSharedConfigurations(
-                              //   locale: Locale('de'),
-                              // ),
-                              ),
+                          controller: qController,
+                          configurations: const QuillEditorConfigurations(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 10),
+                          ),
                         ),
                       ),
                     ),

@@ -1,3 +1,4 @@
+import 'package:school_of_future/features/domain/entities/assignment_assign_student_response.dart';
 import 'package:school_of_future/features/domain/entities/assignment_details_response.dart';
 import 'package:school_of_future/features/domain/entities/assignment_feedback_response.dart';
 import 'package:school_of_future/features/domain/entities/assignment_list_response.dart';
@@ -59,6 +60,9 @@ class EntityMap {
         return GetBacthAsSections.fromJson(json) as T;
       case const (BatchWiseStudent):
         return BatchWiseStudent.fromJson(json) as T;
+      case const (AssignmentAssignStudent):
+        return AssignmentAssignStudent.fromJson(json) as T;
+
       default:
         throw Exception('Unknown class');
     }

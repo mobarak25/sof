@@ -3,6 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_quill/flutter_quill.dart';
+import 'package:flutter_quill_delta_from_html/flutter_quill_delta_from_html.dart';
 import 'package:gap/gap.dart';
 import 'package:quill_json_to_html/json_to_html.dart';
 import 'package:school_of_future/core/router/route_constents.dart';
@@ -41,24 +42,63 @@ class AssignmentCreateScreen extends StatelessWidget {
     final startController = TextEditingController();
     final endController = TextEditingController();
 
-    QuillController qController = QuillController.basic();
+    QuillController qcontroller = QuillController.basic();
     MultiValueDropDownController cntMulti = MultiValueDropDownController();
 
     return BlocBuilder<AssignmentCreateBloc, AssignmentCreateState>(
       builder: (context, state) {
-        if (state.isFirstTime && state.assingmentDtls.data != null) {
-          final data = state.assingmentDtls.data!;
-          bloc.add(AddData(
-            title: data.title!,
-            description: data.description!,
-            mark: data.marks!,
-            startDate: data.publishedAt!,
-            endDate: data.dueAt!,
-            selectedVersionId: data.subject!.versionId!,
-            selectedClassId: data.subject!.classId!,
-            selectedSubjectId: data.subject!.id,
-            assignToBatchId: const [1],
-          ));
+        if (state.isFirstTime) {
+          if (state.assingmentDtls.data != null &&
+              state.assignmentAssignStudentForEdit.isNotEmpty) {
+            final data = state.assingmentDtls.data!;
+
+            var delta = HtmlToDelta().convert(data.description!);
+            qcontroller.document = Document.fromDelta(delta);
+
+            List<int> batchIds = [];
+            List<DropDownValueModel> modalData = [];
+
+            for (int i = 0; i < data.sections!.length; i++) {
+              batchIds.add(data.sections![i].id!);
+            }
+
+            for (int i = 0; i < state.sectionList.length; i++) {
+              if (batchIds.contains(state.sectionList[i].value)) {
+                modalData.add(DropDownValueModel(
+                    name: state.sectionList[i].name,
+                    value: state.sectionList[i].value));
+              }
+            }
+            cntMulti = MultiValueDropDownController(
+              data: modalData,
+            );
+            bloc.add(SelectSectionList(sectionList: modalData));
+
+            bloc.add(AddData(
+              title: data.title!,
+              isSubmittable: data.isSubmitable == 1 ? true : false,
+              isAssessment: data.isMarkable == 1 ? true : false,
+              mark: data.marks!,
+              startDate: data.publishedAt!,
+              endDate: data.dueAt!,
+              selectedVersionId: data.subject!.versionId!,
+              selectedClassId: data.subject!.classId!,
+              selectedSubjectId: data.subject!.id,
+            ));
+          } else if (state.assignmentAssignStudentForEdit.isEmpty &&
+              state.assignmentId != -1) {
+            return Body(
+              isFullScreen: true,
+              appBar: FutureAppBar(
+                actions: const [SizedBox()],
+                title: LocaleKeys.createHomeWork.tr(),
+                isLoading: state.loading,
+              ),
+              child: const Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          }
         }
 
         titleController.text = state.title;
@@ -112,28 +152,22 @@ class AssignmentCreateScreen extends StatelessWidget {
                       height: 240,
                       child: Column(
                         children: [
-                          QuillToolbar.simple(
-                            configurations: QuillSimpleToolbarConfigurations(
-                              // sharedConfigurations: const QuillSharedConfigurations(
-                              //   locale: Locale('de'),
-                              // ),
-                              controller: qController,
+                          QuillSimpleToolbar(
+                            controller: qcontroller,
+                            configurations:
+                                const QuillSimpleToolbarConfigurations(
                               multiRowsDisplay: false,
-                              toolbarSize: 50,
+                              toolbarSize: 45,
                             ),
                           ),
                           Expanded(
                             child: QuillEditor.basic(
+                              controller: qcontroller,
                               configurations: QuillEditorConfigurations(
-                                  controller: qController,
-                                  padding: const EdgeInsets.all(10),
-                                  readOnly: false,
-                                  showCursor: true
-
-                                  // sharedConfigurations: const QuillSharedConfigurations(
-                                  //   locale: Locale('de'),
-                                  // ),
-                                  ),
+                                placeholder: LocaleKeys.enterDescription.tr(),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 10),
+                              ),
                             ),
                           ),
                         ],
@@ -173,6 +207,7 @@ class AssignmentCreateScreen extends StatelessWidget {
                           textStyle: bBody1,
                         ),
                         SwitchView(
+                          defaultValue: state.isSubmitable,
                           onChanged: (bool value) {
                             bloc.add(Submitable(isSubmitable: value));
                           },
@@ -188,6 +223,7 @@ class AssignmentCreateScreen extends StatelessWidget {
                           textStyle: bBody1,
                         ),
                         SwitchView(
+                          defaultValue: state.isAssessment,
                           onChanged: (bool value) {
                             bloc.add(Assessment(isAssessment: value));
                           },
@@ -307,8 +343,11 @@ class AssignmentCreateScreen extends StatelessWidget {
                     if (state.forms == Forms.invalid &&
                         state.selectedSubjectId == -1)
                       TextB(text: LocaleKeys.subject.tr(), fontColor: bRed),
+
+                    //==============Section================
                     const Gap(10),
                     TextB(text: LocaleKeys.section.tr(), textStyle: bBody1),
+
                     SizedBox(
                       height: 50,
                       child: DropDownTextField.multiSelection(
@@ -351,6 +390,8 @@ class AssignmentCreateScreen extends StatelessWidget {
                     if (state.forms == Forms.invalid &&
                         state.assignToBatchId.isEmpty)
                       TextB(text: LocaleKeys.section.tr(), fontColor: bRed),
+
+                    //==============Batch================
                     const Gap(10),
                     if (state.batchWiseStudent.isNotEmpty &&
                         !state.batchLoading)
@@ -379,10 +420,12 @@ class AssignmentCreateScreen extends StatelessWidget {
                     const Gap(30),
                     ButtonB(
                       heigh: 60,
-                      text: LocaleKeys.create.tr(),
+                      text: state.assignmentId == -1
+                          ? LocaleKeys.create.tr()
+                          : LocaleKeys.save.tr(),
                       press: () {
                         List jsonContent =
-                            qController.document.toDelta().toJson();
+                            qcontroller.document.toDelta().toJson();
 
                         final htmlContent =
                             QuillJsonToHTML.encodeJson(jsonContent);
@@ -409,7 +452,7 @@ class AssignmentCreateScreen extends StatelessWidget {
                             text: LocaleKeys.saveAsDraft.tr(),
                             press: () {
                               List jsonContent =
-                                  qController.document.toDelta().toJson();
+                                  qcontroller.document.toDelta().toJson();
 
                               final htmlContent =
                                   QuillJsonToHTML.encodeJson(jsonContent);

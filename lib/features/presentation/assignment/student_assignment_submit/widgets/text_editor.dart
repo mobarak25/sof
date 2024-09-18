@@ -1,6 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:quill_json_to_html/json_to_html.dart';
+import 'package:school_of_future/core/translations/local_keys.dart';
 import 'package:school_of_future/core/utils/colors.dart';
 
 class AppTextEditor extends StatelessWidget {
@@ -18,14 +20,11 @@ class AppTextEditor extends StatelessWidget {
     });
     return Column(
       children: [
-        QuillToolbar.simple(
-          configurations: QuillSimpleToolbarConfigurations(
-            // sharedConfigurations: const QuillSharedConfigurations(
-            //   locale: Locale('de'),
-            // ),
-            controller: qController,
+        QuillSimpleToolbar(
+          controller: qController,
+          configurations: const QuillSimpleToolbarConfigurations(
             multiRowsDisplay: false,
-            toolbarSize: 60,
+            toolbarSize: 45,
           ),
         ),
         Container(
@@ -37,14 +36,9 @@ class AppTextEditor extends StatelessWidget {
           height: 200,
           child: Expanded(
             child: QuillEditor.basic(
-              configurations: QuillEditorConfigurations(
-                controller: qController,
-                padding: const EdgeInsets.all(10),
-                readOnly: false,
-
-                // sharedConfigurations: const QuillSharedConfigurations(
-                //   locale: Locale('de'),
-                // ),
+              controller: qController,
+              configurations: const QuillEditorConfigurations(
+                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               ),
             ),
           ),

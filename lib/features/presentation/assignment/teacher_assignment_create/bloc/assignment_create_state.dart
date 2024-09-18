@@ -2,6 +2,7 @@ part of 'assignment_create_bloc.dart';
 
 class AssignmentCreateState extends Equatable {
   const AssignmentCreateState({
+    this.assignmentId = -1,
     this.loading = false,
     this.forms = Forms.initial,
     this.batchLoading = false,
@@ -30,12 +31,14 @@ class AssignmentCreateState extends Equatable {
     this.selecteClassName = '',
     this.batchWiseStudent = const [],
     //End dependable
-    this.tempBatchWiseStudent = const [],
+    // this.tempBatchWiseStudent = const [], //may be no need
     this.listOfCheckUncheckStudent = const [],
     this.assingmentDtls = const AssignmentDetails(),
     this.isFirstTime = true,
+    this.assignmentAssignStudentForEdit = const [],
   });
 
+  final int assignmentId;
   final bool loading, batchLoading;
   final Forms forms;
   final String title;
@@ -66,13 +69,14 @@ class AssignmentCreateState extends Equatable {
   final List<String> selectedBatchName;
   final String selecteClassName;
   final List<BatchWiseStudent> batchWiseStudent;
-  final List<BatchWiseStudent> tempBatchWiseStudent;
+  // final List<BatchWiseStudent> tempBatchWiseStudent;
   final List<List<CheckUncheckStudents>> listOfCheckUncheckStudent;
   final AssignmentDetails assingmentDtls;
-
   final bool isFirstTime;
+  final List<AssignmentAssignStudent> assignmentAssignStudentForEdit;
 
   AssignmentCreateState copyWith({
+    int? assignmentId,
     bool? loading,
     Forms? forms,
     bool? batchLoading,
@@ -105,8 +109,10 @@ class AssignmentCreateState extends Equatable {
     List<List<CheckUncheckStudents>>? listOfCheckUncheckStudent,
     AssignmentDetails? assingmentDtls,
     bool? isFirstTime,
+    List<AssignmentAssignStudent>? assignmentAssignStudentForEdit,
   }) {
     return AssignmentCreateState(
+      assignmentId: assignmentId ?? this.assignmentId,
       loading: loading ?? this.loading,
       forms: forms ?? this.forms,
       batchLoading: batchLoading ?? this.batchLoading,
@@ -135,16 +141,19 @@ class AssignmentCreateState extends Equatable {
       selectedBatchName: selectedBatchName ?? this.selectedBatchName,
       selecteClassName: selecteClassName ?? this.selecteClassName,
       batchWiseStudent: batchWiseStudent ?? this.batchWiseStudent,
-      tempBatchWiseStudent: tempBatchWiseStudent ?? this.tempBatchWiseStudent,
+      // tempBatchWiseStudent: tempBatchWiseStudent ?? this.tempBatchWiseStudent,
       listOfCheckUncheckStudent:
           listOfCheckUncheckStudent ?? this.listOfCheckUncheckStudent,
       assingmentDtls: assingmentDtls ?? this.assingmentDtls,
       isFirstTime: isFirstTime ?? this.isFirstTime,
+      assignmentAssignStudentForEdit:
+          assignmentAssignStudentForEdit ?? this.assignmentAssignStudentForEdit,
     );
   }
 
   @override
   List<Object> get props => [
+        assignmentId,
         loading,
         forms,
         batchLoading,
@@ -173,10 +182,11 @@ class AssignmentCreateState extends Equatable {
         selectedBatchName,
         selecteClassName,
         batchWiseStudent,
-        tempBatchWiseStudent,
+        // tempBatchWiseStudent,
         listOfCheckUncheckStudent,
         assingmentDtls,
         isFirstTime,
+        assignmentAssignStudentForEdit,
       ];
 }
 

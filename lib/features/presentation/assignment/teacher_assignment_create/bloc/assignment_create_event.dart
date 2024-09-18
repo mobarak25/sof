@@ -103,22 +103,32 @@ class PressToCancel extends AssignmentCreateEvent {}
 class AddData extends AssignmentCreateEvent {
   const AddData({
     required this.title,
-    required this.description,
+    required this.isSubmittable,
+    required this.isAssessment,
     required this.mark,
     required this.startDate,
     required this.endDate,
     required this.selectedVersionId,
     required this.selectedClassId,
     required this.selectedSubjectId,
-    required this.assignToBatchId,
   });
   final String title;
-  final String description;
+  final bool isSubmittable, isAssessment;
   final int mark;
   final String startDate;
   final String endDate;
   final dynamic selectedVersionId;
   final dynamic selectedClassId;
   final dynamic selectedSubjectId;
-  final List<int> assignToBatchId;
+}
+
+class GetAssignmentAssignStudents extends AssignmentCreateEvent {
+  const GetAssignmentAssignStudents({
+    required this.assignmentId,
+    required this.subjectId,
+    required this.batchIdList,
+  });
+  final int assignmentId;
+  final int subjectId;
+  final List<int> batchIdList;
 }

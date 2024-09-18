@@ -5,6 +5,7 @@ import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:equatable/equatable.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:school_of_future/core/file_picker/file_picker_service.dart';
 import 'package:school_of_future/core/form_validator/validator.dart';
@@ -17,6 +18,7 @@ import 'package:school_of_future/core/utils/utilities.dart';
 import 'package:school_of_future/core/widgets/confirm_cancel_dialog.dart';
 import 'package:school_of_future/features/data/data_sources/local_db_keys.dart';
 import 'package:school_of_future/features/data/data_sources/remote_constants.dart';
+import 'package:school_of_future/features/domain/entities/assignment_assign_student_response.dart';
 import 'package:school_of_future/features/domain/entities/assignment_details_response.dart';
 import 'package:school_of_future/features/domain/entities/batch_wise_student.dart';
 import 'package:school_of_future/features/domain/entities/default_response.dart';
@@ -51,6 +53,7 @@ class AssignmentCreateBloc
     on<PressToCreate>(_pressToCreate);
     on<PressToCancel>(_pressToCancel);
     on<AddData>(_addData);
+    on<GetAssignmentAssignStudents>(_getAssignmentAssignStudents);
 
     add(GetVersionList());
   }
@@ -62,6 +65,7 @@ class AssignmentCreateBloc
 
   FutureOr<void> _assignmentIdForEdit(
       AssignmentIdForEdit event, Emitter<AssignmentCreateState> emit) async {
+    emit(state.copyWith(assignmentId: event.assignmentId));
     if (event.assignmentId != -1) {
       final details = await _apiRepo.get<AssignmentDetails>(
         endpoint: assignmentDetailsEndPoint(
@@ -70,12 +74,43 @@ class AssignmentCreateBloc
       );
 
       if (details != null) {
+        List<int> batchIdList =
+            details.data!.sections!.map((item) => item.id!).toList();
+
+        add(GetAssignmentAssignStudents(
+          assignmentId: details.data!.id!,
+          subjectId: details.data!.subject!.id!,
+          batchIdList: batchIdList,
+        ));
+
         emit(state.copyWith(assingmentDtls: details));
-        add(SelectVersionId(id: details.data!.subject!.versionId!));
-        add(SelectClassId(id: details.data!.subject!.classId!));
-        add(SelectSubjectId(id: details.data!.subject!.id!));
       }
     }
+  }
+
+  FutureOr<void> _getAssignmentAssignStudents(GetAssignmentAssignStudents event,
+      Emitter<AssignmentCreateState> emit) async {
+    List<AssignmentAssignStudent> assignmentAssignStudent = [];
+    for (int i = 0; i < event.batchIdList.length; i++) {
+      final queryParams = {
+        "assignment_id": event.assignmentId,
+        "subject_id": event.subjectId,
+        "batch_id": event.batchIdList[i],
+      };
+      final students = await _apiRepo.get<AssignmentAssignStudent>(
+          endpoint: buildUrl(getAssignmentAssignStudentsEndpoint, queryParams));
+
+      if (students != null) {
+        assignmentAssignStudent.add(students);
+      }
+    }
+
+    emit(state.copyWith(
+        assignmentAssignStudentForEdit: assignmentAssignStudent));
+
+    add(SelectVersionId(id: state.assingmentDtls.data!.subject!.versionId!));
+    add(SelectClassId(id: state.assingmentDtls.data!.subject!.classId!));
+    add(SelectSubjectId(id: state.assingmentDtls.data!.subject!.id!));
   }
 
   FutureOr<void> _changeTitle(
@@ -300,7 +335,7 @@ class AssignmentCreateBloc
               subjectId: state.selectedSubjectId,
               batchId: state.assignToBatchId[i]));
 
-      if (student != null) {
+      if (student != null && state.assignmentId == -1) {
         batchWiseStudentList.add(student);
 
         if (student.data != null) {
@@ -315,12 +350,36 @@ class AssignmentCreateBloc
           listCheckUncheck.add(checkUncheck);
           checkUncheck = [];
         }
+      } else {
+        batchWiseStudentList.add(student!);
+        if (student.data != null) {
+          for (int j = 0; j < student.data!.length; j++) {
+            if (state.assignmentAssignStudentForEdit[i].data!
+                .contains(student.data![j].id)) {
+              checkUncheck.add(CheckUncheckStudents(
+                id: student.data![j].id!,
+                isChecked: true,
+                name: student.data![j].name!,
+                admissionRoll: student.data![j].admissionNumber!,
+              ));
+            } else {
+              checkUncheck.add(CheckUncheckStudents(
+                id: student.data![j].id!,
+                isChecked: false,
+                name: student.data![j].name!,
+                admissionRoll: student.data![j].admissionNumber!,
+              ));
+            }
+          }
+          listCheckUncheck.add(checkUncheck);
+          checkUncheck = [];
+        }
       }
     }
 
     emit(state.copyWith(
       batchWiseStudent: batchWiseStudentList,
-      tempBatchWiseStudent: batchWiseStudentList,
+      // tempBatchWiseStudent: batchWiseStudentList,
       batchLoading: false,
       listOfCheckUncheckStudent: listCheckUncheck,
     ));
@@ -350,7 +409,9 @@ class AssignmentCreateBloc
     if (isValid(event) && !state.loading) {
       emit(state.copyWith(loading: true));
       final create = await _apiRepo.appMultipart<DefaultResponse, void>(
-        endpoint: assignmentCreateEndPoint,
+        endpoint: state.assignmentId != -1
+            ? assignmentEditEndPoint(assignmentId: state.assignmentId)
+            : assignmentCreateEndPoint,
         body: {
           "status": event.isDraft ? 0 : 1,
           "title": state.title,
@@ -359,10 +420,11 @@ class AssignmentCreateBloc
           "due_at": state.endDate,
           "subject_id": state.selectedSubjectId,
           "is_markable": state.isAssessment ? '1' : '0',
-          "assign_to_student": studentList,
           "marks": state.mark,
           "assign_to_batch": state.assignToBatchId,
           "submission_required": state.isSubmitable ? 1 : 0,
+          "assign_to_student": studentList,
+          "_method": state.assignmentId == -1 ? "POST" : "PUT",
         },
         fileFieldName: "assignment_attachment__url",
         files: state.fileList,
@@ -411,8 +473,10 @@ class AssignmentCreateBloc
     if (state.isFirstTime) {
       emit(state.copyWith(
         title: event.title,
+        isSubmitable: event.isSubmittable,
+        isAssessment: event.isAssessment,
         mark: event.mark.toString(),
-        startDate: event.startDate,
+        startDate: getDate(value: event.startDate, formate: "yyyy-MM-dd"),
         endDate: event.endDate,
         selectedVersionId: event.selectedVersionId,
         selectedClassId: event.selectedClassId,

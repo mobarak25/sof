@@ -33,3 +33,5 @@ const teacherAssignmentViewSubmissionScreen =
 const teacherAssignmentListScreen = "/teacher-assignment-screen";
 const teacherAssignmentCreateScreen = "/teacher-assignment-create-screen";
 const selectedStudentsScreen = "/selected-students-screen";
+const classworkListScreen = "/classwork_list_screen";
+const teacherClassworkCreateSreen = "/teacher_classwork_create_screen";

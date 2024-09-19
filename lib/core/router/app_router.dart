@@ -24,6 +24,8 @@ import 'package:school_of_future/features/presentation/assignment/teacher_view_s
 import 'package:school_of_future/features/presentation/assignment/teacher_view_submission/view/teacher_view_submission_screen.dart';
 import 'package:school_of_future/features/presentation/change_password/bloc/change_password_bloc.dart';
 import 'package:school_of_future/features/presentation/change_password/view/change_password_screen.dart';
+import 'package:school_of_future/features/presentation/class_work/teacher_classwork_create/bloc/class_work_create_bloc.dart';
+import 'package:school_of_future/features/presentation/class_work/teacher_classwork_create/view/teacher_classwork_create_screen.dart';
 import 'package:school_of_future/features/presentation/forgot_password_1/bloc/forgot_password_bloc.dart';
 import 'package:school_of_future/features/presentation/forgot_password_2/bloc/forgot_password2_bloc.dart';
 import 'package:school_of_future/features/presentation/forgot_password_2/view/step-2.dart';
@@ -189,7 +191,7 @@ class AppRouter {
                 getIt<LocalStorageRepo>(),
                 getIt<FilePickerRepo>())
               ..add(AssignmentIdForEdit(assignmentId: id)),
-            child: AssignmentCreateScreen(),
+            child: const AssignmentCreateScreen(),
           ),
         );
 
@@ -201,6 +203,21 @@ class AppRouter {
             create: (context) => SelectStudentsBloc()
               ..add(GetInitialStudents(students: students)),
             child: const SelectedStudentsScreen(),
+          ),
+        );
+
+      case teacherClassworkCreateSreen:
+        final id = settings.arguments as int;
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (BuildContext context) => BlocProvider(
+            create: (context) => ClassWorkCreateBloc(
+                getIt<ApiRepo>(),
+                getIt<IFlutterNavigator>(),
+                getIt<LocalStorageRepo>(),
+                getIt<FilePickerRepo>())
+              ..add(ClassworkIdForEdit(classworkId: id)),
+            child: const ClassWorkCreateScreen(),
           ),
         );
 

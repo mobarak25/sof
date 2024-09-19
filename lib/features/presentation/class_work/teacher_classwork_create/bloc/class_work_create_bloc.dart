@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:bloc/bloc.dart';
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:equatable/equatable.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:school_of_future/core/file_picker/file_picker_service.dart';
 import 'package:school_of_future/core/form_validator/validator.dart';
 import 'package:school_of_future/core/navigator/iflutter_navigator.dart';
@@ -14,45 +14,37 @@ import 'package:school_of_future/core/router/route_constents.dart';
 import 'package:school_of_future/core/snackbar/show_snackbar.dart';
 import 'package:school_of_future/core/utils/enums.dart';
 import 'package:school_of_future/core/utils/utilities.dart';
-import 'package:school_of_future/core/widgets/confirm_cancel_dialog.dart';
-import 'package:school_of_future/features/data/data_sources/local_db_keys.dart';
 import 'package:school_of_future/features/data/data_sources/remote_constants.dart';
 import 'package:school_of_future/features/domain/entities/assignment_assign_student_response.dart';
-import 'package:school_of_future/features/domain/entities/assignment_details_response.dart';
 import 'package:school_of_future/features/domain/entities/batch_wise_student.dart';
+import 'package:school_of_future/features/domain/entities/classwork_details_response.dart';
 import 'package:school_of_future/features/domain/entities/default_response.dart';
 import 'package:school_of_future/features/domain/entities/get_batch_as_section_response.dart';
 import 'package:school_of_future/features/domain/repositories/api_repo.dart';
 import 'package:school_of_future/features/domain/repositories/local_storage_repo.dart';
 
-part 'assignment_create_event.dart';
-part 'assignment_create_state.dart';
+part 'class_work_create_event.dart';
+part 'class_work_create_state.dart';
 
-class AssignmentCreateBloc
-    extends Bloc<AssignmentCreateEvent, AssignmentCreateState> {
-  AssignmentCreateBloc(this._apiRepo, this._iFlutterNavigator,
+class ClassWorkCreateBloc
+    extends Bloc<ClassWorkCreateEvent, ClassWorkCreateState> {
+  ClassWorkCreateBloc(this._apiRepo, this._iFlutterNavigator,
       this._localStorageRepo, this._filePickerRepo)
-      : super(AssignmentCreateInitial()) {
-    on<AssignmentIdForEdit>(_assignmentIdForEdit);
+      : super(ClassWorkCreateInitial()) {
+    on<ClassworkIdForEdit>(_classworkIdForEdit);
     on<ChangeTitle>(_changeTitle);
+    on<PublishDate>(_publishDate);
     on<GetFile>(_getFile);
     on<RemoveFile>(_removeFile);
-    on<Submitable>(_submitable);
-    on<Assessment>(_assessment);
-    on<ChangeMark>(_changeMark);
-    on<StartDate>(_startDate);
-    on<EndDate>(_endDate);
     on<GetVersionList>(_getVersionList);
     on<SelectVersionId>(_selectVersionId);
     on<SelectClassId>(_selectClassId);
     on<SelectSubjectId>(_selectSubjectId);
-    // on<SelectSectionId>(_selectSectionId);
+    on<SelectSectionId>(_selectSectionId);
     on<SelectSectionList>(_selectSectionList);
     on<BackWithUnselected>(_backWithUnselected);
     on<PressToCreate>(_pressToCreate);
-    on<PressToCancel>(_pressToCancel);
     on<AddData>(_addData);
-    on<GetAssignmentAssignStudents>(_getAssignmentAssignStudents);
 
     add(GetVersionList());
   }
@@ -62,63 +54,44 @@ class AssignmentCreateBloc
   final LocalStorageRepo _localStorageRepo;
   final FilePickerRepo _filePickerRepo;
 
-  FutureOr<void> _assignmentIdForEdit(
-      AssignmentIdForEdit event, Emitter<AssignmentCreateState> emit) async {
-    emit(state.copyWith(assignmentId: event.assignmentId));
-    if (event.assignmentId != -1) {
-      final details = await _apiRepo.get<AssignmentDetails>(
-        endpoint: assignmentDetailsEndPoint(
-            dId: event.assignmentId,
-            sId: _localStorageRepo.read(key: loginIdDB)!),
+  FutureOr<void> _classworkIdForEdit(
+      ClassworkIdForEdit event, Emitter<ClassWorkCreateState> emit) async {
+    emit(state.copyWith(classWorkId: event.classworkId));
+
+    print(event.classworkId);
+    if (event.classworkId != -1) {
+      final details = await _apiRepo.get<ClassworkDetails>(
+        endpoint: classworkDetailsEndPoint(id: event.classworkId),
       );
 
       if (details != null) {
         List<int> batchIdList =
             details.data!.sections!.map((item) => item.id!).toList();
 
-        add(GetAssignmentAssignStudents(
-          assignmentId: details.data!.id!,
-          subjectId: details.data!.subject!.id!,
-          batchIdList: batchIdList,
-        ));
+        // add(GetAssignmentAssignStudents(
+        //   assignmentId: details.data!.id!,
+        //   subjectId: details.data!.subject!.id!,
+        //   batchIdList: batchIdList,
+        // ));
 
-        emit(state.copyWith(assingmentDtls: details));
+        emit(state.copyWith(classworkDtls: details));
       }
     }
-  }
-
-  FutureOr<void> _getAssignmentAssignStudents(GetAssignmentAssignStudents event,
-      Emitter<AssignmentCreateState> emit) async {
-    List<AssignmentAssignStudent> assignmentAssignStudent = [];
-    for (int i = 0; i < event.batchIdList.length; i++) {
-      final queryParams = {
-        "assignment_id": event.assignmentId,
-        "subject_id": event.subjectId,
-        "batch_id": event.batchIdList[i],
-      };
-      final students = await _apiRepo.get<AssignmentAssignStudent>(
-          endpoint: buildUrl(getAssignmentAssignStudentsEndpoint, queryParams));
-
-      if (students != null) {
-        assignmentAssignStudent.add(students);
-      }
-    }
-
-    emit(state.copyWith(
-        assignmentAssignStudentForEdit: assignmentAssignStudent));
-
-    add(SelectVersionId(id: state.assingmentDtls.data!.subject!.versionId!));
-    add(SelectClassId(id: state.assingmentDtls.data!.subject!.classId!));
-    add(SelectSubjectId(id: state.assingmentDtls.data!.subject!.id!));
   }
 
   FutureOr<void> _changeTitle(
-      ChangeTitle event, Emitter<AssignmentCreateState> emit) {
+      ChangeTitle event, Emitter<ClassWorkCreateState> emit) {
     emit(state.copyWith(title: event.title));
   }
 
+  FutureOr<void> _publishDate(
+      PublishDate event, Emitter<ClassWorkCreateState> emit) {
+    final date = getDate(value: event.publishedAt, formate: "yyyy-MM-dd");
+    emit(state.copyWith(publishedAt: date));
+  }
+
   FutureOr<void> _getFile(
-      GetFile event, Emitter<AssignmentCreateState> emit) async {
+      GetFile event, Emitter<ClassWorkCreateState> emit) async {
     FilePickerResult? result = await _filePickerRepo.filePicker();
 
     List<File> tempFileList = [];
@@ -143,38 +116,13 @@ class AssignmentCreateBloc
   }
 
   FutureOr<void> _removeFile(
-      RemoveFile event, Emitter<AssignmentCreateState> emit) {
+      RemoveFile event, Emitter<ClassWorkCreateState> emit) {
     emit(state.copyWith(
         fileList: List.from(state.fileList)..removeAt(event.index)));
   }
 
-  FutureOr<void> _submitable(
-      Submitable event, Emitter<AssignmentCreateState> emit) {
-    emit(state.copyWith(isSubmitable: event.isSubmitable));
-  }
-
-  FutureOr<void> _assessment(
-      Assessment event, Emitter<AssignmentCreateState> emit) {
-    emit(state.copyWith(isAssessment: event.isAssessment));
-  }
-
-  FutureOr<void> _changeMark(
-      ChangeMark event, Emitter<AssignmentCreateState> emit) {
-    emit(state.copyWith(mark: event.mark));
-  }
-
-  FutureOr<void> _startDate(
-      StartDate event, Emitter<AssignmentCreateState> emit) {
-    final date = getDate(value: event.startDate, formate: "yyyy-MM-dd");
-    emit(state.copyWith(startDate: date));
-  }
-
-  FutureOr<void> _endDate(EndDate event, Emitter<AssignmentCreateState> emit) {
-    emit(state.copyWith(endDate: event.endDate));
-  }
-
   FutureOr<void> _getVersionList(
-      GetVersionList event, Emitter<AssignmentCreateState> emit) async {
+      GetVersionList event, Emitter<ClassWorkCreateState> emit) async {
     final versionList = await _apiRepo.get<GetBacthAsSections>(
         endpoint: getBatchAsSectionsEndPoint);
 
@@ -196,7 +144,7 @@ class AssignmentCreateBloc
   }
 
   FutureOr<void> _selectVersionId(
-      SelectVersionId event, Emitter<AssignmentCreateState> emit) {
+      SelectVersionId event, Emitter<ClassWorkCreateState> emit) {
     final data = state.bacthAsSection.data!;
     List<DropdownItem> classList = [
       const DropdownItem(name: "Select", value: -1),
@@ -233,7 +181,7 @@ class AssignmentCreateBloc
   }
 
   FutureOr<void> _selectClassId(
-      SelectClassId event, Emitter<AssignmentCreateState> emit) {
+      SelectClassId event, Emitter<ClassWorkCreateState> emit) {
     final data = state.bacthAsSection.data!;
     List<DropdownItem> subjectList = [
       const DropdownItem(name: "Select", value: -1),
@@ -271,7 +219,7 @@ class AssignmentCreateBloc
   }
 
   FutureOr<void> _selectSubjectId(
-      SelectSubjectId event, Emitter<AssignmentCreateState> emit) {
+      SelectSubjectId event, Emitter<ClassWorkCreateState> emit) {
     final data = state.bacthAsSection.data!;
     List<DropDownValueModel> sectionList = [];
 
@@ -305,13 +253,11 @@ class AssignmentCreateBloc
     }
   }
 
-  // FutureOr<void> _selectSectionId(
-  //     SelectSectionId event, Emitter<AssignmentCreateState> emit) {
-  //   emit(state.copyWith(selectSectionId: event.id));
-  // }
+  FutureOr<void> _selectSectionId(
+      SelectSectionId event, Emitter<ClassWorkCreateState> emit) {}
 
   FutureOr<void> _selectSectionList(
-      SelectSectionList event, Emitter<AssignmentCreateState> emit) async {
+      SelectSectionList event, Emitter<ClassWorkCreateState> emit) async {
     List<int> batchIdList = [];
     List<String> batchNames = [];
     for (int i = 0; i < event.sectionList.length; i++) {
@@ -334,7 +280,7 @@ class AssignmentCreateBloc
               subjectId: state.selectedSubjectId,
               batchId: state.assignToBatchId[i]));
 
-      if (student != null && state.assignmentId == -1) {
+      if (student != null && state.classWorkId == -1) {
         batchWiseStudentList.add(student);
 
         if (student.data != null) {
@@ -385,7 +331,7 @@ class AssignmentCreateBloc
   }
 
   FutureOr<void> _backWithUnselected(
-      BackWithUnselected event, Emitter<AssignmentCreateState> emit) {
+      BackWithUnselected event, Emitter<ClassWorkCreateState> emit) {
     List<List<CheckUncheckStudents>> updateStudents =
         state.listOfCheckUncheckStudent;
 
@@ -394,7 +340,7 @@ class AssignmentCreateBloc
   }
 
   FutureOr<void> _pressToCreate(
-      PressToCreate event, Emitter<AssignmentCreateState> emit) async {
+      PressToCreate event, Emitter<ClassWorkCreateState> emit) async {
     List<int> studentList = [];
 
     for (int i = 0; i < state.listOfCheckUncheckStudent.length; i++) {
@@ -408,31 +354,27 @@ class AssignmentCreateBloc
     if (isValid(event) && !state.loading) {
       emit(state.copyWith(loading: true));
       final create = await _apiRepo.appMultipart<DefaultResponse, void>(
-        endpoint: state.assignmentId != -1
-            ? assignmentEditEndPoint(assignmentId: state.assignmentId)
-            : assignmentCreateEndPoint,
+        endpoint: state.classWorkId != -1
+            ? assignmentEditEndPoint(assignmentId: state.classWorkId)
+            : classworkEndpoint,
         body: {
           "status": event.isDraft ? 0 : 1,
           "title": state.title,
+          "published_at": state.publishedAt,
           "description": event.content,
-          "published_at": state.startDate,
-          "due_at": state.endDate,
           "subject_id": state.selectedSubjectId,
-          "is_markable": state.isAssessment ? '1' : '0',
-          "marks": state.mark,
           "assign_to_batch": state.assignToBatchId,
-          "submission_required": state.isSubmitable ? 1 : 0,
-          "assign_to_student": studentList,
-          "_method": state.assignmentId == -1 ? "POST" : "PUT",
+          "assigne_to_student": studentList,
+          "_method": state.classWorkId == -1 ? "POST" : "PUT",
         },
-        fileFieldName: "assignment_attachment__url",
+        fileFieldName: "class_work_attachment__url",
         files: state.fileList,
       );
 
       if (create != null) {
         _iFlutterNavigator.pop();
         navigatorKey.currentState!.pushNamedAndRemoveUntil(
-            teacherAssignmentListScreen, ModalRoute.withName('/'));
+            classworkListScreen, ModalRoute.withName('/'));
         ShowSnackBar(message: create.message!, navigator: _iFlutterNavigator);
       }
       emit(state.copyWith(loading: false));
@@ -444,14 +386,10 @@ class AssignmentCreateBloc
   bool isValid(PressToCreate event) {
     final validate = Validator.isValidated(items: [
       FormItem(text: state.title, focusNode: event.titleFocusnode),
-      FormItem(text: state.mark, focusNode: event.markFocusnode),
     ], navigator: _iFlutterNavigator);
 
     if (!validate) return false;
     if (state.title.isEmpty ||
-        state.startDate.isEmpty ||
-        state.endDate.isEmpty ||
-        state.isAssessment && state.mark.isEmpty ||
         state.selectedSubjectId == -1 ||
         state.assignToBatchId.isEmpty) {
       return false;
@@ -459,24 +397,11 @@ class AssignmentCreateBloc
     return true;
   }
 
-  FutureOr<void> _pressToCancel(
-      PressToCancel event, Emitter<AssignmentCreateState> emit) {
-    showCancelDialog(_iFlutterNavigator.context, pressToYes: () {
-      _iFlutterNavigator.pop();
-      navigatorKey.currentState!.pushNamedAndRemoveUntil(
-          teacherAssignmentListScreen, ModalRoute.withName('/'));
-    });
-  }
-
-  FutureOr<void> _addData(AddData event, Emitter<AssignmentCreateState> emit) {
+  FutureOr<void> _addData(AddData event, Emitter<ClassWorkCreateState> emit) {
     if (state.isFirstTime) {
       emit(state.copyWith(
         title: event.title,
-        isSubmitable: event.isSubmittable,
-        isAssessment: event.isAssessment,
-        mark: event.mark.toString(),
-        startDate: getDate(value: event.startDate, formate: "yyyy-MM-dd"),
-        endDate: event.endDate,
+        publishedAt: getDate(value: event.publishAt, formate: "yyyy-MM-dd"),
         selectedVersionId: event.selectedVersionId,
         selectedClassId: event.selectedClassId,
         selectedSubjectId: event.selectedSubjectId,

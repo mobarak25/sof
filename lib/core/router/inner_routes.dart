@@ -13,6 +13,8 @@ import 'package:school_of_future/features/presentation/assignment/student_assign
 import 'package:school_of_future/features/presentation/assignment/student_assignment_list/view/student_assinment_list_screen.dart';
 import 'package:school_of_future/features/presentation/assignment/teacher_assignment_list/bloc/teacher_assignment_list_bloc.dart';
 import 'package:school_of_future/features/presentation/assignment/teacher_assignment_list/view/teacher_assinment_list_screen.dart';
+import 'package:school_of_future/features/presentation/class_work/classwork_list/bloc/classwork_list_bloc.dart';
+import 'package:school_of_future/features/presentation/class_work/classwork_list/view/classwork_list_screen.dart';
 import 'package:school_of_future/features/presentation/leave/apply_leave/bloc/apply_leave_bloc.dart';
 import 'package:school_of_future/features/presentation/leave/apply_leave/view/parent_apply_leave_screen.dart';
 import 'package:school_of_future/features/presentation/leave/leave_details/view/leave_details_screen.dart';
@@ -112,6 +114,15 @@ Route<dynamic>? studentsRoutes(RouteSettings settings) {
           create: (context) => TeacherAssignmentListBloc(getIt<ApiRepo>(),
               getIt<IFlutterNavigator>(), getIt<LocalStorageRepo>()),
           child: const TeacherAssinmentListScreen(),
+        ),
+      );
+    case classworkListScreen:
+      // final students = settings.arguments as List<CheckUncheckStudents>;
+      return MaterialPageRoute(
+        settings: settings,
+        builder: (BuildContext context) => BlocProvider(
+          create: (context) => ClassworkListBloc(),
+          child: const ClassworkListScreen(),
         ),
       );
     case leaveDetailsScreen:

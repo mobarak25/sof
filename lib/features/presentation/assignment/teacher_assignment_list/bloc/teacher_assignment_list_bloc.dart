@@ -40,7 +40,7 @@ class TeacherAssignmentListBloc
     on<DeleteAssignment>(_deleteAssignment);
     on<PageIncrement>(_pageIncrement);
 
-    add(DataForTab(tabIndex: state.activeTab.toString()));
+    add(DataForTab(tabIndex: state.activeTab));
     add(GetVersionList());
   }
 

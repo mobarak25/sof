@@ -4,7 +4,6 @@ import 'package:school_of_future/core/file_picker/file_picker_service.dart';
 import 'package:school_of_future/core/ioc/global.dart';
 import 'package:school_of_future/core/navigator/iflutter_navigator.dart';
 import 'package:school_of_future/core/utils/utilities.dart';
-import 'package:school_of_future/features/domain/entities/batch_wise_student.dart';
 import 'package:school_of_future/features/domain/repositories/api_repo.dart';
 import 'package:school_of_future/features/domain/repositories/local_storage_repo.dart';
 import 'package:school_of_future/core/router/route_constents.dart';
@@ -24,6 +23,8 @@ import 'package:school_of_future/features/presentation/assignment/teacher_view_s
 import 'package:school_of_future/features/presentation/assignment/teacher_view_submission/view/teacher_view_submission_screen.dart';
 import 'package:school_of_future/features/presentation/change_password/bloc/change_password_bloc.dart';
 import 'package:school_of_future/features/presentation/change_password/view/change_password_screen.dart';
+import 'package:school_of_future/features/presentation/class_work/classwork_details/bloc/classwork_details_bloc.dart';
+import 'package:school_of_future/features/presentation/class_work/classwork_details/view/classwork_details_screen.dart';
 import 'package:school_of_future/features/presentation/class_work/teacher_classwork_create/bloc/class_work_create_bloc.dart';
 import 'package:school_of_future/features/presentation/class_work/teacher_classwork_create/view/teacher_classwork_create_screen.dart';
 import 'package:school_of_future/features/presentation/forgot_password_1/bloc/forgot_password_bloc.dart';
@@ -218,6 +219,19 @@ class AppRouter {
                 getIt<FilePickerRepo>())
               ..add(ClassworkIdForEdit(classworkId: id)),
             child: const ClassWorkCreateScreen(),
+          ),
+        );
+      case classworkDetailsScreen:
+        final id = settings.arguments as int;
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (BuildContext context) => BlocProvider(
+            create: (context) => ClassworkDetailsBloc(
+              getIt<ApiRepo>(),
+              getIt<IFlutterNavigator>(),
+              getIt<LocalStorageRepo>(),
+            )..add(GetClassworkDetails(classworkId: id)),
+            child: const ClassworkDetailsScreen(),
           ),
         );
 

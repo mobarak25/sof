@@ -14,6 +14,7 @@ import 'package:school_of_future/core/router/route_constents.dart';
 import 'package:school_of_future/core/snackbar/show_snackbar.dart';
 import 'package:school_of_future/core/utils/enums.dart';
 import 'package:school_of_future/core/utils/utilities.dart';
+import 'package:school_of_future/core/widgets/confirm_cancel_dialog.dart';
 import 'package:school_of_future/features/data/data_sources/remote_constants.dart';
 import 'package:school_of_future/features/domain/entities/assignment_assign_student_response.dart';
 import 'package:school_of_future/features/domain/entities/batch_wise_student.dart';
@@ -44,6 +45,7 @@ class ClassWorkCreateBloc
     on<SelectSectionList>(_selectSectionList);
     on<BackWithUnselected>(_backWithUnselected);
     on<PressToCreate>(_pressToCreate);
+    on<PressToCancel>(_pressToCancel);
     on<AddData>(_addData);
 
     add(GetVersionList());
@@ -395,6 +397,16 @@ class ClassWorkCreateBloc
       return false;
     }
     return true;
+  }
+
+  FutureOr<void> _pressToCancel(
+      PressToCancel event, Emitter<ClassWorkCreateState> emit) {
+    showCancelDialog(_iFlutterNavigator.context, pressToYes: () {
+      // _iFlutterNavigator.pop();
+      // navigatorKey.currentState!.pushNamedAndRemoveUntil(
+      //     classworkListScreen, ModalRoute.withName('/'));
+      Navigator.popUntil(_iFlutterNavigator.context, (route) => route.isFirst);
+    });
   }
 
   FutureOr<void> _addData(AddData event, Emitter<ClassWorkCreateState> emit) {

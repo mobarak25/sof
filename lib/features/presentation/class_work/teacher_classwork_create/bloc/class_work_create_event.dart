@@ -76,6 +76,8 @@ class PressToCreate extends ClassWorkCreateEvent {
   final FocusNode titleFocusnode;
 }
 
+class PressToCancel extends ClassWorkCreateEvent {}
+
 class AddData extends ClassWorkCreateEvent {
   const AddData({
     required this.title,

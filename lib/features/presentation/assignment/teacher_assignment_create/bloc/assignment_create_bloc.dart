@@ -462,9 +462,10 @@ class AssignmentCreateBloc
   FutureOr<void> _pressToCancel(
       PressToCancel event, Emitter<AssignmentCreateState> emit) {
     showCancelDialog(_iFlutterNavigator.context, pressToYes: () {
-      _iFlutterNavigator.pop();
-      navigatorKey.currentState!.pushNamedAndRemoveUntil(
-          teacherAssignmentListScreen, ModalRoute.withName('/'));
+      // _iFlutterNavigator.pop();
+      // navigatorKey.currentState!.pushNamedAndRemoveUntil(
+      //     teacherAssignmentListScreen, ModalRoute.withName('/'));
+      Navigator.popUntil(_iFlutterNavigator.context, (route) => route.isFirst);
     });
   }
 

@@ -47,3 +47,5 @@ String getAssignmentAssignStudentsEndpoint =
 String classworkEndpoint = "${version1}class-work";
 String classworkDetailsEndPoint({required int id}) =>
     "${version1}class-work/$id";
+
+String teacherClassworkEndPoint = "${version1}class-work";

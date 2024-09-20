@@ -370,14 +370,13 @@ class ClassWorkCreateScreen extends StatelessWidget {
 
                               final htmlContent =
                                   QuillJsonToHTML.encodeJson(jsonContent);
-                              // bloc.add(
-                              //   PressToCreate(
-                              //     isDraft: true,
-                              //     content: htmlContent,
-                              //     titleFocusnode: titleFocusnode,
-                              //     markFocusnode: markFocusnode,
-                              //   ),
-                              // );
+                              bloc.add(
+                                PressToCreate(
+                                  isDraft: true,
+                                  content: htmlContent,
+                                  titleFocusnode: titleFocusnode,
+                                ),
+                              );
                             },
                           ),
                         ),
@@ -389,7 +388,7 @@ class ClassWorkCreateScreen extends StatelessWidget {
                             textColor: kTextAnotherColor,
                             text: LocaleKeys.cancel.tr(),
                             press: () {
-                              // bloc.add(PressToCancel());
+                              bloc.add(PressToCancel());
                             },
                           ),
                         ),

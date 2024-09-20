@@ -9,6 +9,7 @@ import 'package:school_of_future/core/widgets/doc_viewer_page.dart';
 import 'package:school_of_future/core/widgets/image_view_page.dart';
 import 'package:school_of_future/features/domain/repositories/api_repo.dart';
 import 'package:school_of_future/features/domain/repositories/local_storage_repo.dart';
+import 'package:school_of_future/features/presentation/app_common/filter_sidebar/bloc/filter_sidebar_bloc.dart';
 import 'package:school_of_future/features/presentation/assignment/student_assignment_list/bloc/student_assignment_list_bloc.dart';
 import 'package:school_of_future/features/presentation/assignment/student_assignment_list/view/student_assinment_list_screen.dart';
 import 'package:school_of_future/features/presentation/assignment/teacher_assignment_list/bloc/teacher_assignment_list_bloc.dart';
@@ -120,8 +121,16 @@ Route<dynamic>? studentsRoutes(RouteSettings settings) {
       // final students = settings.arguments as List<CheckUncheckStudents>;
       return MaterialPageRoute(
         settings: settings,
-        builder: (BuildContext context) => BlocProvider(
-          create: (context) => ClassworkListBloc(),
+        builder: (BuildContext context) => MultiBlocProvider(
+          providers: [
+            BlocProvider<ClassworkListBloc>(
+              create: (context) => ClassworkListBloc(getIt<ApiRepo>(),
+                  getIt<IFlutterNavigator>(), getIt<LocalStorageRepo>()),
+            ),
+            BlocProvider<FilterSidebarBloc>(
+              create: (context) => FilterSidebarBloc(getIt<ApiRepo>()),
+            ),
+          ],
           child: const ClassworkListScreen(),
         ),
       );

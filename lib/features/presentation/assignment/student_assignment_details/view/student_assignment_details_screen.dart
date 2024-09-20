@@ -13,7 +13,7 @@ import 'package:school_of_future/core/widgets/body.dart';
 import 'package:school_of_future/core/widgets/button.dart';
 import 'package:school_of_future/core/widgets/text.dart';
 import 'package:school_of_future/features/presentation/assignment/student_assignment_details/bloc/student_assignment_details_bloc.dart';
-import 'package:school_of_future/features/presentation/assignment/student_assignment_details/widgets/detail_description.dart';
+import 'package:school_of_future/core/widgets/detail_description.dart';
 
 class StudentAssignmentDetailsScreen extends StatelessWidget {
   const StudentAssignmentDetailsScreen({super.key});
@@ -51,89 +51,92 @@ class StudentAssignmentDetailsScreen extends StatelessWidget {
                                       child: SizedBox(
                                         height: 50,
                                         width: 50,
-                                        child:
-                                            appGenerateSvgWidgetFromId(id: 1),
+                                        child: appGenerateSvgWidgetFromId(
+                                            id: data.subject!.subjectGroupId!),
                                       ),
                                     ),
                                     const Gap(15),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        TextB(
-                                          text: data.title ?? '',
-                                          textStyle: bBody1,
-                                          fontColor: kTextAnotherColor,
-                                          maxLines: 2,
-                                        ),
-                                        const Gap(5),
-                                        TextB(
-                                          text: data.subject!.name ?? '',
-                                          fontSize: 13,
-                                          fontColor: kPrimaryColor,
-                                        ),
-                                        const Gap(5),
-                                        Row(
-                                          children: [
-                                            TextB(
-                                              text:
-                                                  '${LocaleKeys.assignDate.tr()}: ',
-                                              fontColor: kTextDefaultColor,
-                                            ),
-                                            TextB(
-                                              text: getDate(
-                                                  value: data.publishedAt!,
-                                                  formate: "dd MMM, yyyy"),
-                                              fontColor: kPrimaryColor,
-                                            ),
-                                          ],
-                                        ),
-                                        const Gap(5),
-                                        Row(
-                                          children: [
-                                            TextB(
-                                              text:
-                                                  '${LocaleKeys.dueDateAssignment.tr()}: ',
-                                              fontColor: kTextDefaultColor,
-                                            ),
-                                            TextB(
-                                              text: getDate(
-                                                  value: state
-                                                      .details.data!.dueAt!,
-                                                  formate: "dd MMM, yyyy"),
-                                              fontColor: kPrimaryColor,
-                                            ),
-                                            Container(
-                                              height: 15,
-                                              width: 0.9,
-                                              color: kDividerColor,
-                                              margin:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 10),
-                                            ),
-                                            Row(
-                                              children: [
-                                                const Gap(5),
-                                                TextB(
-                                                  text: "${data.daysLeft!}",
-                                                  fontColor: kErrorColor,
-                                                ),
-                                                const Gap(5),
-                                                Text(
-                                                  LocaleKeys.daysLeftAssignment
-                                                      .tr(),
-                                                  style: bSub1.copyWith(
-                                                      color: kTextDefaultColor
-                                                          .withOpacity(0.5),
-                                                      fontSize: 10),
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ],
+                                    Flexible(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          TextB(
+                                            text: data.title ?? '',
+                                            textStyle: bBody1,
+                                            fontColor: kTextAnotherColor,
+                                            maxLines: 2,
+                                          ),
+                                          const Gap(5),
+                                          TextB(
+                                            text: data.subject!.name ?? '',
+                                            fontSize: 13,
+                                            fontColor: kPrimaryColor,
+                                          ),
+                                          const Gap(5),
+                                          Row(
+                                            children: [
+                                              TextB(
+                                                text:
+                                                    '${LocaleKeys.assignDate.tr()}: ',
+                                                fontColor: kTextDefaultColor,
+                                              ),
+                                              TextB(
+                                                text: getDate(
+                                                    value: data.publishedAt!,
+                                                    formate: "dd MMM, yyyy"),
+                                                fontColor: kPrimaryColor,
+                                              ),
+                                            ],
+                                          ),
+                                          const Gap(5),
+                                          Row(
+                                            children: [
+                                              TextB(
+                                                text:
+                                                    '${LocaleKeys.dueDateAssignment.tr()}: ',
+                                                fontColor: kTextDefaultColor,
+                                              ),
+                                              TextB(
+                                                text: getDate(
+                                                    value: state
+                                                        .details.data!.dueAt!,
+                                                    formate: "dd MMM, yyyy"),
+                                                fontColor: kPrimaryColor,
+                                              ),
+                                              Container(
+                                                height: 15,
+                                                width: 0.9,
+                                                color: kDividerColor,
+                                                margin:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 10),
+                                              ),
+                                              Row(
+                                                children: [
+                                                  const Gap(5),
+                                                  TextB(
+                                                    text: "${data.daysLeft!}",
+                                                    fontColor: kErrorColor,
+                                                  ),
+                                                  const Gap(5),
+                                                  Text(
+                                                    LocaleKeys
+                                                        .daysLeftAssignment
+                                                        .tr(),
+                                                    style: bSub1.copyWith(
+                                                        color: kTextDefaultColor
+                                                            .withOpacity(0.5),
+                                                        fontSize: 10),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ],
                                 ),

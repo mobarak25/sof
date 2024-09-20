@@ -12,7 +12,7 @@ import 'package:school_of_future/core/widgets/body.dart';
 import 'package:school_of_future/core/widgets/button.dart';
 import 'package:school_of_future/core/widgets/network_image.dart';
 import 'package:school_of_future/core/widgets/text.dart';
-import 'package:school_of_future/features/presentation/assignment/student_assignment_details/widgets/detail_description.dart';
+import 'package:school_of_future/core/widgets/detail_description.dart';
 import 'package:school_of_future/features/presentation/assignment/student_submission_details/bloc/student_submission_details_bloc.dart';
 
 class StudentAssignmentSubmissionDetailsScreen extends StatelessWidget {

@@ -11,22 +11,25 @@ class FloatingButton extends StatelessWidget {
     return Positioned(
       bottom: 100,
       right: 15,
-      child: InkWell(
-        onTap: () {
-          press();
-        },
-        child: Container(
-          width: 56,
-          height: 56,
-          alignment: Alignment.center,
-          decoration: const BoxDecoration(
-            color: kPrimaryColor,
-            shape: BoxShape.circle,
-          ),
-          child: const Icon(
-            Icons.add,
-            size: 30,
-            color: bWhite,
+      child: Material(
+        color: kPrimaryColor,
+        borderRadius: BorderRadius.circular(30),
+        child: InkWell(
+          onTap: () {
+            press();
+          },
+          child: Container(
+            width: 56,
+            height: 56,
+            alignment: Alignment.center,
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+            ),
+            child: const Icon(
+              Icons.add,
+              size: 30,
+              color: bWhite,
+            ),
           ),
         ),
       ),

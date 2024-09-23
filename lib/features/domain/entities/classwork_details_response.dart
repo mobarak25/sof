@@ -20,38 +20,24 @@ class Data {
   final String? title;
   final String? description;
   final String? publishedAt;
-  final int? versionId;
-  final int? classId;
-  final int? subjectId;
-  final String? subject;
   final int? status;
-  final int? subjectGroupId;
-  final List<String>? attachment;
-  final List<AssignedBatch>? assignedBatches;
-  final List<AssignedBatch>? sections;
+  final Subject? subject;
+  final List<Attachment>? attachments;
+  final List<Section>? sections;
+  final List<int>? assignBatches;
   final List<int>? assignStudents;
-  final String? createdAt;
-  final String? updatedAt;
-  final String? deletedAt;
 
-  const Data({
+  Data({
     this.id,
     this.title,
     this.description,
     this.publishedAt,
-    this.versionId,
-    this.classId,
-    this.subjectId,
-    this.subject,
     this.status,
-    this.subjectGroupId,
-    this.attachment,
-    this.assignedBatches,
+    this.subject,
+    this.attachments,
     this.sections,
+    this.assignBatches,
     this.assignStudents,
-    this.createdAt,
-    this.updatedAt,
-    this.deletedAt,
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
@@ -59,29 +45,23 @@ class Data {
         title: json["title"],
         description: json["description"],
         publishedAt: json["published_at"],
-        versionId: json["version_id"],
-        classId: json["class_id"],
-        subjectId: json["subject_id"],
-        subject: json["subject"],
         status: json["status"],
-        subjectGroupId: json["subject_group_id"],
-        attachment: json["attachment"] == null
+        subject:
+            json["subject"] == null ? null : Subject.fromJson(json["subject"]),
+        attachments: json["attachments"] == null
             ? []
-            : List<String>.from(json["attachment"]!.map((x) => x)),
-        assignedBatches: json["assigned_batches"] == null
-            ? []
-            : List<AssignedBatch>.from(json["assigned_batches"]!
-                .map((x) => AssignedBatch.fromJson(x))),
+            : List<Attachment>.from(
+                json["attachments"]!.map((x) => Attachment.fromJson(x))),
         sections: json["sections"] == null
             ? []
-            : List<AssignedBatch>.from(
-                json["sections"]!.map((x) => AssignedBatch.fromJson(x))),
+            : List<Section>.from(
+                json["sections"]!.map((x) => Section.fromJson(x))),
+        assignBatches: json["assign_batches"] == null
+            ? []
+            : List<int>.from(json["assign_batches"]!.map((x) => x)),
         assignStudents: json["assign_students"] == null
             ? []
             : List<int>.from(json["assign_students"]!.map((x) => x)),
-        createdAt: json["created_at"],
-        updatedAt: json["updated_at"],
-        deletedAt: json["deleted_at"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -89,40 +69,61 @@ class Data {
         "title": title,
         "description": description,
         "published_at": publishedAt,
-        "version_id": versionId,
-        "class_id": classId,
-        "subject_id": subjectId,
-        "subject": subject,
         "status": status,
-        "subject_group_id": subjectGroupId,
-        "attachment": attachment == null
+        "subject": subject?.toJson(),
+        "attachments": attachments == null
             ? []
-            : List<dynamic>.from(attachment!.map((x) => x)),
-        "assigned_batches": assignedBatches == null
-            ? []
-            : List<dynamic>.from(assignedBatches!.map((x) => x.toJson())),
+            : List<dynamic>.from(attachments!.map((x) => x.toJson())),
         "sections": sections == null
             ? []
             : List<dynamic>.from(sections!.map((x) => x.toJson())),
+        "assign_batches": assignBatches == null
+            ? []
+            : List<dynamic>.from(assignBatches!.map((x) => x)),
         "assign_students": assignStudents == null
             ? []
             : List<dynamic>.from(assignStudents!.map((x) => x)),
-        "created_at": createdAt,
-        "updated_at": updatedAt,
-        "deleted_at": deletedAt,
       };
 }
 
-class AssignedBatch {
+class Attachment {
+  final int? id;
+  final int? classWorkId;
+  final String? url;
+  final String? type;
+
+  Attachment({
+    this.id,
+    this.classWorkId,
+    this.url,
+    this.type,
+  });
+
+  factory Attachment.fromJson(Map<String, dynamic> json) => Attachment(
+        id: json["id"],
+        classWorkId: json["class_work_id"],
+        url: json["url"],
+        type: json["type"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "class_work_id": classWorkId,
+        "url": url,
+        "type": type,
+      };
+}
+
+class Section {
   final int? id;
   final String? name;
 
-  AssignedBatch({
+  Section({
     this.id,
     this.name,
   });
 
-  factory AssignedBatch.fromJson(Map<String, dynamic> json) => AssignedBatch(
+  factory Section.fromJson(Map<String, dynamic> json) => Section(
         id: json["id"],
         name: json["name"],
       );
@@ -130,5 +131,45 @@ class AssignedBatch {
   Map<String, dynamic> toJson() => {
         "id": id,
         "name": name,
+      };
+}
+
+class Subject {
+  final int? id;
+  final String? name;
+  final String? code;
+  final String? imageUrl;
+  final int? subjectGroupId;
+  final int? classId;
+  final int? versionId;
+
+  Subject({
+    this.id,
+    this.name,
+    this.code,
+    this.imageUrl,
+    this.subjectGroupId,
+    this.classId,
+    this.versionId,
+  });
+
+  factory Subject.fromJson(Map<String, dynamic> json) => Subject(
+        id: json["id"],
+        name: json["name"],
+        code: json["code"],
+        imageUrl: json["image_url"],
+        subjectGroupId: json["subject_group_id"],
+        classId: json["class_id"],
+        versionId: json["version_id"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "name": name,
+        "code": code,
+        "image_url": imageUrl,
+        "subject_group_id": subjectGroupId,
+        "class_id": classId,
+        "version_id": versionId,
       };
 }

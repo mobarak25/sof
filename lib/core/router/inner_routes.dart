@@ -14,8 +14,10 @@ import 'package:school_of_future/features/presentation/assignment/student_assign
 import 'package:school_of_future/features/presentation/assignment/student_assignment_list/view/student_assinment_list_screen.dart';
 import 'package:school_of_future/features/presentation/assignment/teacher_assignment_list/bloc/teacher_assignment_list_bloc.dart';
 import 'package:school_of_future/features/presentation/assignment/teacher_assignment_list/view/teacher_assinment_list_screen.dart';
-import 'package:school_of_future/features/presentation/class_work/classwork_list/bloc/classwork_list_bloc.dart';
-import 'package:school_of_future/features/presentation/class_work/classwork_list/view/classwork_list_screen.dart';
+import 'package:school_of_future/features/presentation/class_work/student_classwork_list/bloc/student_classwork_list_bloc.dart';
+import 'package:school_of_future/features/presentation/class_work/student_classwork_list/view/student_classwork_list_screen.dart';
+import 'package:school_of_future/features/presentation/class_work/teacher_classwork_list/bloc/classwork_list_bloc.dart';
+import 'package:school_of_future/features/presentation/class_work/teacher_classwork_list/view/teacher_classwork_list_screen.dart';
 import 'package:school_of_future/features/presentation/leave/apply_leave/bloc/apply_leave_bloc.dart';
 import 'package:school_of_future/features/presentation/leave/apply_leave/view/parent_apply_leave_screen.dart';
 import 'package:school_of_future/features/presentation/leave/leave_details/view/leave_details_screen.dart';
@@ -131,7 +133,7 @@ Route<dynamic>? studentsRoutes(RouteSettings settings) {
               create: (context) => FilterSidebarBloc(getIt<ApiRepo>()),
             ),
           ],
-          child: const ClassworkListScreen(),
+          child: const TeacherClassworkListScreen(),
         ),
       );
     case leaveDetailsScreen:
@@ -141,6 +143,15 @@ Route<dynamic>? studentsRoutes(RouteSettings settings) {
           create: (context) => NoticeListBloc(getIt<ApiRepo>(),
               getIt<IFlutterNavigator>(), getIt<LocalStorageRepo>()),
           child: const LeaveDetailsScreen(),
+        ),
+      );
+    case studentClassworkListScreen:
+      return MaterialPageRoute(
+        settings: settings,
+        builder: (BuildContext context) => BlocProvider(
+          create: (context) => StudentClassworkListBloc(getIt<ApiRepo>(),
+              getIt<IFlutterNavigator>(), getIt<LocalStorageRepo>()),
+          child: const StudentClassworkListScreen(),
         ),
       );
     case parentApplyLeaveScreen:

@@ -1,11 +1,10 @@
 import 'dart:async';
 import 'dart:io';
-
-import 'package:bloc/bloc.dart';
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:equatable/equatable.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:school_of_future/core/file_picker/file_picker_service.dart';
 import 'package:school_of_future/core/form_validator/validator.dart';
 import 'package:school_of_future/core/navigator/iflutter_navigator.dart';
@@ -60,23 +59,17 @@ class ClassWorkCreateBloc
       ClassworkIdForEdit event, Emitter<ClassWorkCreateState> emit) async {
     emit(state.copyWith(classWorkId: event.classworkId));
 
-    print(event.classworkId);
     if (event.classworkId != -1) {
       final details = await _apiRepo.get<ClassworkDetails>(
         endpoint: classworkDetailsEndPoint(id: event.classworkId),
       );
 
       if (details != null) {
-        List<int> batchIdList =
-            details.data!.sections!.map((item) => item.id!).toList();
-
-        // add(GetAssignmentAssignStudents(
-        //   assignmentId: details.data!.id!,
-        //   subjectId: details.data!.subject!.id!,
-        //   batchIdList: batchIdList,
-        // ));
-
         emit(state.copyWith(classworkDtls: details));
+
+        add(SelectVersionId(id: state.classworkDtls.data!.subject!.versionId!));
+        add(SelectClassId(id: state.classworkDtls.data!.subject!.classId!));
+        add(SelectSubjectId(id: state.classworkDtls.data!.subject!.id!));
       }
     }
   }
@@ -301,7 +294,7 @@ class ClassWorkCreateBloc
         batchWiseStudentList.add(student!);
         if (student.data != null) {
           for (int j = 0; j < student.data!.length; j++) {
-            if (state.assignmentAssignStudentForEdit[i].data!
+            if (state.classworkDtls.data!.assignStudents!
                 .contains(student.data![j].id)) {
               checkUncheck.add(CheckUncheckStudents(
                 id: student.data![j].id!,
@@ -357,8 +350,8 @@ class ClassWorkCreateBloc
       emit(state.copyWith(loading: true));
       final create = await _apiRepo.appMultipart<DefaultResponse, void>(
         endpoint: state.classWorkId != -1
-            ? assignmentEditEndPoint(assignmentId: state.classWorkId)
-            : classworkEndpoint,
+            ? classworkDetailsEndPoint(id: state.classWorkId)
+            : teacherClassworkEndPoint,
         body: {
           "status": event.isDraft ? 0 : 1,
           "title": state.title,

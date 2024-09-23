@@ -59,8 +59,8 @@ class ClassworkDetailsBloc
         add(DeleteClasswork(classworkId: event.id));
       });
     } else if (event.type == "Edit") {
-      // Navigator.of(_iFlutterNavigator.context, rootNavigator: true)
-      //     .pushNamed(teacherAssignmentCreateScreen, arguments: event.id);
+      Navigator.of(_iFlutterNavigator.context, rootNavigator: true)
+          .pushNamed(teacherClassworkCreateSreen, arguments: event.id);
     }
   }
 

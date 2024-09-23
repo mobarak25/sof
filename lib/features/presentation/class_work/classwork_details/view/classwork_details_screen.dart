@@ -47,7 +47,7 @@ class ClassworkDetailsScreen extends StatelessWidget {
                                   height: 50,
                                   width: 50,
                                   child: appGenerateSvgWidgetFromId(
-                                      id: data.subjectGroupId!),
+                                      id: data.subject!.subjectGroupId!),
                                 ),
                               ),
                               const Gap(15),
@@ -63,7 +63,7 @@ class ClassworkDetailsScreen extends StatelessWidget {
                                     ),
                                     const Gap(5),
                                     TextB(
-                                      text: data.subject ?? '',
+                                      text: data.subject!.name ?? '',
                                       fontSize: 13,
                                       fontColor: kPrimaryColor,
                                     ),
@@ -90,7 +90,8 @@ class ClassworkDetailsScreen extends StatelessWidget {
                           const Gap(30),
                           DetailDescription(
                             description: data.description ?? '',
-                            attachments: data.attachment!,
+                            attachments:
+                                data.attachments!.map((e) => e.url).toList(),
                           ),
                         ],
                       ),

@@ -44,7 +44,7 @@ class ClassWorkCreateScreen extends StatelessWidget {
       builder: (context, state) {
         if (state.isFirstTime) {
           if (state.classworkDtls.data != null &&
-              state.assignmentAssignStudentForEdit.isNotEmpty) {
+              state.classworkDtls.data!.assignStudents!.isNotEmpty) {
             final data = state.classworkDtls.data!;
 
             var delta = HtmlToDelta().convert(data.description!);
@@ -72,11 +72,11 @@ class ClassWorkCreateScreen extends StatelessWidget {
             bloc.add(AddData(
               title: data.title!,
               publishAt: data.publishedAt!,
-              selectedVersionId: data.versionId!,
-              selectedClassId: data.classId!,
-              selectedSubjectId: data.id!,
+              selectedVersionId: data.subject!.versionId!,
+              selectedClassId: data.subject!.classId!,
+              selectedSubjectId: data.subject!.id!,
             ));
-          } else if (state.assignmentAssignStudentForEdit.isEmpty &&
+          } else if (state.classworkDtls.data == null &&
               state.classWorkId != -1) {
             return Body(
               isFullScreen: true,

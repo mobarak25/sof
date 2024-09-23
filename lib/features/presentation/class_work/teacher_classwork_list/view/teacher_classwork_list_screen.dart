@@ -13,11 +13,11 @@ import 'package:school_of_future/core/widgets/text.dart';
 import 'package:school_of_future/core/widgets/custom_tab.dart';
 import 'package:school_of_future/features/presentation/app_common/filter_sidebar/bloc/filter_sidebar_bloc.dart';
 import 'package:school_of_future/features/presentation/app_common/filter_sidebar/view/filter_sidebar.dart';
-import 'package:school_of_future/features/presentation/class_work/classwork_list/bloc/classwork_list_bloc.dart';
-import 'package:school_of_future/features/presentation/class_work/classwork_list/widgets/classwork_card.dart';
+import 'package:school_of_future/features/presentation/class_work/teacher_classwork_list/bloc/classwork_list_bloc.dart';
+import 'package:school_of_future/features/presentation/class_work/teacher_classwork_list/widgets/classwork_card.dart';
 
-class ClassworkListScreen extends StatelessWidget {
-  const ClassworkListScreen({super.key});
+class TeacherClassworkListScreen extends StatelessWidget {
+  const TeacherClassworkListScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

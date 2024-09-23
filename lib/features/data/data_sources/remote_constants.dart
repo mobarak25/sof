@@ -44,8 +44,10 @@ String getBatchWiseStudentsEndpoint(
     "${version1}common/get-batch-wise-students?subject_id=$subjectId&batch_id=$batchId";
 String getAssignmentAssignStudentsEndpoint =
     "${version1}common/get-assignment-assigned-students";
-String classworkEndpoint = "${version1}class-work";
+
 String classworkDetailsEndPoint({required int id}) =>
     "${version1}class-work/$id";
 
 String teacherClassworkEndPoint = "${version1}class-work";
+String studentClassworkEndPoint({required String sId}) =>
+    "${version1}class-work/class-work-for-student/$sId";

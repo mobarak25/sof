@@ -48,7 +48,7 @@ class ClassworkCard extends StatelessWidget {
                             height: 60,
                             width: 60,
                             child: appGenerateSvgWidgetFromId(
-                              id: item.subjectGroupId!,
+                              id: item.subject!.subjectGroupId!,
                             ),
                           ),
                         ),
@@ -63,7 +63,7 @@ class ClassworkCard extends StatelessWidget {
                               ),
                               const Gap(10),
                               TextB(
-                                text: item.subject ?? '',
+                                text: item.subject!.name ?? '',
                                 fontColor: bPrimaryColor,
                               ),
                               Row(
@@ -87,7 +87,7 @@ class ClassworkCard extends StatelessWidget {
                                     fontColor: kLabelColor,
                                   ),
                                   TextB(
-                                    text: item.attachment!.length.toString(),
+                                    text: item.attachments.toString(),
                                     fontColor: bPrimaryColor,
                                   ),
                                 ],
@@ -97,17 +97,6 @@ class ClassworkCard extends StatelessWidget {
                         ),
                       ],
                     ),
-                    if (item.shortDescription!.isNotEmpty)
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Gap(30),
-                          TextB(
-                            text: item.shortDescription ?? '',
-                            maxLines: 2,
-                          ),
-                        ],
-                      )
                   ],
                 ),
               ),

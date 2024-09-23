@@ -76,36 +76,16 @@ class ClassworkItem {
   final String? title;
   final int? status;
   final String? publishedAt;
-  final String? shortDescription;
-  final int? classId;
-  final String? datumClass;
-  final String? subject;
-  final int? subjectId;
-  final String? subjectImageUrl;
-  final int? subjectGroupId;
-  final List<Section>? sections;
-  final List<String>? attachment;
-  final String? createdAt;
-  final String? updatedAt;
-  final String? deletedAt;
+  final Subject? subject;
+  final int? attachments;
 
   ClassworkItem({
     this.id,
     this.title,
     this.status,
     this.publishedAt,
-    this.shortDescription,
-    this.classId,
-    this.datumClass,
     this.subject,
-    this.subjectId,
-    this.subjectImageUrl,
-    this.subjectGroupId,
-    this.sections,
-    this.attachment,
-    this.createdAt,
-    this.updatedAt,
-    this.deletedAt,
+    this.attachments,
   });
 
   factory ClassworkItem.fromJson(Map<String, dynamic> json) => ClassworkItem(
@@ -113,23 +93,9 @@ class ClassworkItem {
         title: json["title"],
         status: json["status"],
         publishedAt: json["published_at"],
-        shortDescription: json["short_description"],
-        classId: json["class_id"],
-        datumClass: json["class"],
-        subject: json["subject"],
-        subjectId: json["subject_id"],
-        subjectImageUrl: json["subject_image_url"],
-        subjectGroupId: json["subject_group_id"],
-        sections: json["sections"] == null
-            ? []
-            : List<Section>.from(
-                json["sections"]!.map((x) => Section.fromJson(x))),
-        attachment: json["attachment"] == null
-            ? []
-            : List<String>.from(json["attachment"]!.map((x) => x)),
-        createdAt: json["created_at"],
-        updatedAt: json["updated_at"],
-        deletedAt: json["deleted_at"],
+        subject:
+            json["subject"] == null ? null : Subject.fromJson(json["subject"]),
+        attachments: json["attachments"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -137,35 +103,59 @@ class ClassworkItem {
         "title": title,
         "status": status,
         "published_at": publishedAt,
-        "short_description": shortDescription,
-        "class_id": classId,
-        "class": datumClass,
-        "subject": subject,
-        "subject_id": subjectId,
-        "subject_image_url": subjectImageUrl,
-        "subject_group_id": subjectGroupId,
-        "sections": sections == null
-            ? []
-            : List<dynamic>.from(sections!.map((x) => x.toJson())),
-        "attachment": attachment == null
-            ? []
-            : List<dynamic>.from(attachment!.map((x) => x)),
-        "created_at": createdAt,
-        "updated_at": updatedAt,
-        "deleted_at": deletedAt,
+        "subject": subject?.toJson(),
+        "attachments": attachments,
       };
 }
 
-class Section {
+class Subject {
+  final int? id;
+  final String? name;
+  final String? code;
+  final String? imageUrl;
+  final int? subjectGroupId;
+  final SubjectGroup? subjectGroup;
+
+  Subject({
+    this.id,
+    this.name,
+    this.code,
+    this.imageUrl,
+    this.subjectGroupId,
+    this.subjectGroup,
+  });
+
+  factory Subject.fromJson(Map<String, dynamic> json) => Subject(
+        id: json["id"],
+        name: json["name"],
+        code: json["code"],
+        imageUrl: json["image_url"],
+        subjectGroupId: json["subject_group_id"],
+        subjectGroup: json["subject_group"] == null
+            ? null
+            : SubjectGroup.fromJson(json["subject_group"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "name": name,
+        "code": code,
+        "image_url": imageUrl,
+        "subject_group_id": subjectGroupId,
+        "subject_group": subjectGroup?.toJson(),
+      };
+}
+
+class SubjectGroup {
   final int? id;
   final String? name;
 
-  Section({
+  SubjectGroup({
     this.id,
     this.name,
   });
 
-  factory Section.fromJson(Map<String, dynamic> json) => Section(
+  factory SubjectGroup.fromJson(Map<String, dynamic> json) => SubjectGroup(
         id: json["id"],
         name: json["name"],
       );

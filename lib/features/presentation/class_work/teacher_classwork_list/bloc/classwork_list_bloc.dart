@@ -10,6 +10,7 @@ import 'package:school_of_future/core/snackbar/show_snackbar.dart';
 import 'package:school_of_future/core/utils/debounce.dart';
 import 'package:school_of_future/core/utils/utilities.dart';
 import 'package:school_of_future/core/widgets/confirm_delete_dialog.dart';
+import 'package:school_of_future/features/data/data_sources/local_db_keys.dart';
 import 'package:school_of_future/features/data/data_sources/remote_constants.dart';
 import 'package:school_of_future/features/domain/entities/classwork_list_response.dart';
 import 'package:school_of_future/features/domain/entities/default_response.dart';
@@ -72,8 +73,7 @@ class ClassworkListBloc extends Bloc<ClassworkListEvent, ClassworkListState> {
     };
 
     final classwork = await _apiRepo.get<ClassworkList>(
-      endpoint: buildUrl(teacherClassworkEndPoint, queryParams),
-    );
+        endpoint: buildUrl(teacherClassworkEndPoint, queryParams));
 
     if (classwork != null) {
       emit(state.copyWith(classworkList: classwork));
@@ -96,7 +96,6 @@ class ClassworkListBloc extends Bloc<ClassworkListEvent, ClassworkListState> {
   FutureOr<void> _getSearchedClasswork(
       GetSearchedClasswork event, Emitter<ClassworkListState> emit) async {
     final filterState = event.filterBloc.state;
-    print(filterState.selectedClassId);
     emit(state.copyWith(page: 1, loading: true, isEndList: false));
     final queryParams = {
       "page": state.page,
@@ -149,8 +148,8 @@ class ClassworkListBloc extends Bloc<ClassworkListEvent, ClassworkListState> {
         add(DeleteClasswork(classworkId: event.id));
       });
     } else if (event.type == "Edit") {
-      // Navigator.of(_iFlutterNavigator.context, rootNavigator: true)
-      //     .pushNamed(teacherAssignmentCreateScreen, arguments: event.id);
+      Navigator.of(_iFlutterNavigator.context, rootNavigator: true)
+          .pushNamed(teacherClassworkCreateSreen, arguments: event.id);
     }
   }
 

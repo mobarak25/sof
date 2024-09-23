@@ -41,6 +41,15 @@ class StudentMenus extends StatelessWidget {
           },
         ),
         FeatureItem(
+          iconName: "assets/images/feature_icons_svg/ic_classwork.svg",
+          title: context.tr(LocaleKeys.classwork),
+          press: () {
+            panelController.close();
+            navigatorKey.currentState!.pushNamedAndRemoveUntil(
+                studentClassworkListScreen, ModalRoute.withName('/'));
+          },
+        ),
+        FeatureItem(
           iconName: "assets/images/feature_icons_svg/ic_leave.svg",
           title: context.tr(LocaleKeys.leave),
           press: () {

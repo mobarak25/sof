@@ -23,6 +23,7 @@ class FilterSidebar extends StatelessWidget {
     return BlocBuilder<FilterSidebarBloc, FilterSidebarState>(
       builder: (context, state) {
         final bloc = context.read<FilterSidebarBloc>();
+        print("object");
         return Column(
           children: [
             const Gap(30),

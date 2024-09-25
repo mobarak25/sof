@@ -46,3 +46,10 @@ class SelectSectionId extends FilterSidebarEvent {
   const SelectSectionId({required this.id});
   final dynamic id;
 }
+
+class SelectChapterId extends FilterSidebarEvent {
+  const SelectChapterId({required this.id});
+  final dynamic id;
+}
+
+class GetChapter extends FilterSidebarEvent {}

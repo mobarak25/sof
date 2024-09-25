@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:school_of_future/core/utils/utilities.dart';
 import 'package:school_of_future/features/data/data_sources/remote_constants.dart';
+import 'package:school_of_future/features/domain/entities/chapter_response.dart';
 import 'package:school_of_future/features/domain/entities/get_batch_as_section_response.dart';
 import 'package:school_of_future/features/domain/repositories/api_repo.dart';
 
@@ -20,6 +21,8 @@ class FilterSidebarBloc extends Bloc<FilterSidebarEvent, FilterSidebarState> {
     on<SelectClassId>(_selectClassId);
     on<SelectSubjectId>(_selectSubjectId);
     on<SelectSectionId>(_selectSectionId);
+    on<SelectChapterId>(_selectChapterId);
+    on<GetChapter>(_getChapter);
 
     add(GetVersionList());
   }
@@ -89,16 +92,15 @@ class FilterSidebarBloc extends Bloc<FilterSidebarEvent, FilterSidebarState> {
         setClass: true,
         setSubject: true,
         setSection: true,
+        setChapter: true,
         selectedClassId: -1,
         selectedSubjectId: -1,
         selectSectionId: -1,
+        selectChapterId: -1,
         classList: classList,
-        subjectList: [
-          const DropdownItem(name: "Select", value: -1),
-        ],
-        sectionList: [
-          const DropdownItem(name: "Select", value: -1),
-        ],
+        subjectList: [const DropdownItem(name: "Select", value: -1)],
+        sectionList: [const DropdownItem(name: "Select", value: -1)],
+        chapterList: [const DropdownItem(name: "Select", value: -1)],
       ));
     }
   }
@@ -129,12 +131,13 @@ class FilterSidebarBloc extends Bloc<FilterSidebarEvent, FilterSidebarState> {
         selectedClassId: event.id,
         setSubject: true,
         setSection: true,
+        setChapter: true,
         selectedSubjectId: -1,
         selectSectionId: -1,
+        selectChapterId: -1,
         subjectList: subjectList,
-        sectionList: [
-          const DropdownItem(name: "Select", value: -1),
-        ],
+        sectionList: [const DropdownItem(name: "Select", value: -1)],
+        chapterList: [const DropdownItem(name: "Select", value: -1)],
       ));
     }
   }
@@ -168,14 +171,42 @@ class FilterSidebarBloc extends Bloc<FilterSidebarEvent, FilterSidebarState> {
       emit(state.copyWith(
         selectedSubjectId: event.id,
         setSection: true,
+        setChapter: true,
+        selectChapterId: -1,
         selectSectionId: -1,
         sectionList: sectionList,
+        chapterList: [const DropdownItem(name: "Select", value: -1)],
       ));
     }
+
+    add(GetChapter());
   }
 
   FutureOr<void> _selectSectionId(
       SelectSectionId event, Emitter<FilterSidebarState> emit) {
     emit(state.copyWith(selectSectionId: event.id));
+  }
+
+  FutureOr<void> _selectChapterId(
+      SelectChapterId event, Emitter<FilterSidebarState> emit) {
+    emit(state.copyWith(selectChapterId: event.id));
+  }
+
+  FutureOr<void> _getChapter(
+      GetChapter event, Emitter<FilterSidebarState> emit) async {
+    final chapter = await _apiRepo.get<Chapter>(
+        endpoint: getChapterEndPoint(subjectId: state.selectedSubjectId));
+
+    List<DropdownItem> listOfChapter = [
+      const DropdownItem(name: "Select", value: -1),
+    ];
+
+    if (chapter != null) {
+      for (int i = 0; i < chapter.data!.length; i++) {
+        listOfChapter.add(DropdownItem(
+            name: chapter.data![i].name!, value: chapter.data![i].id));
+      }
+    }
+    emit(state.copyWith(chapterList: listOfChapter));
   }
 }

@@ -49,7 +49,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   FutureOr<void> _pressToLogin(
       PressToLogin event, Emitter<LoginState> emit) async {
-    print(loginEndPoint);
     if (isValid(event) && !state.loading) {
       emit(state.copyWith(loading: true));
       final loginResponse = await _apiRepo.post<LoginResponse>(

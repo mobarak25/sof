@@ -3,6 +3,7 @@ import 'package:school_of_future/features/domain/entities/assignment_details_res
 import 'package:school_of_future/features/domain/entities/assignment_feedback_response.dart';
 import 'package:school_of_future/features/domain/entities/assignment_list_response.dart';
 import 'package:school_of_future/features/domain/entities/batch_wise_student.dart';
+import 'package:school_of_future/features/domain/entities/chapter_response.dart';
 import 'package:school_of_future/features/domain/entities/child_list_response.dart';
 import 'package:school_of_future/features/domain/entities/classwork_details_response.dart';
 import 'package:school_of_future/features/domain/entities/classwork_list_response.dart';
@@ -14,6 +15,8 @@ import 'package:school_of_future/features/domain/entities/me_response.dart';
 import 'package:school_of_future/features/domain/entities/notice_details_response.dart';
 import 'package:school_of_future/features/domain/entities/notice_response.dart';
 import 'package:school_of_future/features/domain/entities/profile_attendance_response.dart';
+import 'package:school_of_future/features/domain/entities/resource_details_response.dart';
+import 'package:school_of_future/features/domain/entities/resources_response.dart';
 import 'package:school_of_future/features/domain/entities/student_assignment_submissign_details_response.dart';
 import 'package:school_of_future/features/domain/entities/student_profile_response.dart';
 import 'package:school_of_future/features/domain/entities/subject_item_response.dart';
@@ -68,6 +71,12 @@ class EntityMap {
         return ClassworkList.fromJson(json) as T;
       case const (ClassworkDetails):
         return ClassworkDetails.fromJson(json) as T;
+      case const (Chapter):
+        return Chapter.fromJson(json) as T;
+      case const (Resources):
+        return Resources.fromJson(json) as T;
+      case const (ResourceDetails):
+        return ResourceDetails.fromJson(json) as T;
 
       default:
         throw Exception('Unknown class');

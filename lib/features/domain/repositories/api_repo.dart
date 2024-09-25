@@ -23,8 +23,10 @@ abstract class ApiRepo {
   Future<T?> appMultipart<T, K>(
       {required String endpoint,
       required String fileFieldName,
+      String? thumbFieldName,
       Map<String, dynamic>? body,
       List<File> files,
+      List<File>? thumbFiles,
       String? token});
 
   Future<T?> postUrlEncode<T>({required String endpoint, String body});

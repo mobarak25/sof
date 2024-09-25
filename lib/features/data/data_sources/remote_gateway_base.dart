@@ -7,6 +7,7 @@ import 'package:school_of_future/core/navigator/iflutter_navigator.dart';
 import 'package:school_of_future/core/utils/utilities.dart';
 import 'package:school_of_future/features/data/data_sources/local_db_keys.dart';
 import 'package:school_of_future/features/domain/entities/entity_map/entity_map.dart';
+import 'package:school_of_future/features/domain/entities/image_response.dart';
 import 'package:school_of_future/features/domain/repositories/local_storage_repo.dart';
 import 'package:http/http.dart' as http;
 
@@ -44,6 +45,9 @@ class RemoteGatewayBase {
     final headers = _createHeaders(token: token);
     try {
       final body = json.encode(data);
+
+      print("Here is entPoint====: $endpoint");
+      print("body=============$body");
 
       final response =
           await http.post(Uri.parse(endpoint), headers: headers, body: body);
@@ -129,8 +133,10 @@ class RemoteGatewayBase {
   Future<T?> appMultiPartMethod<T, K>(
       {required String endpoint,
       required String fileFieldName,
+      String? thumbFieldName,
       Map<String, dynamic>? data,
       List<File>? files,
+      List<File>? thumbFiles,
       String? token}) async {
     dynamic responseJson;
     final headers = _createHeaders(
@@ -139,6 +145,10 @@ class RemoteGatewayBase {
 
     try {
       data![fileFieldName] = await filesUploadAndGotUrls(headers!, files!);
+      if (thumbFieldName != null && thumbFiles!.isNotEmpty) {
+        data[thumbFieldName] =
+            (await filesUploadAndGotUrls(headers, thumbFiles))[0];
+      }
 
       final body = json.encode(data);
       print("Here is entPoint====: $endpoint");
@@ -294,97 +304,4 @@ class RemoteGatewayBase {
   static List<K>? _fromJsonList<K>(Iterable<dynamic> jsonList) {
     return jsonList.map<K>((dynamic json) => fromJson<K, void>(json)).toList();
   }
-}
-
-class ImageResponse {
-  final List<FileElement>? files;
-
-  ImageResponse({
-    this.files,
-  });
-
-  factory ImageResponse.fromJson(Map<String, dynamic> json) => ImageResponse(
-        files: json["files"] == null
-            ? []
-            : List<FileElement>.from(
-                json["files"]!.map((x) => FileElement.fromJson(x))),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "files": files == null
-            ? []
-            : List<dynamic>.from(files!.map((x) => x.toJson())),
-      };
-}
-
-class FileElement {
-  final String? fieldname;
-  final String? originalname;
-  final String? encoding;
-  final String? mimetype;
-  final int? size;
-  final String? bucket;
-  final String? key;
-  final String? acl;
-  final String? contentType;
-  final dynamic contentDisposition;
-  final String? storageClass;
-  final dynamic serverSideEncryption;
-  final dynamic metadata;
-  final String? location;
-  final String? etag;
-
-  FileElement({
-    this.fieldname,
-    this.originalname,
-    this.encoding,
-    this.mimetype,
-    this.size,
-    this.bucket,
-    this.key,
-    this.acl,
-    this.contentType,
-    this.contentDisposition,
-    this.storageClass,
-    this.serverSideEncryption,
-    this.metadata,
-    this.location,
-    this.etag,
-  });
-
-  factory FileElement.fromJson(Map<String, dynamic> json) => FileElement(
-        fieldname: json["fieldname"],
-        originalname: json["originalname"],
-        encoding: json["encoding"],
-        mimetype: json["mimetype"],
-        size: json["size"],
-        bucket: json["bucket"],
-        key: json["key"],
-        acl: json["acl"],
-        contentType: json["contentType"],
-        contentDisposition: json["contentDisposition"],
-        storageClass: json["storageClass"],
-        serverSideEncryption: json["serverSideEncryption"],
-        metadata: json["metadata"],
-        location: json["location"],
-        etag: json["etag"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "fieldname": fieldname,
-        "originalname": originalname,
-        "encoding": encoding,
-        "mimetype": mimetype,
-        "size": size,
-        "bucket": bucket,
-        "key": key,
-        "acl": acl,
-        "contentType": contentType,
-        "contentDisposition": contentDisposition,
-        "storageClass": storageClass,
-        "serverSideEncryption": serverSideEncryption,
-        "metadata": metadata,
-        "location": location,
-        "etag": etag,
-      };
 }

@@ -51,3 +51,12 @@ String classworkDetailsEndPoint({required int id}) =>
 String teacherClassworkEndPoint = "${version1}class-work";
 String studentClassworkEndPoint({required String sId}) =>
     "${version1}class-work/class-work-for-student/$sId";
+String getChapterEndPoint({required int subjectId}) =>
+    "${version1}common/get-chapters/$subjectId";
+String chapterCreateEndPoint = "${version1}chapter";
+
+String teacherResourcesListEndPoint = "${version1}resource";
+String teacherResourcesCreateEndPoint = "${version1}resource";
+
+String teacherResourcedetailsEndPoint({required int resourceId}) =>
+    "${version1}resource/$resourceId";

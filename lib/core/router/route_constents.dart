@@ -30,10 +30,17 @@ const teacherAssignmentViewSubmissionScreen =
     "/teacher-assignment-view-submission-screen";
 const studentClassworkListScreen = "/student-classwork-list-screen";
 
+//common routes
+
+const classworkDetailsScreen = "/classwork-details-screen";
+
+//Student routes
+
 //Teacher routes
 const teacherAssignmentListScreen = "/teacher-assignment-screen";
 const teacherAssignmentCreateScreen = "/teacher-assignment-create-screen";
 const selectedStudentsScreen = "/selected-students-screen";
 const classworkListScreen = "/classwork_list_screen";
 const teacherClassworkCreateSreen = "/teacher_classwork_create_screen";
-const classworkDetailsScreen = "/classwork-details-screen";
+const teacherResourcesListScreen = "/teacher-resources-list-screen";
+const teacherResourcesCreateScreen = "/teacher-resources-create-screen";

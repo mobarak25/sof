@@ -32,6 +32,8 @@ import 'package:school_of_future/features/presentation/profile/teacher/bloc/teac
 import 'package:school_of_future/features/presentation/profile/teacher/view/teacher_profile_screen.dart';
 import 'package:school_of_future/features/presentation/app_dashboard/Student_home/bloc/student_home_bloc.dart';
 import 'package:school_of_future/features/presentation/app_dashboard/Student_home/view/student_home_screen.dart';
+import 'package:school_of_future/features/presentation/resources/teacher_resources_list/bloc/teacher_resource_list_bloc.dart';
+import 'package:school_of_future/features/presentation/resources/teacher_resources_list/view/teacher_resources_list_screen.dart';
 
 Route<dynamic>? studentsRoutes(RouteSettings settings) {
   print(settings.name);
@@ -161,6 +163,24 @@ Route<dynamic>? studentsRoutes(RouteSettings settings) {
           create: (context) => ApplyLeaveBloc(getIt<IFlutterNavigator>(),
               getIt<ImagePicker>(), getIt<FilePickerRepo>()),
           child: const ParentApplyLeave(),
+        ),
+      );
+
+    case teacherResourcesListScreen:
+      // final students = settings.arguments as List<CheckUncheckStudents>;
+      return MaterialPageRoute(
+        settings: settings,
+        builder: (BuildContext context) => MultiBlocProvider(
+          providers: [
+            BlocProvider<TeacherResourceListBloc>(
+              create: (context) => TeacherResourceListBloc(getIt<ApiRepo>(),
+                  getIt<IFlutterNavigator>(), getIt<LocalStorageRepo>()),
+            ),
+            BlocProvider<FilterSidebarBloc>(
+              create: (context) => FilterSidebarBloc(getIt<ApiRepo>()),
+            ),
+          ],
+          child: const TeacherResourcesListScreen(),
         ),
       );
 

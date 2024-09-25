@@ -110,8 +110,10 @@ class ApiRepoImpl extends RemoteGatewayBase implements ApiRepo {
   Future<T?> appMultipart<T, K>(
       {required String endpoint,
       required String fileFieldName,
+      String? thumbFieldName,
       Map<String, dynamic>? body,
       List<File>? files,
+      List<File>? thumbFiles,
       String? token}) async {
     dynamic data;
 
@@ -119,8 +121,10 @@ class ApiRepoImpl extends RemoteGatewayBase implements ApiRepo {
       data = await appMultiPartMethod<T, K>(
           endpoint: endpoint,
           fileFieldName: fileFieldName,
+          thumbFieldName: thumbFieldName,
           data: body,
           files: files,
+          thumbFiles: thumbFiles,
           token: token);
     } else {
       AppException(CustomError(message: noInternetConnection),

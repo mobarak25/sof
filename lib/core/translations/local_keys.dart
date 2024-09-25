@@ -411,4 +411,6 @@ abstract class LocaleKeys {
   static const admissionNo = 'Admission No';
   static const rollNumber = 'Roll Number';
   static const emergency = 'Emergency';
+  static const videoLink = 'Video link';
+  static const pleaseSelectAtLeastOneFile = 'please select at least one file';
 }

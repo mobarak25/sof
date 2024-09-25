@@ -21,6 +21,7 @@ class FilterSidebar extends StatelessWidget {
     this.showSubject = false,
     this.showSection = false,
     this.showChapter = false,
+    this.showSubjectForStudent = false,
   });
   final VoidCallback pressFilterBtn;
   final bool showStartDate,
@@ -29,7 +30,8 @@ class FilterSidebar extends StatelessWidget {
       showClass,
       showSubject,
       showSection,
-      showChapter;
+      showChapter,
+      showSubjectForStudent;
 
   @override
   Widget build(BuildContext context) {
@@ -180,6 +182,24 @@ class FilterSidebar extends StatelessWidget {
                       bloc.add(SelectSectionId(id: type));
                     },
                     items: state.sectionList,
+                  ),
+                ],
+              ),
+            if (showSubjectForStudent)
+              Column(
+                children: [
+                  const Gap(10),
+                  DropdownFieldB(
+                    dropdownHeight: 50,
+                    label: LocaleKeys.subject.tr(),
+                    setState: state.setChapter,
+                    labelColor: bBlack,
+                    dropDownValue: state.selectSubjectIdForStudent,
+                    selected: (dynamic type) {
+                      print(type);
+                      bloc.add(SelectSubjectIdForStudent(id: type));
+                    },
+                    items: state.studentSubjectList,
                   ),
                 ],
               ),

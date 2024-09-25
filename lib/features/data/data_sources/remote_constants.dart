@@ -60,3 +60,6 @@ String teacherResourcesCreateEndPoint = "${version1}resource";
 
 String teacherResourcedetailsEndPoint({required int resourceId}) =>
     "${version1}resource/$resourceId";
+
+String studentResourcesListEndPoint({required String sId}) =>
+    "${version1}resource/list-for-student/$sId";

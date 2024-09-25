@@ -10,11 +10,13 @@ import 'package:school_of_future/core/snackbar/show_snackbar.dart';
 import 'package:school_of_future/core/utils/debounce.dart';
 import 'package:school_of_future/core/utils/utilities.dart';
 import 'package:school_of_future/core/widgets/confirm_delete_dialog.dart';
+import 'package:school_of_future/features/data/data_sources/local_db_keys.dart';
 import 'package:school_of_future/features/data/data_sources/remote_constants.dart';
 import 'package:school_of_future/features/domain/entities/default_response.dart';
 import 'package:school_of_future/features/domain/entities/resources_response.dart';
 import 'package:school_of_future/features/domain/repositories/api_repo.dart';
 import 'package:school_of_future/features/domain/repositories/local_storage_repo.dart';
+import 'package:school_of_future/features/domain/usecases/local_data.dart';
 import 'package:school_of_future/features/presentation/app_common/filter_sidebar/bloc/filter_sidebar_bloc.dart';
 
 part 'teacher_resource_list_event.dart';
@@ -25,6 +27,7 @@ class TeacherResourceListBloc
   TeacherResourceListBloc(
       this._apiRepo, this._iFlutterNavigator, this._localStorageRepo)
       : super(TeacherResourceListInitial()) {
+    on<IsTeacher>(_isTeacher);
     on<DataForTab>(_dataForTab);
     on<ChangeSearch>(_changeSearch);
     on<GetSearchedResources>(_getSearchedResources);
@@ -32,11 +35,20 @@ class TeacherResourceListBloc
     on<DeleteResource>(_deleteResource);
     on<PressFilter>(_pressFilter);
     on<PageIncrement>(_pageIncrement);
+
+    add(IsTeacher());
   }
 
   final ApiRepo _apiRepo;
   final IFlutterNavigator _iFlutterNavigator;
   final LocalStorageRepo _localStorageRepo;
+
+  FutureOr<void> _isTeacher(
+      IsTeacher event, Emitter<TeacherResourceListState> emit) async {
+    emit(state.copyWith(
+        isTeacher:
+            await LocalData.isTeacher(localStorageRepo: _localStorageRepo)));
+  }
 
   FutureOr<void> _dataForTab(
       DataForTab event, Emitter<TeacherResourceListState> emit) async {
@@ -57,11 +69,12 @@ class TeacherResourceListBloc
       "version_id": state.searchText,
       "class_id": filterState.selectedClassId,
       "subject_id": filterState.selectedSubjectId,
-      "chapter_id": filterState.selectSectionId,
+      "chapter_id": filterState.selectChapterId,
     };
 
     final resources = await _apiRepo.get<Resources>(
-        endpoint: buildUrl(teacherResourcesListEndPoint, queryParams));
+      endpoint: getUrlStudentTeacher(queryParams),
+    );
 
     if (resources != null) {
       emit(state.copyWith(resources: resources));
@@ -96,7 +109,7 @@ class TeacherResourceListBloc
     };
 
     final resources = await _apiRepo.get<Resources>(
-      endpoint: buildUrl(teacherResourcesListEndPoint, queryParams),
+      endpoint: getUrlStudentTeacher(queryParams),
     );
 
     if (resources != null) {
@@ -121,7 +134,7 @@ class TeacherResourceListBloc
     };
 
     final flterResources = await _apiRepo.get<Resources>(
-      endpoint: buildUrl(teacherResourcesListEndPoint, queryParams),
+      endpoint: getUrlStudentTeacher(queryParams),
     );
     if (flterResources != null) {
       emit(state.copyWith(resources: flterResources));
@@ -177,7 +190,7 @@ class TeacherResourceListBloc
         };
 
         final pagiResources = await _apiRepo.get<Resources>(
-          endpoint: buildUrl(teacherResourcesListEndPoint, queryParams),
+          endpoint: getUrlStudentTeacher(queryParams),
         );
 
         emit(state.copyWith(page: totalPage, incrementLoader: false));
@@ -192,6 +205,17 @@ class TeacherResourceListBloc
       }
     } else if (!state.incrementLoader) {
       emit(state.copyWith(isEndList: true));
+    }
+  }
+
+  String getUrlStudentTeacher(Map<String, dynamic> queryParams) {
+    if (state.isTeacher) {
+      return buildUrl(teacherResourcesListEndPoint, queryParams);
+    } else {
+      return buildUrl(
+          studentResourcesListEndPoint(
+              sId: _localStorageRepo.read(key: loginIdDB)!),
+          queryParams);
     }
   }
 }

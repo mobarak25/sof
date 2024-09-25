@@ -35,6 +35,8 @@ import 'package:school_of_future/features/presentation/login/bloc/login_bloc.dar
 import 'package:school_of_future/features/presentation/login/view/login_screen.dart';
 import 'package:school_of_future/features/presentation/menu/bloc/menu_bloc.dart';
 import 'package:school_of_future/features/presentation/menu/view/menu_screen.dart';
+import 'package:school_of_future/features/presentation/resources/resources_details/bloc/resources_details_bloc.dart';
+import 'package:school_of_future/features/presentation/resources/resources_details/view/resources_details_screen.dart';
 import 'package:school_of_future/features/presentation/resources/teacher_resources_create/bloc/resources_create_bloc.dart';
 import 'package:school_of_future/features/presentation/resources/teacher_resources_create/view/resources_create_screen.dart';
 import 'package:school_of_future/features/presentation/select_child/bloc/select_child_bloc.dart';
@@ -248,6 +250,19 @@ class AppRouter {
                 getIt<FilePickerRepo>())
               ..add(ResourceIdForEdit(resourceId: id)),
             child: const ResourcesCreateScreen(),
+          ),
+        );
+      case resourcesDetailsScreen:
+        final id = settings.arguments as int;
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (BuildContext context) => BlocProvider(
+            create: (context) => ResourcesDetailsBloc(
+              getIt<ApiRepo>(),
+              getIt<IFlutterNavigator>(),
+              getIt<LocalStorageRepo>(),
+            )..add(GetResourceDetails(resourcesId: id)),
+            child: const ResourcesDetailsScreen(),
           ),
         );
 

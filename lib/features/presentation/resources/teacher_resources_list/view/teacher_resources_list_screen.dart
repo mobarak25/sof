@@ -52,9 +52,10 @@ class TeacherResourcesListScreen extends StatelessWidget {
             ),
             child: SingleChildScrollView(
               child: FilterSidebar(
-                showVersion: true,
-                showClass: true,
-                showSubject: true,
+                showVersion: state.isTeacher,
+                showClass: state.isTeacher,
+                showSubject: state.isTeacher,
+                showSubjectForStudent: !state.isTeacher ? true : false,
                 showChapter: true,
                 pressFilterBtn: () {
                   bloc.add(PressFilter(filterBloc: filterBloc));
@@ -102,12 +103,13 @@ class TeacherResourcesListScreen extends StatelessWidget {
                                         Navigator.of(context,
                                                 rootNavigator: true)
                                             .pushNamed(
-                                          classworkDetailsScreen,
+                                          resourcesDetailsScreen,
                                           arguments: dataItem.id,
                                         );
                                       },
                                       child: ResourceCard(
                                         item: dataItem,
+                                        isTeacher: state.isTeacher,
                                         pressTo: (String pressTo, int id) {
                                           bloc.add(PressToDelEdit(
                                               type: pressTo, id: id));
@@ -147,12 +149,13 @@ class TeacherResourcesListScreen extends StatelessWidget {
                       : const SizedBox(),
                 ),
               ),
-              FloatingButton(
-                press: () {
-                  Navigator.of(context, rootNavigator: true)
-                      .pushNamed(teacherResourcesCreateScreen, arguments: -1);
-                },
-              )
+              if (state.isTeacher)
+                FloatingButton(
+                  press: () {
+                    Navigator.of(context, rootNavigator: true)
+                        .pushNamed(teacherResourcesCreateScreen, arguments: -1);
+                  },
+                )
             ],
           ),
         );

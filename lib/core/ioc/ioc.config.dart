@@ -43,7 +43,8 @@ i1.GetIt $initGetIt(i1.GetIt sl,
   gh.lazySingleton<ApiRepo>(() => ApiRepoImpl(sl()));
   gh.lazySingleton<GetLocationRepo>(() => GetLocationRepoImpl());
   gh.lazySingleton<FilePickerRepo>(() => FilePickerRepoImpl());
-  gh.lazySingleton(() => FilterSidebarBloc(getIt<ApiRepo>()));
+  gh.lazySingleton(
+      () => FilterSidebarBloc(getIt<ApiRepo>(), getIt<LocalStorageRepo>()));
 
   return sl;
 }

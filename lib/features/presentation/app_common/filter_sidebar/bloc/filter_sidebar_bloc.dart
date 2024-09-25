@@ -4,16 +4,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:school_of_future/core/utils/utilities.dart';
+import 'package:school_of_future/features/data/data_sources/local_db_keys.dart';
 import 'package:school_of_future/features/data/data_sources/remote_constants.dart';
 import 'package:school_of_future/features/domain/entities/chapter_response.dart';
 import 'package:school_of_future/features/domain/entities/get_batch_as_section_response.dart';
+import 'package:school_of_future/features/domain/entities/subject_item_response.dart';
 import 'package:school_of_future/features/domain/repositories/api_repo.dart';
+import 'package:school_of_future/features/domain/repositories/local_storage_repo.dart';
+import 'package:school_of_future/features/domain/usecases/local_data.dart';
 
 part 'filter_sidebar_event.dart';
 part 'filter_sidebar_state.dart';
 
 class FilterSidebarBloc extends Bloc<FilterSidebarEvent, FilterSidebarState> {
-  FilterSidebarBloc(this._apiRepo) : super(FilterSidebarInitial()) {
+  FilterSidebarBloc(this._apiRepo, this._localStorageRepo)
+      : super(FilterSidebarInitial()) {
+    on<IsTeacher>(_isTeacher);
     on<SelectStartDate>(_selectStartDate);
     on<SelectEndDate>(_selectEndDate);
     on<GetVersionList>(_getVersionList);
@@ -22,12 +28,26 @@ class FilterSidebarBloc extends Bloc<FilterSidebarEvent, FilterSidebarState> {
     on<SelectSubjectId>(_selectSubjectId);
     on<SelectSectionId>(_selectSectionId);
     on<SelectChapterId>(_selectChapterId);
+    on<SelectSubjectIdForStudent>(_selectSubjectIdForStudent);
     on<GetChapter>(_getChapter);
+    on<GetSubjectForStudent>(_getSubjectForStudent);
 
-    add(GetVersionList());
+    add(IsTeacher());
+    add(GetSubjectForStudent());
   }
 
   final ApiRepo _apiRepo;
+  final LocalStorageRepo _localStorageRepo;
+  FutureOr<void> _isTeacher(
+      IsTeacher event, Emitter<FilterSidebarState> emit) async {
+    emit(state.copyWith(
+        isTeacher:
+            await LocalData.isTeacher(localStorageRepo: _localStorageRepo)));
+
+    if (state.isTeacher) {
+      add(GetVersionList());
+    }
+  }
 
   FutureOr<void> _selectStartDate(
       SelectStartDate event, Emitter<FilterSidebarState> emit) {
@@ -179,7 +199,7 @@ class FilterSidebarBloc extends Bloc<FilterSidebarEvent, FilterSidebarState> {
       ));
     }
 
-    add(GetChapter());
+    add(GetChapter(subjectId: event.id));
   }
 
   FutureOr<void> _selectSectionId(
@@ -195,7 +215,7 @@ class FilterSidebarBloc extends Bloc<FilterSidebarEvent, FilterSidebarState> {
   FutureOr<void> _getChapter(
       GetChapter event, Emitter<FilterSidebarState> emit) async {
     final chapter = await _apiRepo.get<Chapter>(
-        endpoint: getChapterEndPoint(subjectId: state.selectedSubjectId));
+        endpoint: getChapterEndPoint(subjectId: event.subjectId));
 
     List<DropdownItem> listOfChapter = [
       const DropdownItem(name: "Select", value: -1),
@@ -208,5 +228,54 @@ class FilterSidebarBloc extends Bloc<FilterSidebarEvent, FilterSidebarState> {
       }
     }
     emit(state.copyWith(chapterList: listOfChapter));
+  }
+
+  FutureOr<void> _getSubjectForStudent(
+      GetSubjectForStudent event, Emitter<FilterSidebarState> emit) async {
+    List<DropdownItem> list = [
+      const DropdownItem(name: "Select Subject", value: -1),
+    ];
+
+    final subjectFromDB =
+        await _localStorageRepo.readModel<SubjectResponse>(key: subjectListDB);
+
+    if (subjectFromDB != null) {
+      for (int i = 0; i < subjectFromDB.data!.length; i++) {
+        list.add(DropdownItem(
+            name: subjectFromDB.data![i].name!,
+            value: subjectFromDB.data![i].id));
+      }
+      emit(state.copyWith(studentSubjectList: list));
+      list = [
+        const DropdownItem(name: "Select Subject", value: -1),
+      ];
+    }
+
+    final subjects = await _apiRepo.get<SubjectResponse>(
+        endpoint: getAllSubjectEndPoint(
+            sId: _localStorageRepo.read(key: loginIdDB)!));
+
+    if (subjects != null) {
+      for (int i = 0; i < subjects.data!.length; i++) {
+        list.add(DropdownItem(
+            name: subjects.data![i].name!, value: subjects.data![i].id));
+      }
+      emit(state.copyWith(studentSubjectList: list));
+      await _localStorageRepo.writeModel(key: subjectListDB, value: subjects);
+      list = [
+        const DropdownItem(name: "Select Subject", value: -1),
+      ];
+    }
+  }
+
+  FutureOr<void> _selectSubjectIdForStudent(
+      SelectSubjectIdForStudent event, Emitter<FilterSidebarState> emit) {
+    emit(state.copyWith(
+      selectSubjectIdForStudent: event.id,
+      setChapter: true,
+      selectChapterId: -1,
+      chapterList: [const DropdownItem(name: "Select", value: -1)],
+    ));
+    add(GetChapter(subjectId: event.id));
   }
 }

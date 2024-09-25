@@ -7,6 +7,8 @@ sealed class FilterSidebarEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class IsTeacher extends FilterSidebarEvent {}
+
 class SelectStartDate extends FilterSidebarEvent {
   const SelectStartDate({
     required this.startDate,
@@ -52,4 +54,14 @@ class SelectChapterId extends FilterSidebarEvent {
   final dynamic id;
 }
 
-class GetChapter extends FilterSidebarEvent {}
+class SelectSubjectIdForStudent extends FilterSidebarEvent {
+  const SelectSubjectIdForStudent({required this.id});
+  final dynamic id;
+}
+
+class GetSubjectForStudent extends FilterSidebarEvent {}
+
+class GetChapter extends FilterSidebarEvent {
+  const GetChapter({required this.subjectId});
+  final dynamic subjectId;
+}

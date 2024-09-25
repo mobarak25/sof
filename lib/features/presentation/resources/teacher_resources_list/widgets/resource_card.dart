@@ -7,10 +7,15 @@ import 'package:school_of_future/core/widgets/text.dart';
 import 'package:school_of_future/features/domain/entities/resources_response.dart';
 
 class ResourceCard extends StatelessWidget {
-  const ResourceCard({super.key, required this.item, required this.pressTo});
+  const ResourceCard(
+      {super.key,
+      required this.item,
+      required this.pressTo,
+      required this.isTeacher});
 
   final ResourcesItem item;
   final Function pressTo;
+  final bool isTeacher;
 
   @override
   Widget build(BuildContext context) {
@@ -52,23 +57,24 @@ class ResourceCard extends StatelessWidget {
               ),
             ],
           ),
-          Positioned(
-            right: 0,
-            child: PopupMenuButton(
-              icon: SvgPicture.asset('assets/images/three_dots.svg'),
-              itemBuilder: (context) {
-                return ["Edit", "Delete"].map((action) {
-                  return PopupMenuItem(
-                    value: action,
-                    child: Text(action),
-                  );
-                }).toList();
-              },
-              onSelected: (String value) {
-                pressTo(value, item.id);
-              },
-            ),
-          )
+          if (isTeacher)
+            Positioned(
+              right: 0,
+              child: PopupMenuButton(
+                icon: SvgPicture.asset('assets/images/three_dots.svg'),
+                itemBuilder: (context) {
+                  return ["Edit", "Delete"].map((action) {
+                    return PopupMenuItem(
+                      value: action,
+                      child: Text(action),
+                    );
+                  }).toList();
+                },
+                onSelected: (String value) {
+                  pressTo(value, item.id);
+                },
+              ),
+            )
         ],
       ),
     );

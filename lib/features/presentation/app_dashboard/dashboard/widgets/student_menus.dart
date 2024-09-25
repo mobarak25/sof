@@ -58,40 +58,16 @@ class StudentMenus extends StatelessWidget {
                 leaveListScreen, ModalRoute.withName('/'));
           },
         ),
+        FeatureItem(
+          iconName: "assets/images/feature_icons_svg/ic_resource.svg",
+          title: context.tr(LocaleKeys.resources),
+          press: () {
+            panelController.close();
+            navigatorKey.currentState!.pushNamedAndRemoveUntil(
+                teacherResourcesListScreen, ModalRoute.withName('/'));
+          },
+        ),
       ],
     );
-
-    // Column(
-    //   children: [
-    //     ListTile(
-    //       leading: const Icon(Icons.home),
-    //       title: const Text('Home'),
-    //       onTap: () {
-    //         panelController.close();
-    //         navigatorKey.currentState!.popUntil((route) => route.isFirst);
-    //       },
-    //     ),
-    //     ListTile(
-    //       leading: const Icon(Icons.search),
-    //       title: const Text('Search'),
-    //       onTap: () {
-    //         panelController.close();
-    //         navigatorKey.currentState!.pushNamedAndRemoveUntil(
-    //             studentSearch, ModalRoute.withName('/'));
-    //       },
-    //     ),
-    //     ListTile(
-    //       leading: const Icon(Icons.person),
-    //       title: const Text('Profile'),
-    //       onTap: () {
-    //         if (panelController.isPanelOpen) {
-    //           panelController.close();
-    //         }
-    //         navigatorKey.currentState!.pushNamedAndRemoveUntil(
-    //             studentProfile, ModalRoute.withName('/'));
-    //       },
-    //     ),
-    //   ],
-    // );
   }
 }

@@ -360,7 +360,7 @@ class ResourcesCreateBloc
         );
 
         if (create != null) {
-          _iFlutterNavigator.pop();
+          _iFlutterNavigator.popUntil((route) => route.isFirst);
           navigatorKey.currentState!.pushNamedAndRemoveUntil(
               teacherResourcesListScreen, ModalRoute.withName('/'));
           ShowSnackBar(message: create.message!, navigator: _iFlutterNavigator);

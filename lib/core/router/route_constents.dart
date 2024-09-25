@@ -33,6 +33,7 @@ const studentClassworkListScreen = "/student-classwork-list-screen";
 //common routes
 
 const classworkDetailsScreen = "/classwork-details-screen";
+const resourcesDetailsScreen = "/resources-details-screen";
 
 //Student routes
 

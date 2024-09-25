@@ -132,7 +132,8 @@ Route<dynamic>? studentsRoutes(RouteSettings settings) {
                   getIt<IFlutterNavigator>(), getIt<LocalStorageRepo>()),
             ),
             BlocProvider<FilterSidebarBloc>(
-              create: (context) => FilterSidebarBloc(getIt<ApiRepo>()),
+              create: (context) => FilterSidebarBloc(
+                  getIt<ApiRepo>(), getIt<LocalStorageRepo>()),
             ),
           ],
           child: const TeacherClassworkListScreen(),
@@ -177,7 +178,8 @@ Route<dynamic>? studentsRoutes(RouteSettings settings) {
                   getIt<IFlutterNavigator>(), getIt<LocalStorageRepo>()),
             ),
             BlocProvider<FilterSidebarBloc>(
-              create: (context) => FilterSidebarBloc(getIt<ApiRepo>()),
+              create: (context) => FilterSidebarBloc(
+                  getIt<ApiRepo>(), getIt<LocalStorageRepo>()),
             ),
           ],
           child: const TeacherResourcesListScreen(),

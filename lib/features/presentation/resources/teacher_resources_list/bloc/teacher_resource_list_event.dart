@@ -7,6 +7,8 @@ sealed class TeacherResourceListEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class IsTeacher extends TeacherResourceListEvent {}
+
 class DataForTab extends TeacherResourceListEvent {
   const DataForTab({required this.tabIndex, required this.filterBloc});
   final String tabIndex;

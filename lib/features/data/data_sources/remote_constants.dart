@@ -63,3 +63,12 @@ String teacherResourcedetailsEndPoint({required int resourceId}) =>
 
 String studentResourcesListEndPoint({required String sId}) =>
     "${version1}resource/list-for-student/$sId";
+
+String teacherlessonPlanListEndPoint = "${version1}lesson-plan";
+
+String studentlessonPlanListEndPoint({required String sId}) =>
+    "${version1}lesson-plan/list-for-student/$sId";
+
+String teacherLessonPlanDetailsEndPoint({required int planId}) =>
+    "${version1}lesson-plan/$planId";
+String teacherlessonPlanCreateEndPoint = "${version1}lesson-plan";

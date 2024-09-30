@@ -34,6 +34,8 @@ const studentClassworkListScreen = "/student-classwork-list-screen";
 
 const classworkDetailsScreen = "/classwork-details-screen";
 const resourcesDetailsScreen = "/resources-details-screen";
+const lessonPlanListScreen = "/lesson-plan-list-screen";
+const lessonPlanDetailsScreen = "/lesson-plan-details-screen";
 
 //Student routes
 
@@ -45,3 +47,5 @@ const classworkListScreen = "/classwork_list_screen";
 const teacherClassworkCreateSreen = "/teacher_classwork_create_screen";
 const teacherResourcesListScreen = "/teacher-resources-list-screen";
 const teacherResourcesCreateScreen = "/teacher-resources-create-screen";
+const teacherlessonPlanCreateScreen = "/teacher-lesson-plan-create-screen";
+const teacherAttachResourceScreen = "/teacher-attach-resource-screen";

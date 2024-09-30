@@ -78,7 +78,7 @@ class NoticeList extends StatelessWidget {
                                   month: getDate(
                                       value: state.notice.noticeList![position]
                                           .createdAt!,
-                                      formate: 'MM'),
+                                      formate: 'MMMM'),
                                   title:
                                       state.notice.noticeList![position].title!,
                                   secondLineValue: state.notice
@@ -86,12 +86,12 @@ class NoticeList extends StatelessWidget {
                                           1
                                       ? LocaleKeys.all.tr()
                                       : 'You',
-                                  thirdLineValue: state
-                                      .notice.noticeList![position].authorName!,
+                                  thirdLineValue: state.notice
+                                      .noticeList![position].user!.fullname!,
                                   time: getDate(
                                       value: state.notice.noticeList![position]
                                           .createdAt!,
-                                      formate: 'dd MMM hh:mm a'),
+                                      formate: 'hh:mm a'),
                                   press: () {
                                     Navigator.pushNamed(
                                       navigatorKey.currentState!.context,

@@ -44,6 +44,8 @@ class FilterSidebar extends StatelessWidget {
         final bloc = context.read<FilterSidebarBloc>();
         return Column(
           children: [
+            const Gap(30),
+            //=============Start date===========
             if (showStartDate)
               Column(
                 children: [
@@ -81,6 +83,7 @@ class FilterSidebar extends StatelessWidget {
                   ),
                 ],
               ),
+            //=============End date=============
             if (showEndDate)
               Column(
                 children: [
@@ -118,6 +121,7 @@ class FilterSidebar extends StatelessWidget {
                   ),
                 ],
               ),
+            //=============Version==============
             if (showVersion)
               Column(
                 children: [
@@ -134,6 +138,7 @@ class FilterSidebar extends StatelessWidget {
                   ),
                 ],
               ),
+            //=============Class================
             if (showClass)
               Column(
                 children: [
@@ -151,6 +156,7 @@ class FilterSidebar extends StatelessWidget {
                   ),
                 ],
               ),
+            //=============Subject==============
             if (showSubject)
               Column(
                 children: [
@@ -168,23 +174,7 @@ class FilterSidebar extends StatelessWidget {
                   ),
                 ],
               ),
-            if (showSection)
-              Column(
-                children: [
-                  const Gap(10),
-                  DropdownFieldB(
-                    dropdownHeight: 50,
-                    label: LocaleKeys.section.tr(),
-                    labelColor: bBlack,
-                    setState: state.setSection,
-                    dropDownValue: state.selectSectionId,
-                    selected: (dynamic type) {
-                      bloc.add(SelectSectionId(id: type));
-                    },
-                    items: state.sectionList,
-                  ),
-                ],
-              ),
+            //=======Subject for student========
             if (showSubjectForStudent)
               Column(
                 children: [
@@ -203,6 +193,25 @@ class FilterSidebar extends StatelessWidget {
                   ),
                 ],
               ),
+            //=============Section==============
+            if (showSection)
+              Column(
+                children: [
+                  const Gap(10),
+                  DropdownFieldB(
+                    dropdownHeight: 50,
+                    label: LocaleKeys.section.tr(),
+                    labelColor: bBlack,
+                    setState: state.setSection,
+                    dropDownValue: state.selectSectionId,
+                    selected: (dynamic type) {
+                      bloc.add(SelectSectionId(id: type));
+                    },
+                    items: state.sectionList,
+                  ),
+                ],
+              ),
+            //=============Chapter==============
             if (showChapter)
               Column(
                 children: [
@@ -221,6 +230,7 @@ class FilterSidebar extends StatelessWidget {
                 ],
               ),
             const Gap(30),
+            //===========Filter Button==========
             ButtonB(
               heigh: 60,
               text: LocaleKeys.filter.tr(),

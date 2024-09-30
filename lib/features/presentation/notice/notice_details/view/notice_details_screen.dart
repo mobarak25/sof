@@ -39,14 +39,14 @@ class NoticeDetailsScreen extends StatelessWidget {
                               formate: "dd"),
                           month: getDate(
                               value: state.details.data!.createdAt!,
-                              formate: "hh:mm a"),
+                              formate: "MMMM"),
                           title: state.details.data!.title!,
                           forUser: state.details.data!.isCommon == 1
                               ? LocaleKeys.all.tr()
                               : "You",
                           date: getDate(
                               value: state.details.data!.createdAt!,
-                              formate: "dd  MMM hh:mm a"),
+                              formate: "dd MMM, yyyy  hh:mm a"),
                         ),
                         const SizedBox(height: 49),
                         DetailDescription(

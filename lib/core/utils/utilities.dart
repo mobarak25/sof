@@ -119,7 +119,18 @@ class CheckUncheckStudents {
   final String admissionRoll;
 }
 
-Delta markdownToDelta(String markdownContent) {
-  dynamic doc = Document.fromHtml(markdownContent);
-  return doc.toDelta();
+class CheckUncheckResources {
+  const CheckUncheckResources({
+    required this.id,
+    required this.isChecked,
+    required this.name,
+    required this.chapterName,
+    required this.thumbImg,
+  });
+
+  final int id;
+  final bool isChecked;
+  final String name;
+  final String chapterName;
+  final String thumbImg;
 }

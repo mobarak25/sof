@@ -6,7 +6,7 @@ class NoticeResponse {
   final int? lastPage;
   final String? lastPageUrl;
   final List<Link>? links;
-  final String? nextPageUrl;
+  final dynamic nextPageUrl;
   final String? path;
   final int? perPage;
   final dynamic prevPageUrl;
@@ -74,65 +74,114 @@ class NoticeResponse {
 class NoticeItem {
   final int? id;
   final String? title;
-  final int? categoryId;
-  final String? description;
   final int? isCommon;
   final int? type;
   final int? status;
   final dynamic iconUrl;
   final int? isCommentable;
   final int? authorId;
-  final String? authorName;
   final String? createdAt;
+  final String? description;
+  final List<Attachment>? attachments;
+  final User? user;
 
   NoticeItem({
     this.id,
     this.title,
-    this.categoryId,
-    this.description,
     this.isCommon,
     this.type,
     this.status,
     this.iconUrl,
     this.isCommentable,
     this.authorId,
-    this.authorName,
     this.createdAt,
+    this.description,
+    this.attachments,
+    this.user,
   });
 
   factory NoticeItem.fromJson(Map<String, dynamic> json) => NoticeItem(
         id: json["id"],
         title: json["title"],
-        categoryId: json["category_id"],
-        description: json["description"],
         isCommon: json["is_common"],
         type: json["type"],
         status: json["status"],
         iconUrl: json["icon_url"],
         isCommentable: json["is_commentable"],
         authorId: json["author_id"],
-        authorName: json["author_name"],
         createdAt: json["created_at"],
+        description: json["description"],
+        attachments: json["attachments"] == null
+            ? []
+            : List<Attachment>.from(
+                json["attachments"]!.map((x) => Attachment.fromJson(x))),
+        user: json["user"] == null ? null : User.fromJson(json["user"]),
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "title": title,
-        "category_id": categoryId,
-        "description": description,
         "is_common": isCommon,
         "type": type,
         "status": status,
         "icon_url": iconUrl,
         "is_commentable": isCommentable,
         "author_id": authorId,
-        "author_name": authorName,
         "created_at": createdAt,
+        "description": description,
+        "attachments": attachments == null
+            ? []
+            : List<dynamic>.from(attachments!.map((x) => x.toJson())),
+        "user": user?.toJson(),
+      };
+}
+
+class Attachment {
+  final int? id;
+  final int? noticeId;
+  final String? file;
+
+  Attachment({
+    this.id,
+    this.noticeId,
+    this.file,
+  });
+
+  factory Attachment.fromJson(Map<String, dynamic> json) => Attachment(
+        id: json["id"],
+        noticeId: json["notice_id"],
+        file: json["file"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "notice_id": noticeId,
+        "file": file,
+      };
+}
+
+class User {
+  final int? id;
+  final String? fullname;
+
+  User({
+    this.id,
+    this.fullname,
+  });
+
+  factory User.fromJson(Map<String, dynamic> json) => User(
+        id: json["id"],
+        fullname: json["fullname"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "fullname": fullname,
       };
 }
 
 class Link {
-  final dynamic url;
+  final String? url;
   final String? label;
   final bool? active;
 

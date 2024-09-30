@@ -1,6 +1,6 @@
-class Resources {
+class LessonPlan {
   final int? currentPage;
-  final List<ResourcesItem>? data;
+  final List<PlanItem>? data;
   final String? firstPageUrl;
   final int? from;
   final int? lastPage;
@@ -13,7 +13,7 @@ class Resources {
   final int? to;
   final int? total;
 
-  const Resources({
+  const LessonPlan({
     this.currentPage,
     this.data,
     this.firstPageUrl,
@@ -29,12 +29,12 @@ class Resources {
     this.total,
   });
 
-  factory Resources.fromJson(Map<String, dynamic> json) => Resources(
+  factory LessonPlan.fromJson(Map<String, dynamic> json) => LessonPlan(
         currentPage: json["current_page"],
         data: json["data"] == null
             ? []
-            : List<ResourcesItem>.from(
-                json["data"]!.map((x) => ResourcesItem.fromJson(x))),
+            : List<PlanItem>.from(
+                json["data"]!.map((x) => PlanItem.fromJson(x))),
         firstPageUrl: json["first_page_url"],
         from: json["from"],
         lastPage: json["last_page"],
@@ -71,94 +71,135 @@ class Resources {
       };
 }
 
-class ResourcesItem {
+class PlanItem {
   final int? id;
   final String? title;
-  final int? subjectId;
-  final int? chapterId;
-  final String? thumbnail;
-  final int? resourceType;
+  final int? status;
   final Subject? subject;
-  final ResourceChapter? chapter;
+  final int? attachments;
+  final int? resources;
+  final Class? version;
+  final Class? datumClass;
+  final Class? section;
+  final Batch? batch;
 
-  ResourcesItem({
+  const PlanItem({
     this.id,
     this.title,
-    this.subjectId,
-    this.chapterId,
-    this.thumbnail,
-    this.resourceType,
+    this.status,
     this.subject,
-    this.chapter,
+    this.attachments,
+    this.resources,
+    this.version,
+    this.datumClass,
+    this.section,
+    this.batch,
   });
 
-  factory ResourcesItem.fromJson(Map<String, dynamic> json) => ResourcesItem(
+  factory PlanItem.fromJson(Map<String, dynamic> json) => PlanItem(
         id: json["id"],
         title: json["title"],
-        subjectId: json["subject_id"],
-        chapterId: json["chapter_id"],
-        thumbnail: json["thumbnail"],
-        resourceType: json["resource_type"],
+        status: json["status"],
         subject:
             json["subject"] == null ? null : Subject.fromJson(json["subject"]),
-        chapter: json["chapter"] == null
-            ? null
-            : ResourceChapter.fromJson(json["chapter"]),
+        attachments: json["attachments"],
+        resources: json["resources"],
+        version:
+            json["version"] == null ? null : Class.fromJson(json["version"]),
+        datumClass:
+            json["class"] == null ? null : Class.fromJson(json["class"]),
+        section:
+            json["section"] == null ? null : Class.fromJson(json["section"]),
+        batch: json["batch"] == null ? null : Batch.fromJson(json["batch"]),
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "title": title,
-        "subject_id": subjectId,
-        "chapter_id": chapterId,
-        "thumbnail": thumbnail,
-        "resource_type": resourceType,
+        "status": status,
         "subject": subject?.toJson(),
-        "chapter": chapter?.toJson(),
+        "attachments": attachments,
+        "resources": resources,
+        "version": version?.toJson(),
+        "class": datumClass?.toJson(),
+        "section": section?.toJson(),
+        "batch": batch?.toJson(),
       };
 }
 
-class ResourceChapter {
+class Batch {
   final int? id;
-  final String? title;
+  final String? name;
+  final int? sectionId;
+  final Class? section;
 
-  ResourceChapter({
+  const Batch({
     this.id,
-    this.title,
+    this.name,
+    this.sectionId,
+    this.section,
   });
 
-  factory ResourceChapter.fromJson(Map<String, dynamic> json) =>
-      ResourceChapter(
+  factory Batch.fromJson(Map<String, dynamic> json) => Batch(
         id: json["id"],
-        title: json["title"],
+        name: json["name"],
+        sectionId: json["section_id"],
+        section:
+            json["section"] == null ? null : Class.fromJson(json["section"]),
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "title": title,
+        "name": name,
+        "section_id": sectionId,
+        "section": section?.toJson(),
+      };
+}
+
+class Class {
+  final int? id;
+  final String? name;
+
+  const Class({
+    this.id,
+    this.name,
+  });
+
+  factory Class.fromJson(Map<String, dynamic> json) => Class(
+        id: json["id"],
+        name: json["name"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "name": name,
       };
 }
 
 class Subject {
   final int? id;
   final String? name;
+  final String? code;
   final String? imageUrl;
 
-  Subject({
+  const Subject({
     this.id,
     this.name,
+    this.code,
     this.imageUrl,
   });
 
   factory Subject.fromJson(Map<String, dynamic> json) => Subject(
         id: json["id"],
         name: json["name"],
+        code: json["code"],
         imageUrl: json["image_url"],
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "name": name,
+        "code": code,
         "image_url": imageUrl,
       };
 }
@@ -168,7 +209,7 @@ class Link {
   final String? label;
   final bool? active;
 
-  Link({
+  const Link({
     this.url,
     this.label,
     this.active,

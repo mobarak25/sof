@@ -42,7 +42,7 @@ class ItemNotice extends StatelessWidget {
           child: Row(
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(5, 6, 12, 6),
+                padding: const EdgeInsets.fromLTRB(8, 10, 12, 10),
                 child: GreenBox(
                   day: day,
                   month: month,

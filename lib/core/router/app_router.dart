@@ -4,6 +4,7 @@ import 'package:school_of_future/core/file_picker/file_picker_service.dart';
 import 'package:school_of_future/core/ioc/global.dart';
 import 'package:school_of_future/core/navigator/iflutter_navigator.dart';
 import 'package:school_of_future/core/utils/utilities.dart';
+import 'package:school_of_future/features/domain/entities/lesson_plan_details_response.dart';
 import 'package:school_of_future/features/domain/repositories/api_repo.dart';
 import 'package:school_of_future/features/domain/repositories/local_storage_repo.dart';
 import 'package:school_of_future/core/router/route_constents.dart';
@@ -31,6 +32,12 @@ import 'package:school_of_future/features/presentation/forgot_password_1/bloc/fo
 import 'package:school_of_future/features/presentation/forgot_password_2/bloc/forgot_password2_bloc.dart';
 import 'package:school_of_future/features/presentation/forgot_password_2/view/step-2.dart';
 import 'package:school_of_future/features/presentation/forgot_password_1/view/step_1.dart';
+import 'package:school_of_future/features/presentation/lesson_plan/attach_resource/bloc/attach_resource_bloc.dart';
+import 'package:school_of_future/features/presentation/lesson_plan/attach_resource/view/attach_resource_screen.dart';
+import 'package:school_of_future/features/presentation/lesson_plan/lesson_plan_create/bloc/lesson_plan_create_bloc.dart';
+import 'package:school_of_future/features/presentation/lesson_plan/lesson_plan_create/view/lesson_plan_create_screen.dart';
+import 'package:school_of_future/features/presentation/lesson_plan/lesson_plan_details/bloc/lesson_plan_details_bloc.dart';
+import 'package:school_of_future/features/presentation/lesson_plan/lesson_plan_details/view/lesson_plan_details_screen.dart';
 import 'package:school_of_future/features/presentation/login/bloc/login_bloc.dart';
 import 'package:school_of_future/features/presentation/login/view/login_screen.dart';
 import 'package:school_of_future/features/presentation/menu/bloc/menu_bloc.dart';
@@ -263,6 +270,44 @@ class AppRouter {
               getIt<LocalStorageRepo>(),
             )..add(GetResourceDetails(resourcesId: id)),
             child: const ResourcesDetailsScreen(),
+          ),
+        );
+      case teacherlessonPlanCreateScreen:
+        final id = settings.arguments as int;
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (BuildContext context) => BlocProvider(
+            create: (context) => LessonPlanCreateBloc(
+                getIt<ApiRepo>(),
+                getIt<IFlutterNavigator>(),
+                getIt<LocalStorageRepo>(),
+                getIt<FilePickerRepo>())
+              ..add(PlanIdForEdit(planId: id)),
+            child: const LessonPlanCreateScreen(),
+          ),
+        );
+
+      case teacherAttachResourceScreen:
+        final resources = settings.arguments as List<int>;
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (BuildContext context) => BlocProvider(
+            create: (context) => AttachResourceBloc(getIt<ApiRepo>())
+              ..add(GetResourcesCheckedIds(idList: resources)),
+            child: const AttecheResourceScreen(),
+          ),
+        );
+      case lessonPlanDetailsScreen:
+        final id = settings.arguments as int;
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (BuildContext context) => BlocProvider(
+            create: (context) => LessonPlanDetailsBloc(
+              getIt<ApiRepo>(),
+              getIt<IFlutterNavigator>(),
+              getIt<LocalStorageRepo>(),
+            )..add(GetLessonPlanDetails(planId: id)),
+            child: const LessonPlanDetailsScreen(),
           ),
         );
 

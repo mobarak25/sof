@@ -64,7 +64,8 @@ class DashboardNotice extends StatelessWidget {
                               fontColor: bBlack,
                             ),
                             TextB(
-                              text: notice.noticeList![index].authorName ?? '',
+                              text: notice.noticeList![index].user!.fullname ??
+                                  '',
                               fontColor: bGray32,
                               maxLines: 1,
                             ),

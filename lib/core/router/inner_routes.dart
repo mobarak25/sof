@@ -22,6 +22,8 @@ import 'package:school_of_future/features/presentation/leave/apply_leave/bloc/ap
 import 'package:school_of_future/features/presentation/leave/apply_leave/view/parent_apply_leave_screen.dart';
 import 'package:school_of_future/features/presentation/leave/leave_details/view/leave_details_screen.dart';
 import 'package:school_of_future/features/presentation/leave/leave_list/view/leave_list_screen.dart';
+import 'package:school_of_future/features/presentation/lesson_plan/lesson_plan_list/bloc/lesson_plan_list_bloc.dart';
+import 'package:school_of_future/features/presentation/lesson_plan/lesson_plan_list/view/lesson_plan_list_screen.dart';
 import 'package:school_of_future/features/presentation/notice/notice_details/bloc/notice_details_bloc.dart';
 import 'package:school_of_future/features/presentation/notice/notice_details/view/notice_details_screen.dart';
 import 'package:school_of_future/features/presentation/notice/notice_list/bloc/notice_list_bloc.dart';
@@ -32,8 +34,8 @@ import 'package:school_of_future/features/presentation/profile/teacher/bloc/teac
 import 'package:school_of_future/features/presentation/profile/teacher/view/teacher_profile_screen.dart';
 import 'package:school_of_future/features/presentation/app_dashboard/Student_home/bloc/student_home_bloc.dart';
 import 'package:school_of_future/features/presentation/app_dashboard/Student_home/view/student_home_screen.dart';
-import 'package:school_of_future/features/presentation/resources/teacher_resources_list/bloc/teacher_resource_list_bloc.dart';
-import 'package:school_of_future/features/presentation/resources/teacher_resources_list/view/teacher_resources_list_screen.dart';
+import 'package:school_of_future/features/presentation/resources/resources_list/bloc/teacher_resource_list_bloc.dart';
+import 'package:school_of_future/features/presentation/resources/resources_list/view/teacher_resources_list_screen.dart';
 
 Route<dynamic>? studentsRoutes(RouteSettings settings) {
   print(settings.name);
@@ -183,6 +185,23 @@ Route<dynamic>? studentsRoutes(RouteSettings settings) {
             ),
           ],
           child: const TeacherResourcesListScreen(),
+        ),
+      );
+    case lessonPlanListScreen:
+      return MaterialPageRoute(
+        settings: settings,
+        builder: (BuildContext context) => MultiBlocProvider(
+          providers: [
+            BlocProvider<LessonPlanListBloc>(
+              create: (context) => LessonPlanListBloc(getIt<ApiRepo>(),
+                  getIt<IFlutterNavigator>(), getIt<LocalStorageRepo>()),
+            ),
+            BlocProvider<FilterSidebarBloc>(
+              create: (context) => FilterSidebarBloc(
+                  getIt<ApiRepo>(), getIt<LocalStorageRepo>()),
+            ),
+          ],
+          child: const LessonPlanListScreen(),
         ),
       );
 

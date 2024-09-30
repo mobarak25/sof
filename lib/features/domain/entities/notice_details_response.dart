@@ -29,7 +29,7 @@ class Data {
   final String? createdAt;
   final String? authorName;
   final List<Employee>? employees;
-  final Map<String, Employee>? students;
+  final List<Employee>? students;
   final List<int>? departmentIdArray;
   final List<int>? batchIdArray;
   final List<int>? studentIdArray;
@@ -76,8 +76,10 @@ class Data {
             ? []
             : List<Employee>.from(
                 json["employees"]!.map((x) => Employee.fromJson(x))),
-        students: Map.from(json["students"]!)
-            .map((k, v) => MapEntry<String, Employee>(k, Employee.fromJson(v))),
+        students: json["students"] == null
+            ? []
+            : List<Employee>.from(
+                json["students"]!.map((x) => Employee.fromJson(x))),
         departmentIdArray: json["department_id_array"] == null
             ? []
             : List<int>.from(json["department_id_array"]!.map((x) => x)),
@@ -110,8 +112,9 @@ class Data {
         "employees": employees == null
             ? []
             : List<dynamic>.from(employees!.map((x) => x.toJson())),
-        "students": Map.from(students!)
-            .map((k, v) => MapEntry<String, dynamic>(k, v.toJson())),
+        "students": students == null
+            ? []
+            : List<dynamic>.from(students!.map((x) => x.toJson())),
         "department_id_array": departmentIdArray == null
             ? []
             : List<dynamic>.from(departmentIdArray!.map((x) => x)),
@@ -131,8 +134,8 @@ class Attachment {
   final int? id;
   final int? noticeId;
   final String? file;
-  final String? createdAt;
-  final String? updatedAt;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
   final dynamic deletedAt;
 
   Attachment({
@@ -148,8 +151,12 @@ class Attachment {
         id: json["id"],
         noticeId: json["notice_id"],
         file: json["file"],
-        createdAt: json["created_at"],
-        updatedAt: json["updated_at"],
+        createdAt: json["created_at"] == null
+            ? null
+            : DateTime.parse(json["created_at"]),
+        updatedAt: json["updated_at"] == null
+            ? null
+            : DateTime.parse(json["updated_at"]),
         deletedAt: json["deleted_at"],
       );
 
@@ -157,8 +164,8 @@ class Attachment {
         "id": id,
         "notice_id": noticeId,
         "file": file,
-        "created_at": createdAt,
-        "updated_at": updatedAt,
+        "created_at": createdAt?.toIso8601String(),
+        "updated_at": updatedAt?.toIso8601String(),
         "deleted_at": deletedAt,
       };
 }

@@ -10,6 +10,8 @@ import 'package:school_of_future/features/domain/entities/classwork_list_respons
 import 'package:school_of_future/features/domain/entities/default_response.dart';
 import 'package:school_of_future/features/domain/entities/due_task_response.dart';
 import 'package:school_of_future/features/domain/entities/get_batch_as_section_response.dart';
+import 'package:school_of_future/features/domain/entities/lesson_plan_details_response.dart';
+import 'package:school_of_future/features/domain/entities/lesson_plan_list_response.dart';
 import 'package:school_of_future/features/domain/entities/login_response.dart';
 import 'package:school_of_future/features/domain/entities/me_response.dart';
 import 'package:school_of_future/features/domain/entities/notice_details_response.dart';
@@ -77,6 +79,10 @@ class EntityMap {
         return Resources.fromJson(json) as T;
       case const (ResourceDetails):
         return ResourceDetails.fromJson(json) as T;
+      case const (LessonPlan):
+        return LessonPlan.fromJson(json) as T;
+      case const (LessonPlanDetails):
+        return LessonPlanDetails.fromJson(json) as T;
 
       default:
         throw Exception('Unknown class');

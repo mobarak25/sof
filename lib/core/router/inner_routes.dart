@@ -24,6 +24,8 @@ import 'package:school_of_future/features/presentation/leave/leave_details/view/
 import 'package:school_of_future/features/presentation/leave/leave_list/view/leave_list_screen.dart';
 import 'package:school_of_future/features/presentation/lesson_plan/lesson_plan_list/bloc/lesson_plan_list_bloc.dart';
 import 'package:school_of_future/features/presentation/lesson_plan/lesson_plan_list/view/lesson_plan_list_screen.dart';
+import 'package:school_of_future/features/presentation/meeting/teacher_meeting_list/bloc/theacher_meeting_list_bloc.dart';
+import 'package:school_of_future/features/presentation/meeting/teacher_meeting_list/view/teacher_meetign_list_screen.dart';
 import 'package:school_of_future/features/presentation/notice/notice_details/bloc/notice_details_bloc.dart';
 import 'package:school_of_future/features/presentation/notice/notice_details/view/notice_details_screen.dart';
 import 'package:school_of_future/features/presentation/notice/notice_list/bloc/notice_list_bloc.dart';
@@ -202,6 +204,24 @@ Route<dynamic>? studentsRoutes(RouteSettings settings) {
             ),
           ],
           child: const LessonPlanListScreen(),
+        ),
+      );
+
+    case teacherMeetingListScreen:
+      return MaterialPageRoute(
+        settings: settings,
+        builder: (BuildContext context) => MultiBlocProvider(
+          providers: [
+            BlocProvider<TheacherMeetingListBloc>(
+              create: (context) => TheacherMeetingListBloc(getIt<ApiRepo>(),
+                  getIt<IFlutterNavigator>(), getIt<LocalStorageRepo>()),
+            ),
+            BlocProvider<FilterSidebarBloc>(
+              create: (context) => FilterSidebarBloc(
+                  getIt<ApiRepo>(), getIt<LocalStorageRepo>()),
+            ),
+          ],
+          child: const TeacherMeetingListScreen(),
         ),
       );
 

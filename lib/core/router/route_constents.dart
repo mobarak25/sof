@@ -49,3 +49,5 @@ const teacherResourcesListScreen = "/teacher-resources-list-screen";
 const teacherResourcesCreateScreen = "/teacher-resources-create-screen";
 const teacherlessonPlanCreateScreen = "/teacher-lesson-plan-create-screen";
 const teacherAttachResourceScreen = "/teacher-attach-resource-screen";
+const teacherMeetingListScreen = "/teacher-meeting-list-screen";
+const teacherMeetingCreateScreen = "/teacher-meeting-create-screen";

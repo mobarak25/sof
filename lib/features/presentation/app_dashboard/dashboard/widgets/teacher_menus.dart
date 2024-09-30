@@ -76,6 +76,15 @@ class TeacherMenus extends StatelessWidget {
                 lessonPlanListScreen, ModalRoute.withName('/'));
           },
         ),
+        FeatureItem(
+          iconName: "assets/images/feature_icons_svg/ic_meeting.svg",
+          title: context.tr(LocaleKeys.meeting),
+          press: () {
+            panelController.close();
+            navigatorKey.currentState!.pushNamedAndRemoveUntil(
+                teacherMeetingListScreen, ModalRoute.withName('/'));
+          },
+        ),
       ],
     );
   }

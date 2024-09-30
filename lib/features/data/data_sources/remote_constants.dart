@@ -72,3 +72,11 @@ String studentlessonPlanListEndPoint({required String sId}) =>
 String teacherLessonPlanDetailsEndPoint({required int planId}) =>
     "${version1}lesson-plan/$planId";
 String teacherlessonPlanCreateEndPoint = "${version1}lesson-plan";
+
+String teacherMeetingDetailsEndPoint({required int meetingId}) =>
+    "${version1}meeting/$meetingId";
+
+String teacherMeetingEndPoint = "${version1}meeting";
+
+String getBatchWiseStudentsByBatchIdEndpoint({required int batchId}) =>
+    "${version1}common/get-batch-wise-students?batch_id=$batchId";

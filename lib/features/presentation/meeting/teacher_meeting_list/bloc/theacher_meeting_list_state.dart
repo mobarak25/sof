@@ -10,6 +10,7 @@ class TheacherMeetingListState extends Equatable {
     this.incrementLoader = false,
     this.activeTab = '0',
     this.searchText = '',
+    this.meetingList = const MeetingList(),
   });
 
   final int page;
@@ -20,6 +21,7 @@ class TheacherMeetingListState extends Equatable {
   final bool incrementLoader;
   final String activeTab;
   final String searchText;
+  final MeetingList meetingList;
 
   TheacherMeetingListState copyWith({
     int? page,
@@ -30,6 +32,7 @@ class TheacherMeetingListState extends Equatable {
     bool? incrementLoader,
     String? activeTab,
     String? searchText,
+    MeetingList? meetingList,
   }) {
     return TheacherMeetingListState(
       page: page ?? this.page,
@@ -40,6 +43,7 @@ class TheacherMeetingListState extends Equatable {
       incrementLoader: incrementLoader ?? this.incrementLoader,
       activeTab: activeTab ?? this.activeTab,
       searchText: searchText ?? this.searchText,
+      meetingList: meetingList ?? this.meetingList,
     );
   }
 
@@ -53,6 +57,7 @@ class TheacherMeetingListState extends Equatable {
         incrementLoader,
         activeTab,
         searchText,
+        meetingList,
       ];
 }
 

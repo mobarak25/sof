@@ -42,6 +42,8 @@ import 'package:school_of_future/features/presentation/login/bloc/login_bloc.dar
 import 'package:school_of_future/features/presentation/login/view/login_screen.dart';
 import 'package:school_of_future/features/presentation/meeting/meeting_create/bloc/meeting_create_bloc.dart';
 import 'package:school_of_future/features/presentation/meeting/meeting_create/view/meeting_create_screen.dart';
+import 'package:school_of_future/features/presentation/meeting/meeting_details/bloc/meeting_details_bloc.dart';
+import 'package:school_of_future/features/presentation/meeting/meeting_details/view/meeting_details_screen.dart';
 import 'package:school_of_future/features/presentation/menu/bloc/menu_bloc.dart';
 import 'package:school_of_future/features/presentation/menu/view/menu_screen.dart';
 import 'package:school_of_future/features/presentation/resources/resources_details/bloc/resources_details_bloc.dart';
@@ -324,6 +326,20 @@ class AppRouter {
               getIt<LocalStorageRepo>(),
             )..add(MeetingIdForEdit(meetingId: id)),
             child: const MeetingCreateScreen(),
+          ),
+        );
+
+      case meetingDetailsScreen:
+        final id = settings.arguments as int;
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (BuildContext context) => BlocProvider(
+            create: (context) => MeetingDetailsBloc(
+              getIt<ApiRepo>(),
+              getIt<IFlutterNavigator>(),
+              getIt<LocalStorageRepo>(),
+            )..add(GetMeetingDetails(meetingId: id)),
+            child: const MeetingDetailsScreen(),
           ),
         );
 

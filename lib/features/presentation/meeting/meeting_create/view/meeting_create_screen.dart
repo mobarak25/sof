@@ -8,7 +8,6 @@ import 'package:gap/gap.dart';
 import 'package:quill_json_to_html/json_to_html.dart';
 import 'package:school_of_future/core/router/route_constents.dart';
 import 'package:school_of_future/core/translations/local_keys.dart';
-import 'package:school_of_future/core/utils/asset_image.dart';
 import 'package:school_of_future/core/utils/colors.dart';
 import 'package:school_of_future/core/utils/enums.dart';
 import 'package:school_of_future/core/utils/text_styles.dart';
@@ -17,12 +16,11 @@ import 'package:school_of_future/core/widgets/app_bar.dart';
 import 'package:school_of_future/core/widgets/body.dart';
 import 'package:school_of_future/core/widgets/button.dart';
 import 'package:school_of_future/core/widgets/date_time_picker.dart';
-import 'package:school_of_future/core/widgets/dotted_button.dart';
 import 'package:school_of_future/core/widgets/dropdown_field.dart';
-import 'package:school_of_future/core/widgets/show_file_name.dart';
-import 'package:school_of_future/core/widgets/switch_view.dart';
+import 'package:school_of_future/core/widgets/radio_button.dart';
 import 'package:school_of_future/core/widgets/text.dart';
 import 'package:school_of_future/core/widgets/text_field.dart';
+import 'package:school_of_future/core/widgets/time_picker.dart';
 import 'package:school_of_future/features/presentation/assignment/teacher_assignment_create/widgets/batch_card.dart';
 import 'package:school_of_future/features/presentation/meeting/meeting_create/bloc/meeting_create_bloc.dart';
 
@@ -33,14 +31,16 @@ class MeetingCreateScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final bloc = context.read<MeetingCreateBloc>();
     final titleFocusnode = FocusNode();
-    final markFocusnode = FocusNode();
     final startDateFocusnode = FocusNode();
-    final endDateFocusnode = FocusNode();
+    final startTimeFocusnode = FocusNode();
+    final endTimeFocusnode = FocusNode();
+    final meetingLinkFocusnode = FocusNode();
 
     final titleController = TextEditingController();
-    final markController = TextEditingController();
     final startController = TextEditingController();
-    final endController = TextEditingController();
+    final startTimeController = TextEditingController();
+    final endTimeController = TextEditingController();
+    final meetingLinkController = TextEditingController();
 
     QuillController qcontroller = QuillController.basic();
     MultiValueDropDownController cntMulti = MultiValueDropDownController();
@@ -49,7 +49,7 @@ class MeetingCreateScreen extends StatelessWidget {
       builder: (context, state) {
         if (state.isFirstTime) {
           if (state.meetingDetails.data != null &&
-              state.assignmentAssignStudentForEdit.isNotEmpty) {
+              state.meetingDetails.data!.meetingStudents!.isNotEmpty) {
             final data = state.meetingDetails.data!;
 
             var delta = HtmlToDelta().convert(data.description!);
@@ -57,9 +57,10 @@ class MeetingCreateScreen extends StatelessWidget {
 
             List<int> batchIds = [];
             List<DropDownValueModel> modalData = [];
+            List<AgendaInput> agenda = [];
 
             for (int i = 0; i < data.meetingBatches!.length; i++) {
-              batchIds.add(data.meetingBatches![i].batchId!);
+              batchIds.add(data.meetingBatches![i]);
             }
 
             for (int i = 0; i < state.sectionList.length; i++) {
@@ -69,6 +70,17 @@ class MeetingCreateScreen extends StatelessWidget {
                     value: state.sectionList[i].value));
               }
             }
+
+            for (int i = 0; i < data.agenda!.length; i++) {
+              agenda.add(
+                AgendaInput(
+                  focusnode: FocusNode(),
+                  textEditingController:
+                      TextEditingController(text: data.agenda![i].title),
+                ),
+              );
+            }
+
             cntMulti = MultiValueDropDownController(
               data: modalData,
             );
@@ -77,17 +89,21 @@ class MeetingCreateScreen extends StatelessWidget {
             bloc.add(AddData(
               title: data.title!,
               startDate: data.date!,
-              selectedVersionId: -1, //data.subject!.versionId!,
-              selectedClassId: -1, //data.subject!.classId!,
-              selectedSubjectId: -1, // data.subject!.id,
+              agenda: agenda,
+              meetingType: data.meetingType!,
+              link: data.meetingLink ?? '',
+              selectedVersionId: data.batch!.versionId!,
+              selectedClassId: data.batch!.classId!,
+              startTime: data.startTime!,
+              endTime: data.endTime!,
             ));
-          } else if (state.assignmentAssignStudentForEdit.isEmpty &&
+          } else if (state.meetingDetails.data == null &&
               state.meetingId != -1) {
             return Body(
               isFullScreen: true,
               appBar: FutureAppBar(
                 actions: const [SizedBox()],
-                title: LocaleKeys.createHomeWork.tr(),
+                title: LocaleKeys.meeting.tr(),
                 isLoading: state.loading,
               ),
               child: const Center(
@@ -98,9 +114,10 @@ class MeetingCreateScreen extends StatelessWidget {
         }
 
         titleController.text = state.title;
-        // markController.text = state.mark;
+        meetingLinkController.text = state.link;
         startController.text = state.date;
-        // endController.text = state.endDate;
+        startTimeController.text = state.startTime;
+        endTimeController.text = state.endTime;
 
         return Body(
           isFullScreen: true,
@@ -169,86 +186,110 @@ class MeetingCreateScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-                    // Column(
-                    //   children: [
-                    //     const Gap(15),
-                    //     ShowFileName(
-                    //       selectedFile: state.fileList,
-                    //       press: (int index) {
-                    //         bloc.add(RemoveFile(index: index));
-                    //       },
-                    //     ),
-                    //   ],
-                    // ),
-                    // const Gap(10),
-                    // DottedButtonB(
-                    //   title: LocaleKeys.attachment.tr(),
-                    //   verticalPadding: 20,
-                    //   bgColor: kPrimaryColor,
-                    //   borderColor: kPrimaryColor,
-                    //   textColor: bWhite,
-                    //   svgIcon: fileAttachSvg,
-                    //   svgColor: bWhite,
-                    //   svgHeight: 30,
-                    //   press: () {
-                    //     bloc.add(GetFile());
-                    //   },
-                    // ),
-                    // const Gap(20),
-                    // Row(
-                    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //   children: [
-                    //     TextB(
-                    //       text: LocaleKeys.onlineSubmission.tr(),
-                    //       textStyle: bBody1,
-                    //     ),
-                    //     SwitchView(
-                    //       defaultValue: state.isSubmitable,
-                    //       onChanged: (bool value) {
-                    //         bloc.add(Submitable(isSubmitable: value));
-                    //       },
-                    //     ),
-                    //   ],
-                    // ),
-                    // const Gap(10),
-                    // Row(
-                    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //   children: [
-                    //     TextB(
-                    //       text: LocaleKeys.assessment.tr(),
-                    //       textStyle: bBody1,
-                    //     ),
-                    //     SwitchView(
-                    //       defaultValue: state.isAssessment,
-                    //       onChanged: (bool value) {
-                    //         bloc.add(Assessment(isAssessment: value));
-                    //       },
-                    //     ),
-                    //   ],
-                    // ),
                     const Gap(20),
-                    // TextFieldB(
-                    //   hintText: LocaleKeys.enterMark.tr(),
-                    //   textInputType: TextInputType.number,
-                    //   borderColor: bGray12,
-                    //   focusNode: markFocusnode,
-                    //   controller: markController,
-                    //   isReadOnly: !state.isAssessment,
-                    //   onChanged: (String value) {
-                    //     bloc.add(ChangeMark(mark: value));
-                    //   },
-                    //   errorText: state.forms == Forms.invalid &&
-                    //           state.isAssessment &&
-                    //           state.mark.isEmpty
-                    //       ? LocaleKeys.enterMark.tr()
-                    //       : '',
-                    // ),
+                    const TextB(
+                      text: "Agenda",
+                      textStyle: bBaseM,
+                      fontColor: bBlack,
+                    ),
+                    const Gap(10),
+                    ...List.generate(
+                      state.agenda.length,
+                      (index) => Column(
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                child: TextFieldB(
+                                  borderColor: bGray12,
+                                  focusNode: state.agenda[index].focusnode,
+                                  controller:
+                                      state.agenda[index].textEditingController,
+                                  onChanged: (String value) {
+                                    bloc.add(ChangeTitle(title: value));
+                                  },
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  bloc.add(DeleteAgenda(index: index));
+                                },
+                                icon: const Icon(
+                                  Icons.delete,
+                                  color: bRed,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const Gap(10),
+                        ],
+                      ),
+                    ),
+                    if (state.agenda.isEmpty)
+                      const TextB(
+                        text: "No agenda is selected!",
+                        textStyle: bBase2,
+                        fontColor: bRed,
+                      ),
+                    const Gap(10),
+                    Row(
+                      children: [
+                        TextButton(
+                          child: const TextB(
+                            text: "+ Add New",
+                            textStyle: bSub1,
+                            fontColor: kSecondaryColor,
+                          ),
+                          onPressed: () {
+                            bloc.add(AddAgenda());
+                          },
+                        ),
+                      ],
+                    ),
+                    const Gap(20),
+                    const TextB(
+                      text: "Meeting type",
+                      fontColor: bBlack,
+                      fontSize: 16,
+                    ),
+                    const Gap(10),
+                    RadioGroupB(
+                      radioValues: [
+                        RadioValue(name: "Online", value: 1),
+                        RadioValue(name: "Offline", value: 2),
+                      ],
+                      grid: 2,
+                      color: bGray100,
+                      defaultValue: state.meetingType, // state.condition,
+                      value: (value) {
+                        bloc.add(GetMeetingType(type: value));
+                      },
+                    ),
+                    const Gap(20),
+
+                    TextFieldB(
+                      fieldTitle: LocaleKeys.meetingLink.tr(),
+                      hintText: LocaleKeys.enterMeetingLinkHere.tr(),
+                      borderColor: bGray12,
+                      bgColor: state.meetingType == 2 ? bInnerBg : bWhite,
+                      focusNode: meetingLinkFocusnode,
+                      controller: meetingLinkController,
+                      isReadOnly: state.meetingType == 2,
+                      onChanged: (String value) {
+                        bloc.add(ChangeMeetingLink(link: value));
+                      },
+                      errorText: state.forms == Forms.invalid &&
+                              state.link.isEmpty &&
+                              state.meetingType == 1
+                          ? LocaleKeys.enterMeetingLinkHere.tr()
+                          : '',
+                    ),
+
                     const Gap(20),
                     TextFieldB(
                       isMandatory: true,
                       fieldTitle: LocaleKeys.date.tr(),
                       hintText: LocaleKeys.selectDate.tr(),
-                      textInputType: TextInputType.number,
                       borderColor: bGray12,
                       focusNode: startDateFocusnode,
                       controller: startController,
@@ -269,38 +310,79 @@ class MeetingCreateScreen extends StatelessWidget {
                     ),
                     if (state.forms == Forms.invalid && state.date.isEmpty)
                       TextB(
-                        text: LocaleKeys.noStartDate.tr(),
+                        text: LocaleKeys.noDateIsSelected.tr(),
                         fontColor: bRed,
                       ),
-                    // const Gap(20),
-                    // TextFieldB(
-                    //   isMandatory: true,
-                    //   fieldTitle: LocaleKeys.endDate.tr(),
-                    //   hintText: LocaleKeys.selectEndDate.tr(),
-                    //   borderColor: bGray12,
-                    //   focusNode: endDateFocusnode,
-                    //   controller: endController,
-                    //   isReadOnly: true,
-                    //   suffixIcon: const Icon(
-                    //     Icons.calendar_month,
-                    //     size: 30,
-                    //     color: bGray32,
-                    //   ),
-                    //   onChanged: (String value) {},
-                    //   onTouch: () async {
-                    //     endController.text = await showDateTimePickerDialog(
-                    //             context,
-                    //             initialdate: state.endDate) ??
-                    //         '';
-                    //     bloc.add(EndDate(endDate: endController.text));
-                    //   },
-                    // ),
-                    // if (state.forms == Forms.invalid && state.endDate.isEmpty)
-                    //   TextB(
-                    //     text: LocaleKeys.noEndDate.tr(),
-                    //     fontColor: bRed,
-                    //   ),
-                    // const Gap(20),
+
+                    const Gap(20),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextFieldB(
+                            isMandatory: true,
+                            fieldTitle: LocaleKeys.startTime.tr(),
+                            hintText: LocaleKeys.selectTime.tr(),
+                            borderColor: bGray12,
+                            focusNode: startTimeFocusnode,
+                            controller: startTimeController,
+                            isReadOnly: true,
+                            suffixIcon: const Icon(
+                              Icons.schedule,
+                              size: 30,
+                              color: bGray32,
+                            ),
+                            onChanged: (String value) {},
+                            onTouch: () async {
+                              startTimeController
+                                  .text = await showTimePickerDialog(context,
+                                      initialTime:
+                                          convertToDateTime(state.startTime)) ??
+                                  '';
+
+                              bloc.add(StartTime(
+                                  startTime: startTimeController.text));
+                            },
+                            errorText: state.forms == Forms.invalid &&
+                                    state.startTime.isEmpty
+                                ? LocaleKeys.noStartTime.tr()
+                                : '',
+                          ),
+                        ),
+                        const Gap(20),
+                        Expanded(
+                          child: TextFieldB(
+                            isMandatory: true,
+                            fieldTitle: LocaleKeys.endTime.tr(),
+                            hintText: LocaleKeys.selectTime.tr(),
+                            borderColor: bGray12,
+                            focusNode: endTimeFocusnode,
+                            controller: endTimeController,
+                            isReadOnly: true,
+                            suffixIcon: const Icon(
+                              Icons.schedule,
+                              size: 30,
+                              color: bGray32,
+                            ),
+                            onChanged: (String value) {},
+                            onTouch: () async {
+                              endTimeController
+                                  .text = await showTimePickerDialog(context,
+                                      initialTime:
+                                          convertToDateTime(state.endTime)) ??
+                                  '';
+                              bloc.add(
+                                  EndTime(endTime: endTimeController.text));
+                            },
+                            errorText: state.forms == Forms.invalid &&
+                                    state.endTime.isEmpty
+                                ? LocaleKeys.noEndTime.tr()
+                                : '',
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    const Gap(10),
                     DropdownFieldB(
                       dropdownHeight: 50,
                       label: LocaleKeys.version.tr(),
@@ -320,25 +402,10 @@ class MeetingCreateScreen extends StatelessWidget {
                       dropDownValue: state.selectedClassId,
                       selected: (dynamic type) {
                         bloc.add(SelectClassId(id: type));
+                        cntMulti.clearDropDown();
                       },
                       items: state.classList,
                     ),
-                    // const Gap(10),
-                    // DropdownFieldB(
-                    //   dropdownHeight: 50,
-                    //   label: LocaleKeys.subject.tr(),
-                    //   labelColor: bBlack,
-                    //   setState: state.setSubject,
-                    //   dropDownValue: state.selectedSubjectId,
-                    //   selected: (dynamic type) {
-                    //     bloc.add(SelectSubjectId(id: type));
-                    //     cntMulti.clearDropDown();
-                    //   },
-                    //   items: state.subjectList,
-                    // ),
-                    // if (state.forms == Forms.invalid &&
-                    //     state.selectedSubjectId == -1)
-                    //   TextB(text: LocaleKeys.subject.tr(), fontColor: bRed),
 
                     //==============Section================
                     const Gap(10),
@@ -385,7 +452,8 @@ class MeetingCreateScreen extends StatelessWidget {
                     ),
                     if (state.forms == Forms.invalid &&
                         state.assignToBatchId.isEmpty)
-                      TextB(text: LocaleKeys.section.tr(), fontColor: bRed),
+                      TextB(
+                          text: LocaleKeys.plsSelSection.tr(), fontColor: bRed),
 
                     //==============Batch================
                     const Gap(10),
@@ -431,6 +499,10 @@ class MeetingCreateScreen extends StatelessWidget {
                             isDraft: false,
                             content: htmlContent,
                             titleFocusnode: titleFocusnode,
+                            dateFocusnode: startDateFocusnode,
+                            startTimeFocusnode: startTimeFocusnode,
+                            endTimeFocusnode: endTimeFocusnode,
+                            linkFocusnode: meetingLinkFocusnode,
                           ),
                         );
                       },
@@ -456,7 +528,10 @@ class MeetingCreateScreen extends StatelessWidget {
                                   isDraft: true,
                                   content: htmlContent,
                                   titleFocusnode: titleFocusnode,
-                                  //  markFocusnode: markFocusnode,
+                                  dateFocusnode: startDateFocusnode,
+                                  startTimeFocusnode: startTimeFocusnode,
+                                  endTimeFocusnode: endTimeFocusnode,
+                                  linkFocusnode: meetingLinkFocusnode,
                                 ),
                               );
                             },
@@ -485,5 +560,14 @@ class MeetingCreateScreen extends StatelessWidget {
         );
       },
     );
+  }
+
+  DateTime convertToDateTime(String time) {
+    if (time.isNotEmpty) {
+      DateTime dateTime = DateFormat.jm().parse(time);
+      return dateTime;
+    } else {
+      return DateTime.now();
+    }
   }
 }

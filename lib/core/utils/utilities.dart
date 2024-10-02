@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_quill/quill_delta.dart';
 import 'package:image_picker/image_picker.dart';
@@ -133,4 +134,13 @@ class CheckUncheckResources {
   final String name;
   final String chapterName;
   final String thumbImg;
+}
+
+class AgendaInput {
+  const AgendaInput({
+    required this.focusnode,
+    required this.textEditingController,
+  });
+  final FocusNode focusnode;
+  final TextEditingController textEditingController;
 }

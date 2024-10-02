@@ -7,6 +7,8 @@ sealed class TheacherMeetingListEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class IsTeacher extends TheacherMeetingListEvent {}
+
 class DataForTab extends TheacherMeetingListEvent {
   const DataForTab({required this.tabIndex, required this.filterBloc});
   final String tabIndex;
@@ -31,8 +33,8 @@ class PressToDelEdit extends TheacherMeetingListEvent {
 }
 
 class DeleteMeeting extends TheacherMeetingListEvent {
-  const DeleteMeeting({required this.resourceId});
-  final int resourceId;
+  const DeleteMeeting({required this.meetingId});
+  final int meetingId;
 }
 
 class PressFilter extends TheacherMeetingListEvent {

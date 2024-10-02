@@ -9,6 +9,7 @@ import 'package:school_of_future/core/widgets/text.dart';
 
 Future<void> showConfirmDeleteDialog(BuildContext context,
     {required VoidCallback pressToYes}) async {
+  bool isLoading = false;
   return showDialog<void>(
     context: context,
     barrierDismissible: false,
@@ -37,14 +38,23 @@ Future<void> showConfirmDeleteDialog(BuildContext context,
                 ),
               ),
               const Gap(40),
-              Expanded(
-                child: ButtonB(
-                  heigh: 60,
-                  text: LocaleKeys.yes.tr(),
-                  press: () {
-                    pressToYes();
-                  },
-                ),
+              StatefulBuilder(
+                builder: (ctx, myState) {
+                  return Expanded(
+                    child: ButtonB(
+                      loading: isLoading,
+                      iconPosition: "left",
+                      heigh: 60,
+                      text: LocaleKeys.yes.tr(),
+                      press: () {
+                        pressToYes();
+                        myState(() {
+                          isLoading = true;
+                        });
+                      },
+                    ),
+                  );
+                },
               ),
             ],
           ),

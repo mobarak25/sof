@@ -8,6 +8,11 @@ class MeetingCreateState extends Equatable {
     this.batchLoading = false,
     this.title = '',
     this.date = '',
+    this.startTime = '',
+    this.endTime = '',
+    this.link = '',
+    this.agenda = const [],
+    this.meetingType = 1,
 
     //dependable
     this.bacthAsSection = const GetBacthAsSections(),
@@ -39,6 +44,11 @@ class MeetingCreateState extends Equatable {
   final Forms forms;
   final String title;
   final String date;
+  final String startTime;
+  final String endTime;
+  final String link;
+  final List<AgendaInput> agenda;
+  final int meetingType;
 
   //dependable dropdown
   final GetBacthAsSections bacthAsSection;
@@ -72,6 +82,11 @@ class MeetingCreateState extends Equatable {
     bool? batchLoading,
     String? title,
     String? date,
+    String? startTime,
+    String? endTime,
+    String? link,
+    List<AgendaInput>? agenda,
+    int? meetingType,
 
     //
     GetBacthAsSections? bacthAsSection,
@@ -104,6 +119,11 @@ class MeetingCreateState extends Equatable {
       batchLoading: batchLoading ?? this.batchLoading,
       title: title ?? this.title,
       date: date ?? this.date,
+      startTime: startTime ?? this.startTime,
+      endTime: endTime ?? this.endTime,
+      link: link ?? this.link,
+      agenda: agenda ?? this.agenda,
+      meetingType: meetingType ?? this.meetingType,
 
       //dropdown
       bacthAsSection: bacthAsSection ?? this.bacthAsSection,
@@ -141,6 +161,11 @@ class MeetingCreateState extends Equatable {
         batchLoading,
         title,
         date,
+        startTime,
+        endTime,
+        link,
+        agenda,
+        meetingType,
         //dropdown
         bacthAsSection,
         setClass,

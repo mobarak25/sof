@@ -66,7 +66,7 @@ class _RadioBState extends State<RadioGroupB> {
                     width: 18,
                     height: 18,
                     child: Radio(
-                      activeColor: bGreen,
+                      activeColor: kPrimaryColor,
                       value: widget.radioValues[index].value,
                       groupValue: _groupValue,
                       onChanged: (val) {
@@ -85,7 +85,7 @@ class _RadioBState extends State<RadioGroupB> {
                         textStyle: bBody1,
                         fontColor:
                             widget.radioValues[index].value == _groupValue
-                                ? bGray
+                                ? bGray100
                                 : widget.color,
                       ),
                     ),

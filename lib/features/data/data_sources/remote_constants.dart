@@ -77,6 +77,6 @@ String teacherMeetingDetailsEndPoint({required int meetingId}) =>
     "${version1}meeting/$meetingId";
 
 String teacherMeetingEndPoint = "${version1}meeting";
-
+String teacherMeetingForTeacherEndPoint = "${version1}meeting/teachers";
 String getBatchWiseStudentsByBatchIdEndpoint({required int batchId}) =>
     "${version1}common/get-batch-wise-students?batch_id=$batchId";

@@ -11,7 +11,9 @@ import 'package:school_of_future/core/router/route_constents.dart';
 import 'package:school_of_future/core/snackbar/show_snackbar.dart';
 import 'package:school_of_future/core/utils/enums.dart';
 import 'package:school_of_future/core/utils/utilities.dart';
+import 'package:school_of_future/core/widgets/confirm_cancel_dialog.dart';
 import 'package:school_of_future/features/data/data_sources/remote_constants.dart';
+import 'package:school_of_future/features/data/model/create_meeting.dart';
 import 'package:school_of_future/features/domain/entities/assignment_assign_student_response.dart';
 import 'package:school_of_future/features/domain/entities/batch_wise_student.dart';
 import 'package:school_of_future/features/domain/entities/default_response.dart';
@@ -30,12 +32,20 @@ class MeetingCreateBloc extends Bloc<MeetingCreateEvent, MeetingCreateState> {
     on<MeetingIdForEdit>(_meetingIdForEdit);
     on<ChangeTitle>(_changeTitle);
     on<StartDate>(_startDate);
+    on<StartTime>(_startTime);
+    on<EndTime>(_endTime);
+    on<ChangeMeetingLink>(_changeMeetingLink);
+    on<AddAgenda>(_addAgenda);
+    on<DeleteAgenda>(_deleteAgenda);
+    on<GetMeetingType>(_getMeetingType);
     on<GetVersionList>(_getVersionList);
     on<SelectVersionId>(_selectVersionId);
     on<SelectClassId>(_selectClassId);
     on<SelectSectionList>(_selectSectionList);
     on<BackWithUnselected>(_backWithUnselected);
     on<PressToCreate>(_pressToCreate);
+    on<PressToCancel>(_pressToCancel);
+    on<AddData>(_addData);
 
     add(GetVersionList());
   }
@@ -47,6 +57,7 @@ class MeetingCreateBloc extends Bloc<MeetingCreateEvent, MeetingCreateState> {
   FutureOr<void> _meetingIdForEdit(
       MeetingIdForEdit event, Emitter<MeetingCreateState> emit) async {
     emit(state.copyWith(meetingId: event.meetingId));
+    print("meeting id:=========== ${event.meetingId}");
 
     if (event.meetingId != -1) {
       final details = await _apiRepo.get<MeetingDetails>(
@@ -69,6 +80,19 @@ class MeetingCreateBloc extends Bloc<MeetingCreateEvent, MeetingCreateState> {
   FutureOr<void> _startDate(StartDate event, Emitter<MeetingCreateState> emit) {
     final date = getDate(value: event.startDate, formate: "yyyy-MM-dd");
     emit(state.copyWith(date: date));
+  }
+
+  FutureOr<void> _startTime(StartTime event, Emitter<MeetingCreateState> emit) {
+    emit(state.copyWith(startTime: event.startTime));
+  }
+
+  FutureOr<void> _endTime(EndTime event, Emitter<MeetingCreateState> emit) {
+    emit(state.copyWith(endTime: event.endTime));
+  }
+
+  FutureOr<void> _changeMeetingLink(
+      ChangeMeetingLink event, Emitter<MeetingCreateState> emit) {
+    emit(state.copyWith(link: event.link));
   }
 
   FutureOr<void> _getVersionList(
@@ -244,6 +268,7 @@ class MeetingCreateBloc extends Bloc<MeetingCreateEvent, MeetingCreateState> {
   FutureOr<void> _pressToCreate(
       PressToCreate event, Emitter<MeetingCreateState> emit) async {
     List<int> studentList = [];
+    List<String> adendaList = [];
 
     for (int i = 0; i < state.listOfCheckUncheckStudent.length; i++) {
       for (int j = 0; j < state.listOfCheckUncheckStudent[i].length; j++) {
@@ -253,29 +278,36 @@ class MeetingCreateBloc extends Bloc<MeetingCreateEvent, MeetingCreateState> {
       }
     }
 
+    for (int i = 0; i < state.agenda.length; i++) {
+      adendaList.add(state.agenda[i].textEditingController.text);
+    }
+
     if (isValid(event) && !state.loading) {
       emit(state.copyWith(loading: true));
-      final create = await _apiRepo.appMultipart<DefaultResponse, void>(
+      final create = await _apiRepo.post<DefaultResponse>(
         endpoint: state.meetingId != -1
             ? teacherMeetingDetailsEndPoint(meetingId: state.meetingId)
             : teacherMeetingEndPoint,
-        body: {
-          "status": event.isDraft ? 0 : 1,
-          "title": state.title,
-          "published_at": state.date,
-          "description": event.content,
-          "subject_id": state.selectedSubjectId,
-          "assign_to_batch": state.assignToBatchId,
-          "assigne_to_student": studentList,
-          "_method": state.meetingId == -1 ? "POST" : "PUT",
-        },
-        fileFieldName: "class_work_attachment__url",
+        body: CreateMeeting(
+          title: state.title,
+          description: event.content,
+          status: event.isDraft ? 0 : 1,
+          meetingType: state.meetingType,
+          date: state.date,
+          startTime: state.startTime,
+          endTime: state.endTime,
+          agenda: adendaList,
+          meetingLink: state.link,
+          meetingStudents: studentList,
+          meetingBatch: state.assignToBatchId,
+          method: state.meetingId == -1 ? "POST" : "PUT",
+        ),
       );
 
       if (create != null) {
         _iFlutterNavigator.pop();
         navigatorKey.currentState!.pushNamedAndRemoveUntil(
-            classworkListScreen, ModalRoute.withName('/'));
+            teacherMeetingListScreen, ModalRoute.withName('/'));
         ShowSnackBar(message: create.message!, navigator: _iFlutterNavigator);
       }
       emit(state.copyWith(loading: false));
@@ -287,14 +319,66 @@ class MeetingCreateBloc extends Bloc<MeetingCreateEvent, MeetingCreateState> {
   bool isValid(PressToCreate event) {
     final validate = Validator.isValidated(items: [
       FormItem(text: state.title, focusNode: event.titleFocusnode),
+      FormItem(text: state.date, focusNode: event.dateFocusnode),
+      FormItem(text: state.startTime, focusNode: event.startTimeFocusnode),
+      FormItem(text: state.endTime, focusNode: event.endTimeFocusnode),
     ], navigator: _iFlutterNavigator);
 
     if (!validate) return false;
     if (state.title.isEmpty ||
-        state.selectedSubjectId == -1 ||
+        state.date.isEmpty ||
+        state.startTime.isEmpty ||
+        state.endTime.isEmpty ||
+        (state.meetingType == 1 && state.link.isEmpty) ||
         state.assignToBatchId.isEmpty) {
       return false;
     }
     return true;
+  }
+
+  FutureOr<void> _addAgenda(AddAgenda event, Emitter<MeetingCreateState> emit) {
+    emit(
+      state.copyWith(
+          agenda: List.from(state.agenda)
+            ..add(AgendaInput(
+              textEditingController: TextEditingController(),
+              focusnode: FocusNode(),
+            ))),
+    );
+  }
+
+  FutureOr<void> _deleteAgenda(
+      DeleteAgenda event, Emitter<MeetingCreateState> emit) {
+    emit(
+        state.copyWith(agenda: List.from(state.agenda)..removeAt(event.index)));
+  }
+
+  FutureOr<void> _getMeetingType(
+      GetMeetingType event, Emitter<MeetingCreateState> emit) {
+    emit(state.copyWith(meetingType: event.type));
+  }
+
+  FutureOr<void> _pressToCancel(
+      PressToCancel event, Emitter<MeetingCreateState> emit) {
+    showCancelDialog(_iFlutterNavigator.context, pressToYes: () {
+      Navigator.popUntil(_iFlutterNavigator.context, (route) => route.isFirst);
+    });
+  }
+
+  FutureOr<void> _addData(AddData event, Emitter<MeetingCreateState> emit) {
+    if (state.isFirstTime) {
+      emit(state.copyWith(
+        title: event.title,
+        date: getDate(value: event.startDate, formate: "yyyy-MM-dd"),
+        agenda: event.agenda,
+        meetingType: event.meetingType,
+        link: event.link,
+        selectedVersionId: event.selectedVersionId,
+        selectedClassId: event.selectedClassId,
+        startTime: event.startTime,
+        endTime: event.endTime,
+        isFirstTime: false,
+      ));
+    }
   }
 }

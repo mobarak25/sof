@@ -14,6 +14,7 @@ import 'package:school_of_future/core/widgets/custom_tab.dart';
 import 'package:school_of_future/features/presentation/app_common/filter_sidebar/bloc/filter_sidebar_bloc.dart';
 import 'package:school_of_future/features/presentation/app_common/filter_sidebar/view/filter_sidebar.dart';
 import 'package:school_of_future/features/presentation/meeting/teacher_meeting_list/bloc/theacher_meeting_list_bloc.dart';
+import 'package:school_of_future/features/presentation/meeting/teacher_meeting_list/widgets/meeting_card.dart';
 
 class TeacherMeetingListScreen extends StatelessWidget {
   const TeacherMeetingListScreen({super.key});
@@ -79,162 +80,86 @@ class TeacherMeetingListScreen extends StatelessWidget {
                     bloc.add(ChangeSearch(
                         searchText: value, filterBloc: filterBloc));
                   },
-                  child: Column(
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          color: bWhite,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Column(
+                  child: state.meetingList.data != null
+                      ? Column(
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 15),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                            Expanded(
+                              child: ListView(
+                                controller: scroll,
                                 children: [
-                                  Container(
-                                    width: 40,
-                                    height: 40,
-                                    decoration: BoxDecoration(
-                                      color: kPrimaryColor.withOpacity(0.1),
-                                      borderRadius: BorderRadius.circular(5),
-                                    ),
-                                    child: const Icon(
-                                      Icons.calendar_month,
-                                      color: kPrimaryColor,
-                                    ),
-                                  ),
-                                  const Gap(10),
-                                  const Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                  ...List.generate(
+                                      state.meetingList.data!.length,
+                                      (position) {
+                                    final dataItem =
+                                        state.meetingList.data![position];
+                                    return Column(
+                                      mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        TextB(
-                                          text:
-                                              "Amet minim mollit non deserunt.",
-                                          textStyle: bSub1B,
-                                          fontColor: kTextAnotherColor,
+                                        GestureDetector(
+                                          onTap: () {
+                                            Navigator.of(context,
+                                                    rootNavigator: true)
+                                                .pushNamed(
+                                              meetingDetailsScreen,
+                                              arguments: dataItem.id,
+                                            );
+                                          },
+                                          child: MeetingCard(
+                                            item: dataItem,
+                                            isTeacher: state.isTeacher,
+                                            pressTo: (String pressTo, int id) {
+                                              bloc.add(PressToDelEdit(
+                                                  type: pressTo, id: id));
+                                            },
+                                          ),
                                         ),
-                                        Gap(5),
-                                        TextB(
-                                          text: "Sunday 03 July, 2021",
-                                          textStyle: bBase2,
-                                          fontColor: bGray52,
-                                        ),
-                                        Row(
-                                          children: [
-                                            TextB(
-                                              text: "Coordinator: ",
-                                              textStyle: bBase2,
-                                              fontColor: bGray52,
-                                            ),
-                                            TextB(
-                                              text: "David Lee",
-                                              textStyle: bBase2,
-                                              fontColor: kPrimaryColor,
-                                            ),
-                                          ],
-                                        ),
+                                        const Gap(15),
                                       ],
+                                    );
+                                  }),
+                                  if (state.meetingList.data!.isEmpty)
+                                    TextB(
+                                      text: LocaleKeys.noResultFound.tr(),
+                                      textStyle: bBody1B,
+                                      fontColor: bRed,
+                                      alignMent: TextAlign.center,
                                     ),
-                                  ),
+                                  if (!state.incrementLoader && state.isEndList)
+                                    const Padding(
+                                      padding:
+                                          EdgeInsets.only(top: 15, bottom: 30),
+                                      child: TextB(
+                                        text: "End of the list",
+                                        textStyle: bBase2M,
+                                        fontColor: bRed,
+                                      ),
+                                    ),
                                 ],
                               ),
                             ),
-                            Container(
-                              width: double.infinity,
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 15),
-                              color: kSecondaryColor.withOpacity(0.05),
-                              child: const TextB(
-                                text: "10:30 am - 11:30 am",
-                                textStyle: bHead6M,
-                                fontColor: kSecondaryColor,
-                                alignMent: TextAlign.center,
+                            if (state.incrementLoader)
+                              const Center(
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 20),
+                                  child: CircularProgressIndicator(),
+                                ),
                               ),
-                            )
+                            const Gap(65),
                           ],
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  // state.resources.data != null
-                  //     ? Column(
-                  //         children: [
-                  //           Expanded(
-                  //             child: GridView.count(
-                  //               controller: scroll,
-                  //               primary: false,
-                  //               crossAxisSpacing: 15,
-                  //               mainAxisSpacing: 15,
-                  //               crossAxisCount: 2,
-                  //               children: [
-                  //                 ...List.generate(state.resources.data!.length,
-                  //                     (position) {
-                  //                   final dataItem =
-                  //                       state.resources.data![position];
-                  //                   return GestureDetector(
-                  //                     onTap: () {
-                  //                       Navigator.of(context,
-                  //                               rootNavigator: true)
-                  //                           .pushNamed(
-                  //                         resourcesDetailsScreen,
-                  //                         arguments: dataItem.id,
-                  //                       );
-                  //                     },
-                  //                     child: ResourceCard(
-                  //                       item: dataItem,
-                  //                       isTeacher: state.isTeacher,
-                  //                       pressTo: (String pressTo, int id) {
-                  //                         bloc.add(PressToDelEdit(
-                  //                             type: pressTo, id: id));
-                  //                       },
-                  //                     ),
-                  //                   );
-                  //                 }),
-                  //                 if (state.resources.data!.isEmpty)
-                  //                   TextB(
-                  //                     text: LocaleKeys.noResultFound.tr(),
-                  //                     textStyle: bBody1B,
-                  //                     fontColor: bRed,
-                  //                     alignMent: TextAlign.center,
-                  //                   ),
-                  //               ],
-                  //             ),
-                  //           ),
-                  //           if (state.incrementLoader)
-                  //             const Center(
-                  //               child: Padding(
-                  //                 padding: EdgeInsets.symmetric(vertical: 20),
-                  //                 child: CircularProgressIndicator(),
-                  //               ),
-                  //             ),
-                  //           if (!state.incrementLoader && state.isEndList)
-                  //             const Padding(
-                  //               padding: EdgeInsets.only(top: 15, bottom: 30),
-                  //               child: TextB(
-                  //                 text: "End of the list",
-                  //                 textStyle: bBase2M,
-                  //                 fontColor: bRed,
-                  //               ),
-                  //             ),
-                  //           const Gap(65),
-                  //         ],
-                  //       )
-                  //     : const SizedBox(),
+                        )
+                      : const SizedBox(),
                 ),
               ),
-              //if (state.isTeacher)
-              FloatingButton(
-                press: () {
-                  Navigator.of(context, rootNavigator: true)
-                      .pushNamed(teacherMeetingCreateScreen, arguments: -1);
-                },
-              )
+              if (state.isTeacher)
+                FloatingButton(
+                  press: () {
+                    // Navigator.pushNamed(navigatorKey.currentState!.context,
+                    //     teacherAssignmentCreateScreen);
+
+                    Navigator.of(context, rootNavigator: true)
+                        .pushNamed(teacherMeetingCreateScreen, arguments: -1);
+                  },
+                )
             ],
           ),
         );

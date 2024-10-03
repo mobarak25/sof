@@ -37,6 +37,7 @@ const resourcesDetailsScreen = "/resources-details-screen";
 const lessonPlanListScreen = "/lesson-plan-list-screen";
 const lessonPlanDetailsScreen = "/lesson-plan-details-screen";
 const meetingDetailsScreen = "/meeting-details-screen";
+const routineScreen = "/routine-screen";
 
 //Student routes
 

@@ -80,7 +80,7 @@ class StudentDhasboard extends StatelessWidget {
             controller: panelController,
             color: bTransparentColor,
             boxShadow: const [],
-            maxHeight: 350,
+            maxHeight: 320,
             onPanelOpened: () {
               bloc.add(const GetOpenClose(isOPen: true));
             },
@@ -96,7 +96,7 @@ class StudentDhasboard extends StatelessWidget {
             panel: Stack(
               children: [
                 Container(
-                  margin: const EdgeInsets.only(top: 30),
+                  margin: const EdgeInsets.only(top: 20),
                   width: double.infinity,
                   decoration: const BoxDecoration(
                     gradient: LinearGradient(
@@ -106,7 +106,7 @@ class StudentDhasboard extends StatelessWidget {
                     ),
                   ),
                   child: Container(
-                    padding: const EdgeInsets.only(top: 50, bottom: 50),
+                    padding: const EdgeInsets.only(top: 45, bottom: 50),
                     child: state.isTeacher
                         ? TeacherMenus(panelController: panelController)
                         : StudentMenus(panelController: panelController),
@@ -118,8 +118,8 @@ class StudentDhasboard extends StatelessWidget {
                   left: 0,
                   right: 0,
                   child: Container(
-                    height: 71,
-                    width: 71,
+                    height: 65,
+                    width: 65,
                     alignment: Alignment.topCenter,
                     decoration: const BoxDecoration(
                       color: Color(0xffF7F9EF),

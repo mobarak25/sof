@@ -38,6 +38,8 @@ import 'package:school_of_future/features/presentation/app_dashboard/Student_hom
 import 'package:school_of_future/features/presentation/app_dashboard/Student_home/view/student_home_screen.dart';
 import 'package:school_of_future/features/presentation/resources/resources_list/bloc/teacher_resource_list_bloc.dart';
 import 'package:school_of_future/features/presentation/resources/resources_list/view/teacher_resources_list_screen.dart';
+import 'package:school_of_future/features/presentation/routine/teacher_routine/bloc/teacher_routine_bloc.dart';
+import 'package:school_of_future/features/presentation/routine/teacher_routine/view/teacher_routine_screen.dart';
 
 Route<dynamic>? studentsRoutes(RouteSettings settings) {
   print(settings.name);
@@ -159,6 +161,15 @@ Route<dynamic>? studentsRoutes(RouteSettings settings) {
           create: (context) => StudentClassworkListBloc(getIt<ApiRepo>(),
               getIt<IFlutterNavigator>(), getIt<LocalStorageRepo>()),
           child: const StudentClassworkListScreen(),
+        ),
+      );
+    case routineScreen:
+      return MaterialPageRoute(
+        settings: settings,
+        builder: (BuildContext context) => BlocProvider(
+          create: (context) => TeacherRoutineBloc(getIt<ApiRepo>(),
+              getIt<IFlutterNavigator>(), getIt<LocalStorageRepo>()),
+          child: const RoutineScreen(),
         ),
       );
     case parentApplyLeaveScreen:

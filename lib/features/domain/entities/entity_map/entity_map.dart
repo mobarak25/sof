@@ -21,6 +21,7 @@ import 'package:school_of_future/features/domain/entities/notice_response.dart';
 import 'package:school_of_future/features/domain/entities/profile_attendance_response.dart';
 import 'package:school_of_future/features/domain/entities/resource_details_response.dart';
 import 'package:school_of_future/features/domain/entities/resources_response.dart';
+import 'package:school_of_future/features/domain/entities/routine_response.dart';
 import 'package:school_of_future/features/domain/entities/student_assignment_submissign_details_response.dart';
 import 'package:school_of_future/features/domain/entities/student_profile_response.dart';
 import 'package:school_of_future/features/domain/entities/subject_item_response.dart';
@@ -89,6 +90,8 @@ class EntityMap {
         return MeetingDetails.fromJson(json) as T;
       case const (MeetingList):
         return MeetingList.fromJson(json) as T;
+      case const (Routine):
+        return Routine.fromJson(json) as T;
 
       default:
         throw Exception('Unknown class');

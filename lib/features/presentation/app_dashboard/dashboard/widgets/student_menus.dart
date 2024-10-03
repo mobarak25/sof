@@ -19,8 +19,9 @@ class StudentMenus extends StatelessWidget {
     return GridView.count(
       scrollDirection: Axis.horizontal,
       crossAxisCount: 2,
-      crossAxisSpacing: 10,
-      mainAxisSpacing: 10,
+      crossAxisSpacing: 5,
+      mainAxisSpacing: 5,
+      childAspectRatio: 1.2,
       children: [
         FeatureItem(
           iconName: "assets/images/feature_icons_svg/ic_notice.svg",
@@ -83,6 +84,15 @@ class StudentMenus extends StatelessWidget {
             panelController.close();
             navigatorKey.currentState!.pushNamedAndRemoveUntil(
                 teacherMeetingListScreen, ModalRoute.withName('/'));
+          },
+        ),
+        FeatureItem(
+          iconName: "assets/images/feature_icons_svg/ic_routine.svg",
+          title: context.tr(LocaleKeys.routine),
+          press: () {
+            panelController.close();
+            navigatorKey.currentState!.pushNamedAndRemoveUntil(
+                routineScreen, ModalRoute.withName('/'));
           },
         ),
       ],

@@ -52,6 +52,11 @@ class TeacherClassworkListScreen extends StatelessWidget {
             ),
             child: SingleChildScrollView(
               child: FilterSidebar(
+                showStartDate: true,
+                showVersion: true,
+                showClass: true,
+                showSubject: true,
+                showSection: true,
                 pressFilterBtn: () {
                   bloc.add(PressFilter(filterBloc: filterBloc));
                 },

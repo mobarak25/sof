@@ -57,6 +57,7 @@ class LessonPlanListScreen extends StatelessWidget {
                 showSubject: state.isTeacher,
                 showSubjectForStudent: !state.isTeacher ? true : false,
                 showSection: state.isTeacher,
+                btnText: LocaleKeys.filter.tr(),
                 pressFilterBtn: () {
                   bloc.add(PressFilter(filterBloc: filterBloc));
                 },

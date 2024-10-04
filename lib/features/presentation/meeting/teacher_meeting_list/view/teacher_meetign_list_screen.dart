@@ -54,6 +54,7 @@ class TeacherMeetingListScreen extends StatelessWidget {
               child: FilterSidebar(
                 showStartDate: true,
                 showEndDate: true,
+                btnText: LocaleKeys.filter.tr(),
                 pressFilterBtn: () {
                   bloc.add(PressFilter(filterBloc: filterBloc));
                 },

@@ -57,6 +57,7 @@ class TeacherClassworkListScreen extends StatelessWidget {
                 showClass: true,
                 showSubject: true,
                 showSection: true,
+                btnText: LocaleKeys.filter.tr(),
                 pressFilterBtn: () {
                   bloc.add(PressFilter(filterBloc: filterBloc));
                 },

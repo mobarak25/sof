@@ -57,6 +57,7 @@ class TeacherResourcesListScreen extends StatelessWidget {
                 showSubject: state.isTeacher,
                 showSubjectForStudent: !state.isTeacher ? true : false,
                 showChapter: true,
+                btnText: LocaleKeys.filter.tr(),
                 pressFilterBtn: () {
                   bloc.add(PressFilter(filterBloc: filterBloc));
                 },

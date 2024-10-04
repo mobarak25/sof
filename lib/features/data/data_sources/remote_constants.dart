@@ -84,3 +84,8 @@ String getBatchWiseStudentsByBatchIdEndpoint({required int batchId}) =>
 String teacherRoutineEndPoint = "${version1}routine/daily";
 String studentRoutineEndPoint({required String sId}) =>
     "${version1}routine/daily/$sId";
+
+String teacherFullSyllabusListEndPoint = "${version1}syllabus/full-syllabus";
+String teacherSyllabusListEndPoint = "${version1}syllabus";
+String syllabusDetailsEndPoint({required int syllabusId}) =>
+    "${version1}syllabus/$syllabusId";

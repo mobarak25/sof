@@ -12,6 +12,7 @@ class CustomTab extends StatefulWidget {
     required this.onTabChanged,
     required this.search,
     required this.child,
+    this.showSearch = true,
   });
 
   final bool loading;
@@ -19,6 +20,7 @@ class CustomTab extends StatefulWidget {
   final Function onTabChanged;
   final Function search;
   final Widget child;
+  final bool showSearch;
 
   @override
   State<CustomTab> createState() => _CustomTabState();
@@ -67,36 +69,41 @@ class _CustomTabState extends State<CustomTab> {
             ],
           ),
         ),
-        const Gap(10),
-        TextFieldB(
-          focusNode: searchFocusnode,
-          controller: searchController,
-          hintText: "Search",
-          prefixIcon: const Icon(
-            Icons.search,
-            size: 25,
-          ),
-          suffixIcon: GestureDetector(
-            onTap: () {
-              Scaffold.of(context).openEndDrawer();
-            },
-            child: Container(
-              height: 50,
-              width: 35,
-              padding: const EdgeInsets.only(right: 5),
-              alignment: Alignment.centerRight,
-              decoration: const BoxDecoration(
-                border: Border(
-                  left: BorderSide(color: bGray12),
+        if (widget.showSearch)
+          Column(
+            children: [
+              const Gap(10),
+              TextFieldB(
+                focusNode: searchFocusnode,
+                controller: searchController,
+                hintText: "Search",
+                prefixIcon: const Icon(
+                  Icons.search,
+                  size: 25,
                 ),
+                suffixIcon: GestureDetector(
+                  onTap: () {
+                    Scaffold.of(context).openEndDrawer();
+                  },
+                  child: Container(
+                    height: 50,
+                    width: 35,
+                    padding: const EdgeInsets.only(right: 5),
+                    alignment: Alignment.centerRight,
+                    decoration: const BoxDecoration(
+                      border: Border(
+                        left: BorderSide(color: bGray12),
+                      ),
+                    ),
+                    child: const Icon(Icons.filter_alt),
+                  ),
+                ),
+                onChanged: (value) {
+                  widget.search(value);
+                },
               ),
-              child: const Icon(Icons.filter_alt),
-            ),
+            ],
           ),
-          onChanged: (value) {
-            widget.search(value);
-          },
-        ),
         const Gap(10),
         Expanded(
           child: PageView.builder(

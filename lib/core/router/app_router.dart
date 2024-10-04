@@ -56,6 +56,8 @@ import 'package:school_of_future/features/presentation/splash/bloc/splash_bloc.d
 import 'package:school_of_future/features/presentation/splash/view/splash.dart';
 import 'package:school_of_future/features/presentation/app_dashboard/dashboard/bloc/student_dashboard_bloc.dart';
 import 'package:school_of_future/features/presentation/app_dashboard/dashboard/view/student_dashboard_screen.dart';
+import 'package:school_of_future/features/presentation/syllabus/syllabus_class_quiz/bloc/syllabus_class_quiz_bloc.dart';
+import 'package:school_of_future/features/presentation/syllabus/syllabus_class_quiz/view/syllabus_class_quiz_screen.dart';
 
 class AppRouter {
   Route<dynamic>? generateRoute(RouteSettings settings) {
@@ -340,6 +342,20 @@ class AppRouter {
               getIt<LocalStorageRepo>(),
             )..add(GetMeetingDetails(meetingId: id)),
             child: const MeetingDetailsScreen(),
+          ),
+        );
+
+      case syllabusClassQuizScreen:
+        final params = settings.arguments as Map<String, dynamic>;
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (BuildContext context) => BlocProvider(
+            create: (context) => SyllabusClassQuizBloc(
+              getIt<ApiRepo>(),
+              getIt<IFlutterNavigator>(),
+              getIt<LocalStorageRepo>(),
+            )..add(GetList(queryParams: params)),
+            child: const SyllabusClassQuizScreen(),
           ),
         );
 

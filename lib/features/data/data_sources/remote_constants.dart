@@ -92,3 +92,6 @@ String syllabusDetailsEndPoint({required int syllabusId}) =>
 
 String studentFullSyllabusEndPoint({required String sId}) =>
     "${version1}syllabus/full-syllabus-student/$sId";
+
+String studentQuizClassTestSyllabusEndPoint({required String sId}) =>
+    "${version1}syllabus/syllabus-student/$sId";

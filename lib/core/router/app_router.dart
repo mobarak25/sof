@@ -4,6 +4,8 @@ import 'package:school_of_future/core/file_picker/file_picker_service.dart';
 import 'package:school_of_future/core/ioc/global.dart';
 import 'package:school_of_future/core/navigator/iflutter_navigator.dart';
 import 'package:school_of_future/core/utils/utilities.dart';
+import 'package:school_of_future/core/widgets/doc_viewer_page.dart';
+import 'package:school_of_future/core/widgets/image_view_page.dart';
 import 'package:school_of_future/features/domain/entities/lesson_plan_details_response.dart';
 import 'package:school_of_future/features/domain/repositories/api_repo.dart';
 import 'package:school_of_future/features/domain/repositories/local_storage_repo.dart';
@@ -83,6 +85,22 @@ class AppRouter {
             create: (context) => LoginBloc(getIt<IFlutterNavigator>(),
                 getIt<ApiRepo>(), getIt<LocalStorageRepo>()),
             child: LoginScreen(),
+          ),
+        );
+      case docViewScreen:
+        final url = settings.arguments as String;
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (BuildContext context) => DocViewerScreen(
+            url: url,
+          ),
+        );
+      case imageViewScreen:
+        final url = settings.arguments as String;
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (BuildContext context) => ImageViewerScreen(
+            imageUrl: url,
           ),
         );
       case studentDashboard:

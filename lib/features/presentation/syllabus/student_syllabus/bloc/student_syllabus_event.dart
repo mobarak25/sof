@@ -12,6 +12,4 @@ class DataForTab extends StudentSyllabusEvent {
   final String tabIndex;
 }
 
-class PressContinue extends StudentSyllabusEvent {}
-
 class PageIncrement extends StudentSyllabusEvent {}

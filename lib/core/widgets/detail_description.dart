@@ -39,7 +39,8 @@ class DetailDescription extends StatelessWidget {
                       Navigator.of(context).pushNamed(imageViewScreen,
                           arguments: attachments[position]);
                     } else {
-                      Navigator.of(context).pushNamed(docViewScreen,
+                      Navigator.of(context, rootNavigator: true).pushNamed(
+                          docViewScreen,
                           arguments: attachments[position]);
                     }
                   },

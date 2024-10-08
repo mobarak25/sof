@@ -51,10 +51,8 @@ class SyllabusClassQuizScreen extends StatelessWidget {
                               },
                               pressToView: (int id) {
                                 Navigator.of(context, rootNavigator: true)
-                                    .pushNamed(
-                                  syllabusDetailsScreen,
-                                  arguments: id,
-                                );
+                                    .pushNamed(syllabusDetailsScreen,
+                                        arguments: id);
                               },
                             ),
                           ),

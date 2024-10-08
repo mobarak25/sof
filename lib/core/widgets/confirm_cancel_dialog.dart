@@ -40,7 +40,6 @@ Future<void> showCancelDialog(BuildContext context,
               Expanded(
                 child: ButtonB(
                   heigh: 60,
-                  loading: true,
                   text: LocaleKeys.yes.tr(),
                   press: () {
                     pressToYes();

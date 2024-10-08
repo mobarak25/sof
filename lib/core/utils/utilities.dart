@@ -144,3 +144,13 @@ class AgendaInput {
   final FocusNode focusnode;
   final TextEditingController textEditingController;
 }
+
+String generateValidUrl(String url) {
+  // Replace backslashes with empty string to remove them
+  String validUrl = url.replaceAll(r'\\', '');
+
+  // Decode any percent-encoded characters
+  validUrl = Uri.decodeComponent(validUrl);
+
+  return validUrl;
+}

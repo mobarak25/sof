@@ -39,8 +39,10 @@ const lessonPlanDetailsScreen = "/lesson-plan-details-screen";
 const meetingDetailsScreen = "/meeting-details-screen";
 const routineScreen = "/routine-screen";
 const syllabusClassQuizScreen = "/syllabus-class-quiz-screen";
+const syllabusDetailsScreen = "/syllabus-details-screen";
 
 //Student routes
+const studentSyllabusListScreen = "/student-syllabus-list-screen";
 
 //Teacher routes
 const teacherAssignmentListScreen = "/teacher-assignment-screen";
@@ -55,3 +57,4 @@ const teacherAttachResourceScreen = "/teacher-attach-resource-screen";
 const teacherMeetingListScreen = "/teacher-meeting-list-screen";
 const teacherMeetingCreateScreen = "/teacher-meeting-create-screen";
 const teacherSyllabusListScreen = "/teacher-syllabus-list-screen";
+const teacherSyllabusCreateScreen = "/teacher-syllabus-create-screen";

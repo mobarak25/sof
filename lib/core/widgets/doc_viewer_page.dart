@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:school_of_future/core/widgets/app_bar.dart';
 import 'package:school_of_future/core/widgets/doc_viewer.dart';
 
 class DocViewerScreen extends StatelessWidget {
@@ -8,15 +7,11 @@ class DocViewerScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: const FutureAppBar(
-        title: 'Document Viewer',
-      ),
-      body: SizedBox(
-        height: double.infinity,
-        width: double.infinity,
-        child: DocViewer(url: url),
-      ),
+    final size = MediaQuery.of(context).size;
+    return SizedBox(
+      height: size.height,
+      width: size.width,
+      child: DocViewer(url: url),
     );
   }
 }

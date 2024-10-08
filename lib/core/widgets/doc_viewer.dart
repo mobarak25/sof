@@ -8,10 +8,10 @@ class DocViewer extends StatefulWidget {
   const DocViewer({super.key, required this.url, this.downloadUrl = ''});
 
   @override
-  _DocViewerState createState() => _DocViewerState();
+  DocViewerState createState() => DocViewerState();
 }
 
-class _DocViewerState extends State<DocViewer> {
+class DocViewerState extends State<DocViewer> {
   late WebViewController _controller;
 
   @override

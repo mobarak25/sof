@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
+import 'package:school_of_future/core/router/route_constents.dart';
 import 'package:school_of_future/core/utils/colors.dart';
 import 'package:school_of_future/core/utils/text_styles.dart';
 import 'package:school_of_future/core/utils/utilities.dart';
@@ -13,10 +14,12 @@ class SyllabusCard extends StatelessWidget {
     super.key,
     required this.data,
     required this.pressToDel,
+    required this.pressToView,
   });
 
   final SyllabusClassQuizTest data;
   final Function pressToDel;
+  final Function pressToView;
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +91,7 @@ class SyllabusCard extends StatelessWidget {
                                   fontColor: bGray52,
                                 ),
                                 TextB(
-                                  text: data.mark!.toString(),
+                                  text: "${data.mark}",
                                   textStyle: bBase2,
                                   fontColor: kPrimaryColor,
                                 ),
@@ -108,7 +111,13 @@ class SyllabusCard extends StatelessWidget {
                           text: "Edit",
                           textColor: kSecondaryColor,
                           bgColor: kSecondaryColor.withOpacity(0.1),
-                          press: () {},
+                          press: () {
+                            Navigator.of(context, rootNavigator: true)
+                                .pushNamed(
+                              teacherSyllabusCreateScreen,
+                              arguments: data.id,
+                            );
+                          },
                         ),
                       ),
                       const Gap(15),
@@ -116,7 +125,9 @@ class SyllabusCard extends StatelessWidget {
                         child: ButtonB(
                           heigh: 50,
                           text: "View",
-                          press: () {},
+                          press: () {
+                            pressToView(data.id);
+                          },
                         ),
                       ),
                     ],

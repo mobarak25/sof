@@ -17,3 +17,5 @@ class PressToDelete extends SyllabusClassQuizEvent {
   final String type;
   final int id;
 }
+
+class PageIncrement extends SyllabusClassQuizEvent {}

@@ -11,21 +11,3 @@ class EnumValues<T> {
 }
 
 enum Forms { initial, submitted, inProgress, invalid, valid, success }
-
-enum ChipsType { Approved, Approve, Cancel, Processing }
-
-enum AttenddanceType {
-  Absent,
-  ELeft,
-  Early,
-  HalfDay,
-  Holiday,
-  Late,
-  Present,
-  ONill,
-  OnLeave,
-  Travel,
-  Weekoff
-}
-
-enum PresentEnum { ELeft, Early, HalfDay, Late, Present, Travel }

@@ -89,3 +89,6 @@ String teacherFullSyllabusListEndPoint = "${version1}syllabus/full-syllabus";
 String teacherSyllabusListEndPoint = "${version1}syllabus";
 String syllabusDetailsEndPoint({required int syllabusId}) =>
     "${version1}syllabus/$syllabusId";
+
+String studentFullSyllabusEndPoint({required String sId}) =>
+    "${version1}syllabus/full-syllabus-student/$sId";

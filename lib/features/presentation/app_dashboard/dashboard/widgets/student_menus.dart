@@ -21,7 +21,7 @@ class StudentMenus extends StatelessWidget {
       crossAxisCount: 2,
       crossAxisSpacing: 5,
       mainAxisSpacing: 5,
-      childAspectRatio: 1.2,
+      childAspectRatio: 1.3,
       children: [
         FeatureItem(
           iconName: "assets/images/feature_icons_svg/ic_notice.svg",
@@ -93,6 +93,15 @@ class StudentMenus extends StatelessWidget {
             panelController.close();
             navigatorKey.currentState!.pushNamedAndRemoveUntil(
                 routineScreen, ModalRoute.withName('/'));
+          },
+        ),
+        FeatureItem(
+          iconName: "assets/images/feature_icons_svg/ic_syllabus.svg",
+          title: context.tr(LocaleKeys.syllabus),
+          press: () {
+            panelController.close();
+            navigatorKey.currentState!.pushNamedAndRemoveUntil(
+                studentSyllabusListScreen, ModalRoute.withName('/'));
           },
         ),
       ],

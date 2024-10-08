@@ -1,7 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gap/gap.dart';
 import 'package:school_of_future/core/router/route_constents.dart';
 import 'package:school_of_future/core/translations/local_keys.dart';
 import 'package:school_of_future/core/utils/colors.dart';
@@ -9,26 +8,20 @@ import 'package:school_of_future/core/widgets/app_bar.dart';
 import 'package:school_of_future/core/widgets/body.dart';
 import 'package:school_of_future/core/widgets/custom_tab.dart';
 import 'package:school_of_future/features/presentation/app_common/filter_sidebar/bloc/filter_sidebar_bloc.dart';
-import 'package:school_of_future/features/presentation/syllabus/teacher_syllabus_list/bloc/teacher_syllabus_list_bloc.dart';
-import 'package:school_of_future/features/presentation/syllabus/teacher_syllabus_list/widgets/full_syllabus.dart';
-import 'package:school_of_future/features/presentation/syllabus/teacher_syllabus_list/widgets/syllabus_class_quiz_test.dart';
+import 'package:school_of_future/features/presentation/syllabus/teacher_full_syllabus_list/bloc/teacher_syllabus_list_bloc.dart';
+import 'package:school_of_future/features/presentation/syllabus/teacher_full_syllabus_list/widgets/full_syllabus.dart';
+import 'package:school_of_future/features/presentation/syllabus/teacher_full_syllabus_list/widgets/syllabus_class_quiz_test.dart';
 
 class TeacherSyllabusListScreen extends StatelessWidget {
   const TeacherSyllabusListScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final scroll = ScrollController();
     return BlocBuilder<TeacherSyllabusListBloc, TeacherSyllabusListState>(
       builder: (context, state) {
         final bloc = context.read<TeacherSyllabusListBloc>();
         final filterBloc = context.read<FilterSidebarBloc>();
 
-        scroll.addListener(() {
-          if (scroll.position.pixels == scroll.position.maxScrollExtent) {
-            bloc.add(PageIncrement());
-          }
-        });
         return Body(
           isFullScreen: true,
           appBar: FutureAppBar(
@@ -59,8 +52,8 @@ class TeacherSyllabusListScreen extends StatelessWidget {
                   else
                     ClassQuidSyllabusView(
                       pageTitle: state.activeTab == '1'
-                          ? "Class test syllabus"
-                          : "Quiz test syllabus",
+                          ? "Class Test Syllabus"
+                          : "Quiz Test Syllabus",
                       pressContinue: () {
                         Navigator.of(context, rootNavigator: true).pushNamed(
                           syllabusClassQuizScreen,
@@ -75,7 +68,12 @@ class TeacherSyllabusListScreen extends StatelessWidget {
                           },
                         );
                       },
-                      pressAddNew: () {},
+                      pressAddNew: () {
+                        Navigator.of(context, rootNavigator: true).pushNamed(
+                          teacherSyllabusCreateScreen,
+                          arguments: -1,
+                        );
+                      },
                     ),
                 ],
               ),

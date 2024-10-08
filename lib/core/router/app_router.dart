@@ -8,6 +8,7 @@ import 'package:school_of_future/features/domain/entities/lesson_plan_details_re
 import 'package:school_of_future/features/domain/repositories/api_repo.dart';
 import 'package:school_of_future/features/domain/repositories/local_storage_repo.dart';
 import 'package:school_of_future/core/router/route_constents.dart';
+import 'package:school_of_future/features/presentation/app_common/filter_sidebar/bloc/filter_sidebar_bloc.dart';
 import 'package:school_of_future/features/presentation/assignment/selected_students/bloc/select_students_bloc.dart';
 import 'package:school_of_future/features/presentation/assignment/selected_students/view/selected_students_screen.dart';
 import 'package:school_of_future/features/presentation/assignment/student_assignment_details/bloc/student_assignment_details_bloc.dart';
@@ -58,6 +59,10 @@ import 'package:school_of_future/features/presentation/app_dashboard/dashboard/b
 import 'package:school_of_future/features/presentation/app_dashboard/dashboard/view/student_dashboard_screen.dart';
 import 'package:school_of_future/features/presentation/syllabus/syllabus_class_quiz/bloc/syllabus_class_quiz_bloc.dart';
 import 'package:school_of_future/features/presentation/syllabus/syllabus_class_quiz/view/syllabus_class_quiz_screen.dart';
+import 'package:school_of_future/features/presentation/syllabus/syllabus_create/bloc/syllabus_create_bloc.dart';
+import 'package:school_of_future/features/presentation/syllabus/syllabus_create/view/syllabus_create_screen.dart';
+import 'package:school_of_future/features/presentation/syllabus/syllabus_details/bloc/syllabus_details_bloc.dart';
+import 'package:school_of_future/features/presentation/syllabus/syllabus_details/view/syllabus_details_screen.dart';
 
 class AppRouter {
   Route<dynamic>? generateRoute(RouteSettings settings) {
@@ -356,6 +361,43 @@ class AppRouter {
               getIt<LocalStorageRepo>(),
             )..add(GetList(queryParams: params)),
             child: const SyllabusClassQuizScreen(),
+          ),
+        );
+
+      case syllabusDetailsScreen:
+        final syllabusId = settings.arguments as int;
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (BuildContext context) => BlocProvider(
+            create: (context) => SyllabusDetailsBloc(
+              getIt<ApiRepo>(),
+              getIt<IFlutterNavigator>(),
+              getIt<LocalStorageRepo>(),
+            )..add(GetSyllabusDetails(id: syllabusId)),
+            child: const SyllabusDetailsScreen(),
+          ),
+        );
+
+      case teacherSyllabusCreateScreen:
+        final syllabusId = settings.arguments as int;
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (BuildContext context) => MultiBlocProvider(
+            providers: [
+              BlocProvider<FilterSidebarBloc>(
+                create: (context) => FilterSidebarBloc(
+                    getIt<ApiRepo>(), getIt<LocalStorageRepo>()),
+              ),
+              BlocProvider<SyllabusCreateBloc>(
+                create: (context) => SyllabusCreateBloc(
+                    getIt<ApiRepo>(),
+                    getIt<IFlutterNavigator>(),
+                    getIt<LocalStorageRepo>(),
+                    getIt<FilePickerRepo>())
+                  ..add(SyllabusIdForEdit(syllabusId: syllabusId)),
+              ),
+            ],
+            child: const SyllabusCreateScreen(),
           ),
         );
 

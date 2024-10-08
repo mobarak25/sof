@@ -21,6 +21,7 @@ class SyllabusClassQuizBloc
       : super(SyllabusClassQuizInitial()) {
     on<GetList>(_getList);
     on<PressToDelete>(_pressToDelete);
+    on<PageIncrement>(_pageIncrement);
   }
 
   final ApiRepo _apiRepo;
@@ -52,5 +53,32 @@ class SyllabusClassQuizBloc
         ShowSnackBar(message: delete.message!, navigator: _iFlutterNavigator);
       }
     });
+  }
+
+  FutureOr<void> _pageIncrement(
+      PageIncrement event, Emitter<SyllabusClassQuizState> emit) async {
+    int totalPage = state.page + 1;
+
+    if (totalPage <= state.classQuizTest.lastPage!) {
+      if (!state.incrementLoader) {
+        emit(state.copyWith(page: totalPage, incrementLoader: true));
+        state.queryParams["page"] = state.page;
+
+        final pagiSyllabus = await _apiRepo.get<SyllabusTeacher>(
+            endpoint: buildUrl(teacherSyllabusListEndPoint, state.queryParams));
+
+        emit(state.copyWith(page: totalPage, incrementLoader: false));
+
+        if (pagiSyllabus != null) {
+          emit(state.copyWith(
+              classQuizTest: SyllabusTeacher(
+            data: state.classQuizTest.data! + pagiSyllabus.data!,
+            lastPage: pagiSyllabus.lastPage,
+          )));
+        }
+      }
+    } else if (!state.incrementLoader) {
+      emit(state.copyWith(isEndList: true));
+    }
   }
 }

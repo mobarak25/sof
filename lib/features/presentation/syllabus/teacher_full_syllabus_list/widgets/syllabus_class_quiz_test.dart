@@ -6,7 +6,6 @@ import 'package:school_of_future/core/utils/colors.dart';
 import 'package:school_of_future/core/utils/text_styles.dart';
 import 'package:school_of_future/core/widgets/button.dart';
 import 'package:school_of_future/core/widgets/text.dart';
-
 import 'package:school_of_future/features/presentation/app_common/filter_sidebar/view/filter_sidebar.dart';
 
 class ClassQuidSyllabusView extends StatelessWidget {
@@ -19,6 +18,7 @@ class ClassQuidSyllabusView extends StatelessWidget {
   final String pageTitle;
   final VoidCallback pressContinue;
   final VoidCallback pressAddNew;
+
   @override
   Widget build(BuildContext context) {
     return Expanded(

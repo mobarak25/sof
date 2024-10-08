@@ -40,8 +40,10 @@ import 'package:school_of_future/features/presentation/resources/resources_list/
 import 'package:school_of_future/features/presentation/resources/resources_list/view/teacher_resources_list_screen.dart';
 import 'package:school_of_future/features/presentation/routine/teacher_routine/bloc/teacher_routine_bloc.dart';
 import 'package:school_of_future/features/presentation/routine/teacher_routine/view/teacher_routine_screen.dart';
-import 'package:school_of_future/features/presentation/syllabus/teacher_syllabus_list/bloc/teacher_syllabus_list_bloc.dart';
-import 'package:school_of_future/features/presentation/syllabus/teacher_syllabus_list/view/teacher_syllabus_list_screen.dart';
+import 'package:school_of_future/features/presentation/syllabus/student_syllabus/bloc/student_syllabus_bloc.dart';
+import 'package:school_of_future/features/presentation/syllabus/student_syllabus/view/student_syllabus_screen.dart';
+import 'package:school_of_future/features/presentation/syllabus/teacher_full_syllabus_list/bloc/teacher_syllabus_list_bloc.dart';
+import 'package:school_of_future/features/presentation/syllabus/teacher_full_syllabus_list/view/teacher_syllabus_list_screen.dart';
 
 Route<dynamic>? studentsRoutes(RouteSettings settings) {
   print(settings.name);
@@ -238,16 +240,6 @@ Route<dynamic>? studentsRoutes(RouteSettings settings) {
         ),
       );
 
-    // case teacherSyllabusListScreen:
-    //   return MaterialPageRoute(
-    //     settings: settings,
-    //     builder: (BuildContext context) => BlocProvider(
-    //       create: (context) => TeacherSyllabusListBloc(getIt<ApiRepo>(),
-    //           getIt<IFlutterNavigator>(), getIt<LocalStorageRepo>()),
-    //       child: const TeacherSyllabusListScreen(),
-    //     ),
-    //   );
-
     case teacherSyllabusListScreen:
       return MaterialPageRoute(
         settings: settings,
@@ -263,6 +255,16 @@ Route<dynamic>? studentsRoutes(RouteSettings settings) {
             ),
           ],
           child: const TeacherSyllabusListScreen(),
+        ),
+      );
+
+    case studentSyllabusListScreen:
+      return MaterialPageRoute(
+        settings: settings,
+        builder: (BuildContext context) => BlocProvider(
+          create: (context) => StudentSyllabusBloc(getIt<ApiRepo>(),
+              getIt<IFlutterNavigator>(), getIt<LocalStorageRepo>()),
+          child: const StudentSyllabusScreen(),
         ),
       );
 

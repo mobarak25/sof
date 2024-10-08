@@ -35,7 +35,6 @@ class GreenBox extends StatelessWidget {
               text: day,
               textStyle: bHead6B,
               fontColor: defaultColor ?? kPrimaryColor),
-          const SizedBox(height: 4.5),
           TextB(
             text: month,
             fontColor: bGray.withOpacity(0.52),

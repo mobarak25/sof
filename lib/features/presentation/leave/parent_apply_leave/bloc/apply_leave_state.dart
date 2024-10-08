@@ -2,6 +2,8 @@ part of 'apply_leave_bloc.dart';
 
 class ApplyLeaveState extends Equatable {
   const ApplyLeaveState({
+    this.loading = false,
+    this.forms = Forms.initial,
     this.title = '',
     this.leaveType = 0,
     this.startDate = '',
@@ -14,6 +16,8 @@ class ApplyLeaveState extends Equatable {
     this.fileList = const [],
   });
 
+  final bool loading;
+  final Forms forms;
   final String title;
   final dynamic leaveType;
   final String startDate;
@@ -26,6 +30,8 @@ class ApplyLeaveState extends Equatable {
   final List<File> fileList;
 
   ApplyLeaveState copyWith({
+    bool? loading,
+    Forms? forms,
     String? title,
     dynamic leaveType,
     String? startDate,
@@ -38,6 +44,8 @@ class ApplyLeaveState extends Equatable {
     List<File>? fileList,
   }) {
     return ApplyLeaveState(
+      loading: loading ?? this.loading,
+      forms: forms ?? this.forms,
       title: title ?? this.title,
       leaveType: leaveType ?? this.leaveType,
       startDate: startDate ?? this.startDate,
@@ -53,6 +61,8 @@ class ApplyLeaveState extends Equatable {
 
   @override
   List<Object> get props => [
+        loading,
+        forms,
         title,
         leaveType,
         startDate,

@@ -12,3 +12,4 @@ const classtuneLogo = "${pngRoot}classtune_logo.png";
 const svgRoot = "assets/images/";
 const fileUploadSvg = "${svgRoot}svg/file_upload.svg";
 const fileAttachSvg = "${svgRoot}file_attach_icon.svg";
+const avaterSvg = "${svgRoot}avatar.svg";

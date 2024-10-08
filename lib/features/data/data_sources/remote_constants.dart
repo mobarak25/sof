@@ -84,14 +84,15 @@ String getBatchWiseStudentsByBatchIdEndpoint({required int batchId}) =>
 String teacherRoutineEndPoint = "${version1}routine/daily";
 String studentRoutineEndPoint({required String sId}) =>
     "${version1}routine/daily/$sId";
-
 String teacherFullSyllabusListEndPoint = "${version1}syllabus/full-syllabus";
 String teacherSyllabusListEndPoint = "${version1}syllabus";
 String syllabusDetailsEndPoint({required int syllabusId}) =>
     "${version1}syllabus/$syllabusId";
-
 String studentFullSyllabusEndPoint({required String sId}) =>
     "${version1}syllabus/full-syllabus-student/$sId";
-
 String studentQuizClassTestSyllabusEndPoint({required String sId}) =>
     "${version1}syllabus/syllabus-student/$sId";
+String studentLeaveListEndPoint({required String sId}) =>
+    "${version1}student-leave/student-leave-application-list/$sId";
+String studentLeaveDtlsEndPoint({required int id}) =>
+    "${version1}student-leave/$id";

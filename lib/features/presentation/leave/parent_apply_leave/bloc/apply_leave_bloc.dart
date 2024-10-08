@@ -8,14 +8,15 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:school_of_future/core/file_picker/file_picker_service.dart';
 import 'package:school_of_future/core/navigator/iflutter_navigator.dart';
+import 'package:school_of_future/core/utils/enums.dart';
 import 'package:school_of_future/core/utils/utilities.dart';
-import 'package:school_of_future/features/presentation/leave/apply_leave/widgets/file_bottom_sheet.dart';
+import 'package:school_of_future/features/domain/repositories/api_repo.dart';
+import 'package:school_of_future/features/presentation/leave/parent_apply_leave/widgets/file_bottom_sheet.dart';
 part 'apply_leave_event.dart';
 part 'apply_leave_state.dart';
 
 class ApplyLeaveBloc extends Bloc<ApplyLeaveEvent, ApplyLeaveState> {
-  ApplyLeaveBloc(
-      this._iFlutterNavigator, this._imagePicker, this._filePickerRepo)
+  ApplyLeaveBloc(this._apiRepo, this._iFlutterNavigator, this._filePickerRepo)
       : super(ApplyLeaveInitial()) {
     on<ChangeTitle>(_changeTitle);
     on<SelectLeaveType>(_selectLeaveType);
@@ -24,12 +25,10 @@ class ApplyLeaveBloc extends Bloc<ApplyLeaveEvent, ApplyLeaveState> {
     on<GetIsHalfDay>(_getIsHalfDay);
     on<ChangeDescription>(_changeDescription);
     on<OpenBottomSheet>(_openBottomSheet);
-    on<PickImage>(_pickImage);
     on<GetFile>(_getFile);
   }
-
+  final ApiRepo _apiRepo;
   final IFlutterNavigator _iFlutterNavigator;
-  final ImagePicker _imagePicker;
   final FilePickerRepo _filePickerRepo;
 
   FutureOr<void> _changeTitle(
@@ -119,19 +118,6 @@ class ApplyLeaveBloc extends Bloc<ApplyLeaveEvent, ApplyLeaveState> {
         add(PickImage(imageSource: sourceType));
       },
     );
-  }
-
-  FutureOr<void> _pickImage(
-      PickImage event, Emitter<ApplyLeaveState> emit) async {
-    XFile? file = await _imagePicker.pickImage(
-        source: event.imageSource, imageQuality: 20);
-
-    if (file != null) {
-      _iFlutterNavigator.pop();
-      emit(state.copyWith(
-        leaveFile: [ImageFile(name: 'FileAttachment', file: file)],
-      ));
-    }
   }
 
   FutureOr<void> _getFile(GetFile event, Emitter<ApplyLeaveState> emit) async {

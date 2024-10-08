@@ -35,6 +35,10 @@ import 'package:school_of_future/features/presentation/forgot_password_1/bloc/fo
 import 'package:school_of_future/features/presentation/forgot_password_2/bloc/forgot_password2_bloc.dart';
 import 'package:school_of_future/features/presentation/forgot_password_2/view/step-2.dart';
 import 'package:school_of_future/features/presentation/forgot_password_1/view/step_1.dart';
+import 'package:school_of_future/features/presentation/leave/leave_details/bloc/leave_details_bloc.dart';
+import 'package:school_of_future/features/presentation/leave/leave_details/view/leave_details_screen.dart';
+import 'package:school_of_future/features/presentation/leave/parent_apply_leave/bloc/apply_leave_bloc.dart';
+import 'package:school_of_future/features/presentation/leave/parent_apply_leave/view/parent_apply_leave_screen.dart';
 import 'package:school_of_future/features/presentation/lesson_plan/attach_resource/bloc/attach_resource_bloc.dart';
 import 'package:school_of_future/features/presentation/lesson_plan/attach_resource/view/attach_resource_screen.dart';
 import 'package:school_of_future/features/presentation/lesson_plan/lesson_plan_create/bloc/lesson_plan_create_bloc.dart';
@@ -416,6 +420,27 @@ class AppRouter {
               ),
             ],
             child: const SyllabusCreateScreen(),
+          ),
+        );
+
+      case leaveDetailsScreen:
+        final leaveId = settings.arguments as int;
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (BuildContext context) => BlocProvider(
+            create: (context) => LeaveDetailsBloc(getIt<ApiRepo>(),
+                getIt<IFlutterNavigator>(), getIt<LocalStorageRepo>())
+              ..add(GetLeaveDetails(leaveId: leaveId)),
+            child: const LeaveDetailsScreen(),
+          ),
+        );
+      case parentApplyLeaveScreen:
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (BuildContext context) => BlocProvider(
+            create: (context) => ApplyLeaveBloc(getIt<ApiRepo>(),
+                getIt<IFlutterNavigator>(), getIt<FilePickerRepo>()),
+            child: const ParentApplyLeaveScreen(),
           ),
         );
 

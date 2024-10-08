@@ -1,9 +1,14 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:school_of_future/core/translations/local_keys.dart';
 import 'package:school_of_future/core/utils/colors.dart';
+import 'package:school_of_future/core/utils/enums.dart';
 import 'package:school_of_future/core/utils/text_styles.dart';
 import 'package:school_of_future/core/utils/utilities.dart';
+import 'package:school_of_future/core/widgets/app_bar.dart';
+import 'package:school_of_future/core/widgets/body.dart';
 import 'package:school_of_future/core/widgets/button.dart';
 import 'package:school_of_future/core/widgets/check_box.dart';
 import 'package:school_of_future/core/widgets/date_picker.dart';
@@ -11,10 +16,10 @@ import 'package:school_of_future/core/widgets/dropdown_field.dart';
 import 'package:school_of_future/core/widgets/grid_view_file_image.dart';
 import 'package:school_of_future/core/widgets/text.dart';
 import 'package:school_of_future/core/widgets/text_field.dart';
-import 'package:school_of_future/features/presentation/leave/apply_leave/bloc/apply_leave_bloc.dart';
+import 'package:school_of_future/features/presentation/leave/parent_apply_leave/bloc/apply_leave_bloc.dart';
 
-class ParentApplyLeave extends StatelessWidget {
-  const ParentApplyLeave({super.key});
+class ParentApplyLeaveScreen extends StatelessWidget {
+  const ParentApplyLeaveScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,40 +33,39 @@ class ParentApplyLeave extends StatelessWidget {
     final endController = TextEditingController();
     final descriptionController = TextEditingController();
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Apply for Leave'),
-        leading: ModalRoute.of(context)?.canPop == true
-            ? IconButton(
-                icon: const Icon(Icons.arrow_back),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              )
-            : null,
-      ),
-      endDrawer: const Drawer(),
-      body: BlocBuilder<ApplyLeaveBloc, ApplyLeaveState>(
-        builder: (context, state) {
-          final bloc = context.read<ApplyLeaveBloc>();
-          return Container(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
+    return BlocBuilder<ApplyLeaveBloc, ApplyLeaveState>(
+      builder: (context, state) {
+        final bloc = context.read<ApplyLeaveBloc>();
+        return Body(
+          isFullScreen: true,
+          appBar: FutureAppBar(
+            actions: const [SizedBox()],
+            title: LocaleKeys.leave.tr(),
+            isLoading: state.loading,
+          ),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 13),
             color: bInnerBg,
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   TextFieldB(
-                    fieldTitle: "Title",
-                    hintText: "Enter Title",
+                    isMandatory: true,
+                    fieldTitle: LocaleKeys.title.tr(),
+                    hintText: LocaleKeys.enterTitle.tr(),
+                    borderColor: bGray12,
                     focusNode: titleFocusnode,
                     controller: titleController,
-                    borderColor: bGray12,
-                    onChanged: (String title) {
-                      bloc.add(ChangeTitle(title: title));
+                    onChanged: (String value) {
+                      bloc.add(ChangeTitle(title: value));
                     },
+                    errorText:
+                        state.forms == Forms.invalid && state.title.isEmpty
+                            ? LocaleKeys.enterTitle.tr()
+                            : '',
                   ),
-                  const Gap(12),
+                  const Gap(10),
                   DropdownFieldB(
                     dropdownHeight: 55,
                     label: "Leave Type",
@@ -217,9 +221,9 @@ class ParentApplyLeave extends StatelessWidget {
                 ],
               ),
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }

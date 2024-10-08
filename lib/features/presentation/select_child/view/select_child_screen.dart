@@ -98,9 +98,7 @@ class SelectChildScreen extends StatelessWidget {
                                     border: Border.all(
                                         color: const Color(0XFFE0E0E0)),
                                   ),
-                                  child: NetworkImageB(
-                                      imageUrl: state
-                                          .childList.data![index].imageUrl!),
+                                  child: const NetworkImageB(imageUrl: ''),
                                 ),
                                 const Gap(15),
                                 Column(
@@ -113,7 +111,7 @@ class SelectChildScreen extends StatelessWidget {
                                     ),
                                     TextB(
                                       text:
-                                          "${state.childList.data![index].classRollNo!} | ${state.childList.data![index].batchName!}",
+                                          "${state.childList.data![index].classRollNo ?? ''} | ${state.childList.data![index].batchName!}",
                                       textStyle: bBase2,
                                       fontColor: bGray32,
                                     ),

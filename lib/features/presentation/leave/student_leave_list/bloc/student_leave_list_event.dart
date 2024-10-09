@@ -40,3 +40,14 @@ class SelectEndDate extends StudentLeaveListEvent {
 class PressFilter extends StudentLeaveListEvent {}
 
 class PageIncrement extends StudentLeaveListEvent {}
+
+class PressToDelEdit extends StudentLeaveListEvent {
+  const PressToDelEdit({required this.id, required this.type});
+  final int id;
+  final String type;
+}
+
+class DeleteLeave extends StudentLeaveListEvent {
+  const DeleteLeave({required this.id});
+  final int id;
+}

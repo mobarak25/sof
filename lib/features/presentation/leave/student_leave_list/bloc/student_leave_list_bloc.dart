@@ -5,10 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:school_of_future/core/navigator/iflutter_navigator.dart';
+import 'package:school_of_future/core/navigator/navigator_key.dart';
+import 'package:school_of_future/core/router/route_constents.dart';
+import 'package:school_of_future/core/snackbar/show_snackbar.dart';
 import 'package:school_of_future/core/utils/debounce.dart';
 import 'package:school_of_future/core/utils/utilities.dart';
+import 'package:school_of_future/core/widgets/confirm_delete_dialog.dart';
 import 'package:school_of_future/features/data/data_sources/local_db_keys.dart';
 import 'package:school_of_future/features/data/data_sources/remote_constants.dart';
+import 'package:school_of_future/features/domain/entities/default_response.dart';
 import 'package:school_of_future/features/domain/entities/student_leave_list_response.dart';
 import 'package:school_of_future/features/domain/repositories/api_repo.dart';
 import 'package:school_of_future/features/domain/repositories/local_storage_repo.dart';
@@ -26,9 +31,10 @@ class StudentLeaveListBloc
     on<GetSearchedLeave>(_getSearchedLeave);
     on<SelectStartDate>(_selectStartDate);
     on<SelectEndDate>(_selectEndDate);
-
     on<PressFilter>(_pressFilter);
     on<PageIncrement>(_pageIncrement);
+    on<PressToDelEdit>(_pressToDelEdit);
+    on<DeleteLeave>(_deleteLeave);
 
     add(DataForTab(tabIndex: state.activeTab));
   }
@@ -161,6 +167,32 @@ class StudentLeaveListBloc
       }
     } else if (!state.incrementLoader) {
       emit(state.copyWith(isEndList: true));
+    }
+  }
+
+  FutureOr<void> _pressToDelEdit(
+      PressToDelEdit event, Emitter<StudentLeaveListState> emit) {
+    if (event.type == "Delete") {
+      showConfirmDeleteDialog(_iFlutterNavigator.context, pressToYes: () {
+        add(DeleteLeave(id: event.id));
+      });
+    } else if (event.type == "Edit") {
+      Navigator.of(_iFlutterNavigator.context, rootNavigator: true)
+          .pushNamed(parentApplyLeaveScreen, arguments: event.id);
+    }
+  }
+
+  FutureOr<void> _deleteLeave(
+      DeleteLeave event, Emitter<StudentLeaveListState> emit) async {
+    final delete = await _apiRepo.post<DefaultResponse>(
+        endpoint: studentLeaveDtlsEndPoint(id: event.id),
+        body: {"_method": "delete"});
+
+    if (delete != null) {
+      _iFlutterNavigator.pop();
+      navigatorKey.currentState!
+          .pushNamedAndRemoveUntil(leaveListScreen, ModalRoute.withName('/'));
+      ShowSnackBar(message: delete.message!, navigator: _iFlutterNavigator);
     }
   }
 }

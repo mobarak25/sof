@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:school_of_future/core/translations/local_keys.dart';
+import 'package:school_of_future/core/utils/asset_image.dart';
 import 'package:school_of_future/core/utils/colors.dart';
 import 'package:school_of_future/core/utils/enums.dart';
 import 'package:school_of_future/core/utils/text_styles.dart';
@@ -12,8 +13,9 @@ import 'package:school_of_future/core/widgets/body.dart';
 import 'package:school_of_future/core/widgets/button.dart';
 import 'package:school_of_future/core/widgets/check_box.dart';
 import 'package:school_of_future/core/widgets/date_picker.dart';
+import 'package:school_of_future/core/widgets/dotted_button.dart';
 import 'package:school_of_future/core/widgets/dropdown_field.dart';
-import 'package:school_of_future/core/widgets/grid_view_file_image.dart';
+import 'package:school_of_future/core/widgets/show_file_name.dart';
 import 'package:school_of_future/core/widgets/text.dart';
 import 'package:school_of_future/core/widgets/text_field.dart';
 import 'package:school_of_future/features/presentation/leave/parent_apply_leave/bloc/apply_leave_bloc.dart';
@@ -36,6 +38,42 @@ class ParentApplyLeaveScreen extends StatelessWidget {
     return BlocBuilder<ApplyLeaveBloc, ApplyLeaveState>(
       builder: (context, state) {
         final bloc = context.read<ApplyLeaveBloc>();
+
+        if (state.isFirstTime) {
+          if (state.details.data != null &&
+              state.leaveList.data != null &&
+              state.leaveDropdown.length > 1) {
+            final data = state.details.data!;
+
+            bloc.add(AddData(
+              title: data.title!,
+              startDate: data.startDate!,
+              endDate: data.endDate!,
+              desc: data.reason!,
+              selectedType: data.leaveTypeId,
+              isHalfDay: data.isHalfDay == 1 ? true : false,
+            ));
+          } else if (state.details.data == null &&
+              state.leaveDropdown.length == 1 &&
+              state.leaveId != -1) {
+            return Body(
+              isFullScreen: true,
+              appBar: FutureAppBar(
+                actions: const [SizedBox()],
+                title: LocaleKeys.leave.tr(),
+                isLoading: state.loading,
+              ),
+              child: const Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          }
+        }
+
+        titleController.text = state.title;
+        startController.text = state.startDate;
+        endController.text = state.endDate;
+        descriptionController.text = state.description;
         return Body(
           isFullScreen: true,
           appBar: FutureAppBar(
@@ -68,16 +106,19 @@ class ParentApplyLeaveScreen extends StatelessWidget {
                   const Gap(10),
                   DropdownFieldB(
                     dropdownHeight: 55,
-                    label: "Leave Type",
+                    label: LocaleKeys.leaveType.tr(),
                     dropDownValue: state.leaveType,
                     selected: (dynamic type) {
                       bloc.add(SelectLeaveType(value: type));
                     },
-                    items: const [
-                      DropdownItem(name: "Sick leave", value: 0),
-                      DropdownItem(name: "Casual leave", value: 1),
-                    ],
+                    items: state.leaveDropdown,
                   ),
+                  if (state.forms == Forms.invalid && state.leaveType == -1)
+                    TextB(
+                      text: LocaleKeys.selectLeaveType.tr(),
+                      textStyle: bBase2,
+                      fontColor: bRed,
+                    ),
                   const Gap(12),
                   TextFieldB(
                     fieldTitle: "Start Date",
@@ -106,10 +147,10 @@ class ParentApplyLeaveScreen extends StatelessWidget {
                         },
                       );
                     },
-                    // errorText:
-                    //     state.forms == Forms.invalid && state.dateFrom.isEmpty
-                    //         ? 'Select date from'
-                    //         : '',
+                    errorText:
+                        state.forms == Forms.invalid && state.startDate.isEmpty
+                            ? LocaleKeys.noStartDate.tr()
+                            : '',
                   ),
                   const Gap(12),
                   TextFieldB(
@@ -142,17 +183,17 @@ class ParentApplyLeaveScreen extends StatelessWidget {
                         },
                       );
                     },
-                    // errorText:
-                    //     state.forms == Forms.invalid && state.dateTo.isEmpty
-                    //         ? 'Select date to'
-                    //         : '',
+                    errorText:
+                        state.forms == Forms.invalid && state.endDate.isEmpty
+                            ? LocaleKeys.noEndDate.tr()
+                            : '',
                   ),
                   if (state.tempDateCount > 0)
                     TextB(
                       text:
                           "${state.tempDateCount.plural('day')} you have selected for leave",
                       textStyle: bBody2,
-                      fontColor: bGray100,
+                      fontColor: kSecondaryColor,
                     ),
                   if (state.dateCount < 0)
                     const TextB(
@@ -161,12 +202,28 @@ class ParentApplyLeaveScreen extends StatelessWidget {
                       fontColor: bRed,
                     ),
                   const Gap(12),
-                  CheckboxB(
-                    label: "Half Day Leave",
-                    press: (bool value) {
-                      bloc.add(GetIsHalfDay(isHalfDay: value));
+                  // CheckboxB(
+                  //   label: "Half Day Leave",
+                  //   fontColor: bGray100,
+                  //   fontSize: 16,
+                  //   press: (bool value) {
+                  //     print(value);
+                  //     bloc.add(GetIsHalfDay(isHalfDay: value));
+                  //   },
+                  //   defaultValue: state.isHalfDay,
+                  // ),
+                  CheckboxListTile(
+                    contentPadding: EdgeInsets.zero,
+                    visualDensity: VisualDensity.compact,
+                    controlAffinity: ListTileControlAffinity.leading,
+                    title: const TextB(
+                      text: "Half Day Leave",
+                      fontSize: 16,
+                    ),
+                    value: state.isHalfDay,
+                    onChanged: (bool? value) {
+                      bloc.add(GetIsHalfDay(isHalfDay: value!));
                     },
-                    defaultValue: state.isHalfDay,
                   ),
                   const Gap(20),
                   TextFieldB(
@@ -179,21 +236,36 @@ class ParentApplyLeaveScreen extends StatelessWidget {
                     onChanged: (String desc) {
                       bloc.add(ChangeDescription(desc: desc));
                     },
+                    errorText: state.forms == Forms.invalid &&
+                            state.description.isEmpty
+                        ? LocaleKeys.enterDescription.tr()
+                        : '',
                   ),
-                  const Gap(30),
-                  ButtonB(
-                    heigh: 55,
-                    text: "Attach",
+                  const Gap(20),
+                  Column(
+                    children: [
+                      const Gap(15),
+                      ShowFileName(
+                        selectedFile: state.fileList,
+                        press: (int index) {
+                          bloc.add(RemoveFile(index: index));
+                        },
+                      ),
+                    ],
+                  ),
+                  const Gap(10),
+                  DottedButtonB(
+                    title: LocaleKeys.attachment.tr(),
+                    verticalPadding: 20,
+                    bgColor: kPrimaryColor,
+                    borderColor: kPrimaryColor,
+                    textColor: bWhite,
+                    svgIcon: fileAttachSvg,
+                    svgColor: bWhite,
+                    svgHeight: 30,
                     press: () {
-                      //bloc.add(OpenBottomSheet());
                       bloc.add(GetFile());
                     },
-                    iconPosition: "left",
-                    svgIcon: "assets/images/file_attach_icon.svg",
-                  ),
-                  GridViewFileImageB(
-                    crossAxisCount: 6,
-                    images: state.leaveFile,
                   ),
                   const Gap(30),
                   Row(
@@ -202,7 +274,14 @@ class ParentApplyLeaveScreen extends StatelessWidget {
                         child: ButtonB(
                           heigh: 55,
                           text: "Apply",
-                          press: () {},
+                          press: () {
+                            bloc.add(PressToApply(
+                              titleFocusnode: titleFocusnode,
+                              startFocusnode: startDateFocusnode,
+                              endFocusnode: endDateFocusnode,
+                              descFocusnode: descriptionFocusnode,
+                            ));
+                          },
                         ),
                       ),
                       const Gap(15),

@@ -14,6 +14,7 @@ import 'package:school_of_future/features/domain/entities/entity_map/student_lea
 import 'package:school_of_future/features/domain/entities/entity_map/syllabus_details_response.dart';
 import 'package:school_of_future/features/domain/entities/full_syllabus_teacher_response.dart';
 import 'package:school_of_future/features/domain/entities/get_batch_as_section_response.dart';
+import 'package:school_of_future/features/domain/entities/leave_types_response.dart';
 import 'package:school_of_future/features/domain/entities/lesson_plan_details_response.dart';
 import 'package:school_of_future/features/domain/entities/lesson_plan_list_response.dart';
 import 'package:school_of_future/features/domain/entities/login_response.dart';
@@ -110,6 +111,8 @@ class EntityMap {
         return StudentLeaveList.fromJson(json) as T;
       case const (StudentLeaveLDetails):
         return StudentLeaveLDetails.fromJson(json) as T;
+      case const (LeaveTypes):
+        return LeaveTypes.fromJson(json) as T;
 
       default:
         throw Exception('Unknown class');

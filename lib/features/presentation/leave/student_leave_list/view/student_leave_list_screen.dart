@@ -168,6 +168,7 @@ class StudentLeaveListScreen extends StatelessWidget {
                                       children: [
                                         LeaveItemView(
                                           data: dataItem,
+                                          userType: state.userType,
                                           press: () {
                                             Navigator.of(context,
                                                     rootNavigator: true)
@@ -175,6 +176,11 @@ class StudentLeaveListScreen extends StatelessWidget {
                                               leaveDetailsScreen,
                                               arguments: dataItem.id,
                                             );
+                                          },
+                                          prssToEditDel:
+                                              (String pressTo, int id) {
+                                            bloc.add(PressToDelEdit(
+                                                type: pressTo, id: id));
                                           },
                                         ),
                                         const Gap(15),

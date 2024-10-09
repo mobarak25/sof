@@ -94,5 +94,10 @@ String studentQuizClassTestSyllabusEndPoint({required String sId}) =>
     "${version1}syllabus/syllabus-student/$sId";
 String studentLeaveListEndPoint({required String sId}) =>
     "${version1}student-leave/student-leave-application-list/$sId";
+
+String studentLeaveEndPoint = "${version1}student-leave";
+
 String studentLeaveDtlsEndPoint({required int id}) =>
     "${version1}student-leave/$id";
+
+String studentLeaveTypeEndPoint = "${version1}student-leave/leave-type";

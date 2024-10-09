@@ -33,7 +33,7 @@ class Data {
   final Ent? parent;
   final LeaveType? leaveType;
   final Teacher? teacher;
-  final List<String>? attachments;
+  final List<Attachment>? attachments;
   final Batch? batch;
 
   Data({
@@ -81,7 +81,8 @@ class Data {
             json["teacher"] == null ? null : Teacher.fromJson(json["teacher"]),
         attachments: json["attachments"] == null
             ? []
-            : List<String>.from(json["attachments"]!.map((x) => x)),
+            : List<Attachment>.from(
+                json["attachments"]!.map((x) => Attachment.fromJson(x))),
         batch: json["batch"] == null ? null : Batch.fromJson(json["batch"]),
       );
 
@@ -105,8 +106,36 @@ class Data {
         "teacher": teacher?.toJson(),
         "attachments": attachments == null
             ? []
-            : List<dynamic>.from(attachments!.map((x) => x)),
+            : List<dynamic>.from(attachments!.map((x) => x.toJson())),
         "batch": batch?.toJson(),
+      };
+}
+
+class Attachment {
+  final int? id;
+  final int? studentLeavesId;
+  final String? url;
+  final String? type;
+
+  Attachment({
+    this.id,
+    this.studentLeavesId,
+    this.url,
+    this.type,
+  });
+
+  factory Attachment.fromJson(Map<String, dynamic> json) => Attachment(
+        id: json["id"],
+        studentLeavesId: json["student_leaves_id"],
+        url: json["url"],
+        type: json["type"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "student_leaves_id": studentLeavesId,
+        "url": url,
+        "type": type,
       };
 }
 

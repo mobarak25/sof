@@ -2,10 +2,13 @@ part of 'apply_leave_bloc.dart';
 
 class ApplyLeaveState extends Equatable {
   const ApplyLeaveState({
+    this.leaveId = -1,
+    this.loginId = '',
     this.loading = false,
+    this.isFirstTime = true,
     this.forms = Forms.initial,
     this.title = '',
-    this.leaveType = 0,
+    this.leaveType = -1,
     this.startDate = '',
     this.endDate = '',
     this.dateCount = 0,
@@ -14,9 +17,15 @@ class ApplyLeaveState extends Equatable {
     this.description = '',
     this.leaveFile = const [],
     this.fileList = const [],
+    this.leaveList = const LeaveTypes(),
+    this.leaveDropdown = const [DropdownItem(name: "Select", value: -1)],
+    this.details = const StudentLeaveLDetails(),
   });
 
+  final int leaveId;
+  final String loginId;
   final bool loading;
+  final bool isFirstTime;
   final Forms forms;
   final String title;
   final dynamic leaveType;
@@ -28,9 +37,15 @@ class ApplyLeaveState extends Equatable {
   final String description;
   final List<ImageFile> leaveFile;
   final List<File> fileList;
+  final LeaveTypes leaveList;
+  final List<DropdownItem> leaveDropdown;
+  final StudentLeaveLDetails details;
 
   ApplyLeaveState copyWith({
+    int? leaveId,
+    String? loginId,
     bool? loading,
+    bool? isFirstTime,
     Forms? forms,
     String? title,
     dynamic leaveType,
@@ -42,9 +57,15 @@ class ApplyLeaveState extends Equatable {
     String? description,
     List<ImageFile>? leaveFile,
     List<File>? fileList,
+    LeaveTypes? leaveList,
+    List<DropdownItem>? leaveDropdown,
+    StudentLeaveLDetails? details,
   }) {
     return ApplyLeaveState(
+      leaveId: leaveId ?? this.leaveId,
+      loginId: loginId ?? this.loginId,
       loading: loading ?? this.loading,
+      isFirstTime: isFirstTime ?? this.isFirstTime,
       forms: forms ?? this.forms,
       title: title ?? this.title,
       leaveType: leaveType ?? this.leaveType,
@@ -56,12 +77,18 @@ class ApplyLeaveState extends Equatable {
       description: description ?? this.description,
       leaveFile: leaveFile ?? this.leaveFile,
       fileList: fileList ?? this.fileList,
+      leaveList: leaveList ?? this.leaveList,
+      leaveDropdown: leaveDropdown ?? this.leaveDropdown,
+      details: details ?? this.details,
     );
   }
 
   @override
   List<Object> get props => [
+        leaveId,
+        loginId,
         loading,
+        isFirstTime,
         forms,
         title,
         leaveType,
@@ -73,6 +100,9 @@ class ApplyLeaveState extends Equatable {
         description,
         leaveFile,
         fileList,
+        leaveList,
+        leaveDropdown,
+        details,
       ];
 }
 

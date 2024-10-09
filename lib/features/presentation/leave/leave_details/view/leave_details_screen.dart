@@ -157,7 +157,7 @@ class LeaveDetailsScreen extends StatelessWidget {
                           DetailDescription(
                             description: state.details.data!.reason!,
                             attachments: state.details.data!.attachments!
-                                .map((e) => e)
+                                .map((e) => e.url)
                                 .toList(),
                           ),
                           const Gap(20),

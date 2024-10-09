@@ -413,4 +413,6 @@ abstract class LocaleKeys {
   static const emergency = 'Emergency';
   static const videoLink = 'Video link';
   static const pleaseSelectAtLeastOneFile = 'please select at least one file';
+  static const leaveType = 'Leave type';
+  static const selectLeaveType = 'Select leave type';
 }

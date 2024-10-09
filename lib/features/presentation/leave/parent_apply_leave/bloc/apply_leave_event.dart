@@ -7,6 +7,13 @@ sealed class ApplyLeaveEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class LeaveIdForEdit extends ApplyLeaveEvent {
+  const LeaveIdForEdit({required this.leaveId});
+  final int leaveId;
+}
+
+class GetLeaveType extends ApplyLeaveEvent {}
+
 class ChangeTitle extends ApplyLeaveEvent {
   const ChangeTitle({required this.title});
   final String title;
@@ -47,11 +54,40 @@ class ChangeDescription extends ApplyLeaveEvent {
   final String desc;
 }
 
-class OpenBottomSheet extends ApplyLeaveEvent {}
+class GetFile extends ApplyLeaveEvent {}
 
-class PickImage extends ApplyLeaveEvent {
-  const PickImage({required this.imageSource});
-  final ImageSource imageSource;
+class RemoveFile extends ApplyLeaveEvent {
+  const RemoveFile({required this.index});
+  final int index;
 }
 
-class GetFile extends ApplyLeaveEvent {}
+class PressToApply extends ApplyLeaveEvent {
+  const PressToApply({
+    required this.startFocusnode,
+    required this.endFocusnode,
+    required this.descFocusnode,
+    required this.titleFocusnode,
+  });
+
+  final FocusNode startFocusnode;
+  final FocusNode endFocusnode;
+  final FocusNode descFocusnode;
+  final FocusNode titleFocusnode;
+}
+
+class AddData extends ApplyLeaveEvent {
+  const AddData({
+    required this.title,
+    required this.startDate,
+    required this.endDate,
+    required this.desc,
+    required this.selectedType,
+    required this.isHalfDay,
+  });
+  final String title;
+  final String startDate;
+  final String endDate;
+  final String desc;
+  final dynamic selectedType;
+  final bool isHalfDay;
+}

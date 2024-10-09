@@ -435,11 +435,16 @@ class AppRouter {
           ),
         );
       case parentApplyLeaveScreen:
+        final leaveId = settings.arguments as int;
         return MaterialPageRoute(
           settings: settings,
           builder: (BuildContext context) => BlocProvider(
-            create: (context) => ApplyLeaveBloc(getIt<ApiRepo>(),
-                getIt<IFlutterNavigator>(), getIt<FilePickerRepo>()),
+            create: (context) => ApplyLeaveBloc(
+                getIt<ApiRepo>(),
+                getIt<IFlutterNavigator>(),
+                getIt<LocalStorageRepo>(),
+                getIt<FilePickerRepo>())
+              ..add(LeaveIdForEdit(leaveId: leaveId)),
             child: const ParentApplyLeaveScreen(),
           ),
         );

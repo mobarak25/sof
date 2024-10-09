@@ -16,6 +16,7 @@ import 'package:school_of_future/core/widgets/custom_tab.dart';
 import 'package:school_of_future/core/widgets/text_field.dart';
 import 'package:school_of_future/features/presentation/leave/student_leave_list/bloc/student_leave_list_bloc.dart';
 import 'package:school_of_future/features/presentation/leave/student_leave_list/widgets/leave_item.dart';
+import 'package:school_of_future/features/presentation/leave/student_leave_list/widgets/leave_item_for_teacher.dart';
 
 class StudentLeaveListScreen extends StatelessWidget {
   const StudentLeaveListScreen({super.key});
@@ -159,34 +160,55 @@ class StudentLeaveListScreen extends StatelessWidget {
                               child: ListView(
                                 controller: scroll,
                                 children: [
-                                  ...List.generate(state.leaveList.data!.length,
-                                      (position) {
-                                    final dataItem =
-                                        state.leaveList.data![position];
-                                    return Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        LeaveItemView(
-                                          data: dataItem,
-                                          userType: state.userType,
-                                          press: () {
-                                            Navigator.of(context,
-                                                    rootNavigator: true)
-                                                .pushNamed(
-                                              leaveDetailsScreen,
-                                              arguments: dataItem.id,
-                                            );
-                                          },
-                                          prssToEditDel:
-                                              (String pressTo, int id) {
-                                            bloc.add(PressToDelEdit(
-                                                type: pressTo, id: id));
-                                          },
-                                        ),
-                                        const Gap(15),
-                                      ],
-                                    );
-                                  }),
+                                  ...List.generate(
+                                    state.leaveList.data!.length,
+                                    (position) {
+                                      final dataItem =
+                                          state.leaveList.data![position];
+                                      return Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          if (state.isTeacher)
+                                            LeaveItemForTeacher(
+                                              data: state
+                                                  .leaveList.data![position],
+                                              press: () {
+                                                Navigator.of(context,
+                                                        rootNavigator: true)
+                                                    .pushNamed(
+                                                  leaveDetailsScreen,
+                                                  arguments: dataItem.id,
+                                                );
+                                              },
+                                              updateStatus: (String type) {
+                                                bloc.add(UpdateStatus(
+                                                    id: dataItem.id!,
+                                                    type: type));
+                                              },
+                                            ),
+                                          if (!state.isTeacher)
+                                            LeaveItemView(
+                                              data: dataItem,
+                                              userType: state.userType,
+                                              press: () {
+                                                Navigator.of(context,
+                                                        rootNavigator: true)
+                                                    .pushNamed(
+                                                  leaveDetailsScreen,
+                                                  arguments: dataItem.id,
+                                                );
+                                              },
+                                              prssToEditDel:
+                                                  (String pressTo, int id) {
+                                                bloc.add(PressToDelEdit(
+                                                    type: pressTo, id: id));
+                                              },
+                                            ),
+                                          const Gap(15),
+                                        ],
+                                      );
+                                    },
+                                  ),
                                   if (state.leaveList.data!.isEmpty)
                                     TextB(
                                       text: LocaleKeys.noResultFound.tr(),

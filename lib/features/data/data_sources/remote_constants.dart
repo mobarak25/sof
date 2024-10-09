@@ -101,3 +101,5 @@ String studentLeaveDtlsEndPoint({required int id}) =>
     "${version1}student-leave/$id";
 
 String studentLeaveTypeEndPoint = "${version1}student-leave/leave-type";
+String studentLeaveUpdateEndPoint({required String status, required int id}) =>
+    "${version1}student-leave/action/$id/$status";

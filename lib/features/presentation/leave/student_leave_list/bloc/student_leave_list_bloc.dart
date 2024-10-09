@@ -17,6 +17,9 @@ import 'package:school_of_future/features/domain/entities/default_response.dart'
 import 'package:school_of_future/features/domain/entities/student_leave_list_response.dart';
 import 'package:school_of_future/features/domain/repositories/api_repo.dart';
 import 'package:school_of_future/features/domain/repositories/local_storage_repo.dart';
+import 'package:school_of_future/features/domain/usecases/local_data.dart';
+import 'package:school_of_future/features/presentation/leave/student_leave_list/widgets/accept_dialog.dart';
+import 'package:school_of_future/features/presentation/leave/student_leave_list/widgets/reject_bottom_sheet.dart';
 
 part 'student_leave_list_event.dart';
 part 'student_leave_list_state.dart';
@@ -35,6 +38,8 @@ class StudentLeaveListBloc
     on<PageIncrement>(_pageIncrement);
     on<PressToDelEdit>(_pressToDelEdit);
     on<DeleteLeave>(_deleteLeave);
+    on<UpdateStatus>(_updateStatus);
+    on<ConfirmUpdateStatus>(_confirmUpdateStatus);
 
     add(DataForTab(tabIndex: state.activeTab));
   }
@@ -46,9 +51,15 @@ class StudentLeaveListBloc
   FutureOr<void> _dataForTab(
       DataForTab event, Emitter<StudentLeaveListState> emit) async {
     final usertype = _localStorageRepo.read(key: userTypeDB);
+    final isTeacher =
+        await LocalData.isTeacher(localStorageRepo: _localStorageRepo);
 
     emit(state.copyWith(
-        page: 1, userType: usertype, loading: true, isEndList: false));
+        page: 1,
+        userType: usertype,
+        loading: true,
+        isTeacher: isTeacher,
+        isEndList: false));
 
     if (event.tabIndex == '0') {
       emit(state.copyWith(activeTab: '1', loading: true));
@@ -69,7 +80,9 @@ class StudentLeaveListBloc
     final sId = _localStorageRepo.read(key: loginIdDB)!;
 
     final leaves = await _apiRepo.get<StudentLeaveList>(
-      endpoint: buildUrl(studentLeaveListEndPoint(sId: sId), queryParams),
+      endpoint: state.isTeacher
+          ? buildUrl(studentLeaveEndPoint, queryParams)
+          : buildUrl(studentLeaveListEndPoint(sId: sId), queryParams),
     );
 
     if (leaves != null) {
@@ -120,7 +133,9 @@ class StudentLeaveListBloc
     final sId = _localStorageRepo.read(key: loginIdDB)!;
 
     final searchLeave = await _apiRepo.get<StudentLeaveList>(
-      endpoint: buildUrl(studentLeaveListEndPoint(sId: sId), queryParams),
+      endpoint: state.isTeacher
+          ? buildUrl(studentLeaveEndPoint, queryParams)
+          : buildUrl(studentLeaveListEndPoint(sId: sId), queryParams),
     );
 
     if (searchLeave != null) {
@@ -152,7 +167,9 @@ class StudentLeaveListBloc
         final sId = _localStorageRepo.read(key: loginIdDB)!;
 
         final pagiLeave = await _apiRepo.get<StudentLeaveList>(
-          endpoint: buildUrl(studentLeaveListEndPoint(sId: sId), queryParams),
+          endpoint: state.isTeacher
+              ? buildUrl(studentLeaveEndPoint, queryParams)
+              : buildUrl(studentLeaveListEndPoint(sId: sId), queryParams),
         );
 
         emit(state.copyWith(page: totalPage, incrementLoader: false));
@@ -193,6 +210,41 @@ class StudentLeaveListBloc
       navigatorKey.currentState!
           .pushNamedAndRemoveUntil(leaveListScreen, ModalRoute.withName('/'));
       ShowSnackBar(message: delete.message!, navigator: _iFlutterNavigator);
+    }
+  }
+
+  FutureOr<void> _updateStatus(
+      UpdateStatus event, Emitter<StudentLeaveListState> emit) {
+    if (event.type == "accept") {
+      showAcceptDialog(_iFlutterNavigator.context, pressToYes: () {
+        add(ConfirmUpdateStatus(id: event.id, type: event.type, reason: ''));
+      });
+    } else {
+      openLeaveRejectSheet(
+        _iFlutterNavigator.context,
+        press: (String reason) {
+          add(ConfirmUpdateStatus(
+              id: event.id, type: event.type, reason: reason));
+        },
+      );
+    }
+  }
+
+  FutureOr<void> _confirmUpdateStatus(
+      ConfirmUpdateStatus event, Emitter<StudentLeaveListState> emit) async {
+    final accept = await _apiRepo.post<DefaultResponse>(
+      endpoint: studentLeaveUpdateEndPoint(status: event.type, id: event.id),
+      body: {
+        "rejection_reason": "PUT",
+        "_method": "PUT",
+      },
+    );
+
+    if (accept != null) {
+      _iFlutterNavigator.pop();
+      navigatorKey.currentState!
+          .pushNamedAndRemoveUntil(leaveListScreen, ModalRoute.withName('/'));
+      ShowSnackBar(message: accept.message!, navigator: _iFlutterNavigator);
     }
   }
 }

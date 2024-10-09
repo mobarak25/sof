@@ -180,6 +180,7 @@ class Ent {
   final String? firstName;
   final dynamic middleName;
   final dynamic lastName;
+  final dynamic imageUrl;
   final String? fullName;
 
   const Ent({
@@ -187,6 +188,7 @@ class Ent {
     this.firstName,
     this.middleName,
     this.lastName,
+    this.imageUrl,
     this.fullName,
   });
 
@@ -195,6 +197,7 @@ class Ent {
         firstName: json["first_name"],
         middleName: json["middle_name"],
         lastName: json["last_name"],
+        imageUrl: json["image_url"],
         fullName: json["full_name"],
       );
 
@@ -203,6 +206,7 @@ class Ent {
         "first_name": firstName,
         "middle_name": middleName,
         "last_name": lastName,
+        "image_url": imageUrl,
         "full_name": fullName,
       };
 }

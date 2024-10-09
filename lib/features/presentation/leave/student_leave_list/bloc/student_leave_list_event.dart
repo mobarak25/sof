@@ -51,3 +51,16 @@ class DeleteLeave extends StudentLeaveListEvent {
   const DeleteLeave({required this.id});
   final int id;
 }
+
+class UpdateStatus extends StudentLeaveListEvent {
+  const UpdateStatus({required this.id, required this.type});
+  final int id;
+  final String type;
+}
+
+class ConfirmUpdateStatus extends StudentLeaveListEvent {
+  const ConfirmUpdateStatus(
+      {required this.id, required this.type, required this.reason});
+  final int id;
+  final String type, reason;
+}

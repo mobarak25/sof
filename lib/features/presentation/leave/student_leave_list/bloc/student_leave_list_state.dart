@@ -4,6 +4,7 @@ class StudentLeaveListState extends Equatable {
   const StudentLeaveListState({
     this.page = 1,
     this.loading = false,
+    this.isTeacher = false,
     this.isFirst = true,
     this.isEndList = false,
     this.incrementLoader = false,
@@ -18,6 +19,7 @@ class StudentLeaveListState extends Equatable {
 
   final int page;
   final bool loading;
+  final bool isTeacher;
   final bool isFirst;
   final bool isEndList;
   final int subjectId;
@@ -32,6 +34,7 @@ class StudentLeaveListState extends Equatable {
   StudentLeaveListState copyWith({
     int? page,
     bool? loading,
+    bool? isTeacher,
     bool? isFirst,
     bool? isEndList,
     bool? incrementLoader,
@@ -46,6 +49,7 @@ class StudentLeaveListState extends Equatable {
     return StudentLeaveListState(
       page: page ?? this.page,
       loading: loading ?? this.loading,
+      isTeacher: isTeacher ?? this.isTeacher,
       isFirst: isFirst ?? this.isFirst,
       isEndList: isEndList ?? this.isEndList,
       incrementLoader: incrementLoader ?? this.incrementLoader,
@@ -63,6 +67,7 @@ class StudentLeaveListState extends Equatable {
   List<Object> get props => [
         page,
         loading,
+        isTeacher,
         isFirst,
         isEndList,
         incrementLoader,

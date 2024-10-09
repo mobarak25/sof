@@ -1,8 +1,12 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:gap/gap.dart';
 import 'package:school_of_future/core/navigator/navigator_key.dart';
 import 'package:school_of_future/core/router/route_constents.dart';
 import 'package:school_of_future/core/translations/local_keys.dart';
+import 'package:school_of_future/core/utils/colors.dart';
+import 'package:school_of_future/core/widgets/text.dart';
 import 'package:school_of_future/features/presentation/app_dashboard/dashboard/widgets/feature_item.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
@@ -50,14 +54,61 @@ class TeacherMenus extends StatelessWidget {
                 classworkListScreen, ModalRoute.withName('/'));
           },
         ),
-        FeatureItem(
-          iconName: "assets/images/feature_icons_svg/ic_leave.svg",
-          title: context.tr(LocaleKeys.leave),
-          press: () {
-            panelController.close();
-            navigatorKey.currentState!.pushNamedAndRemoveUntil(
-                leaveListScreen, ModalRoute.withName('/'));
-          },
+        // FeatureItem(
+        //   iconName: "assets/images/feature_icons_svg/ic_leave.svg",
+        //   title: context.tr(LocaleKeys.leave),
+        //   press: () {
+        //     panelController.close();
+        //     navigatorKey.currentState!.pushNamedAndRemoveUntil(
+        //         leaveListScreen, ModalRoute.withName('/'));
+        //   },
+        // ),
+        Column(
+          children: [
+            SizedBox(
+              width: 60,
+              height: 60,
+              child: PopupMenuButton(
+                child: Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: bWhite,
+                    borderRadius: BorderRadius.circular(5),
+                    border:
+                        Border.all(color: kTextDefaultColor.withOpacity(0.12)),
+                  ),
+                  child: SvgPicture.asset(
+                    'assets/images/feature_icons_svg/ic_leave.svg',
+                    colorFilter: ColorFilter.mode(
+                      kTextDefaultColor.withOpacity(0.52),
+                      BlendMode.srcIn,
+                    ),
+                  ),
+                ),
+                itemBuilder: (context) {
+                  return ["Own", "Student"].map((action) {
+                    return PopupMenuItem(
+                      value: action,
+                      child: Text(action),
+                    );
+                  }).toList();
+                },
+                onSelected: (String value) {
+                  if (value == "Student") {
+                    panelController.close();
+                    navigatorKey.currentState!.pushNamedAndRemoveUntil(
+                        leaveListScreen, ModalRoute.withName('/'));
+                  }
+                },
+              ),
+            ),
+            const Gap(5),
+            TextB(
+              text: context.tr(LocaleKeys.leave),
+              fontSize: 10,
+              fontColor: kMenuTextColor,
+            ),
+          ],
         ),
         FeatureItem(
           iconName: "assets/images/feature_icons_svg/ic_resource.svg",

@@ -11,33 +11,30 @@ import 'package:school_of_future/core/utils/utilities.dart';
 import 'package:school_of_future/core/widgets/app_bar.dart';
 import 'package:school_of_future/core/widgets/body.dart';
 import 'package:school_of_future/core/widgets/button.dart';
-import 'package:school_of_future/core/widgets/check_box.dart';
 import 'package:school_of_future/core/widgets/date_picker.dart';
 import 'package:school_of_future/core/widgets/dotted_button.dart';
 import 'package:school_of_future/core/widgets/dropdown_field.dart';
 import 'package:school_of_future/core/widgets/show_file_name.dart';
 import 'package:school_of_future/core/widgets/text.dart';
 import 'package:school_of_future/core/widgets/text_field.dart';
-import 'package:school_of_future/features/presentation/leave/parent_apply_leave/bloc/apply_leave_bloc.dart';
+import 'package:school_of_future/features/presentation/leave/teacher_apply_leave/bloc/teacher_apply_leave_bloc.dart';
 
-class ParentApplyLeaveScreen extends StatelessWidget {
-  const ParentApplyLeaveScreen({super.key});
+class TeacherApplyLeaveScreen extends StatelessWidget {
+  const TeacherApplyLeaveScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final titleFocusnode = FocusNode();
     final startDateFocusnode = FocusNode();
     final endDateFocusnode = FocusNode();
     final descriptionFocusnode = FocusNode();
 
-    final titleController = TextEditingController();
     final startController = TextEditingController();
     final endController = TextEditingController();
     final descriptionController = TextEditingController();
 
-    return BlocBuilder<ApplyLeaveBloc, ApplyLeaveState>(
+    return BlocBuilder<TeacherApplyLeaveBloc, TeacherApplyLeaveState>(
       builder: (context, state) {
-        final bloc = context.read<ApplyLeaveBloc>();
+        final bloc = context.read<TeacherApplyLeaveBloc>();
 
         if (state.isFirstTime) {
           if (state.details.data != null &&
@@ -46,12 +43,12 @@ class ParentApplyLeaveScreen extends StatelessWidget {
             final data = state.details.data!;
 
             bloc.add(AddData(
-              title: data.title!,
-              startDate: data.startDate!,
-              endDate: data.endDate!,
-              desc: data.reason!,
+              startDate: data.fromDate!,
+              endDate: data.toDate!,
+              desc: data.comment!,
               selectedType: data.leaveTypeId,
-              isHalfDay: data.isHalfDay == 1 ? true : false,
+              isHalfDay: data.applicationType == 2 ? true : false,
+              isEmergency: data.isEmergency == 1 ? true : false,
             ));
           } else if ((state.details.data == null ||
                   state.leaveList.data == null) &&
@@ -71,7 +68,6 @@ class ParentApplyLeaveScreen extends StatelessWidget {
           }
         }
 
-        titleController.text = state.title;
         startController.text = state.startDate;
         endController.text = state.endDate;
         descriptionController.text = state.description;
@@ -89,22 +85,6 @@ class ParentApplyLeaveScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  TextFieldB(
-                    isMandatory: true,
-                    fieldTitle: LocaleKeys.title.tr(),
-                    hintText: LocaleKeys.enterTitle.tr(),
-                    borderColor: bGray12,
-                    focusNode: titleFocusnode,
-                    controller: titleController,
-                    onChanged: (String value) {
-                      bloc.add(ChangeTitle(title: value));
-                    },
-                    errorText:
-                        state.forms == Forms.invalid && state.title.isEmpty
-                            ? LocaleKeys.enterTitle.tr()
-                            : '',
-                  ),
-                  const Gap(10),
                   DropdownFieldB(
                     dropdownHeight: 55,
                     label: LocaleKeys.leaveType.tr(),
@@ -203,16 +183,6 @@ class ParentApplyLeaveScreen extends StatelessWidget {
                       fontColor: bRed,
                     ),
                   const Gap(12),
-                  // CheckboxB(
-                  //   label: "Half Day Leave",
-                  //   fontColor: bGray100,
-                  //   fontSize: 16,
-                  //   press: (bool value) {
-                  //     print(value);
-                  //     bloc.add(GetIsHalfDay(isHalfDay: value));
-                  //   },
-                  //   defaultValue: state.isHalfDay,
-                  // ),
                   CheckboxListTile(
                     contentPadding: EdgeInsets.zero,
                     visualDensity: VisualDensity.compact,
@@ -224,6 +194,19 @@ class ParentApplyLeaveScreen extends StatelessWidget {
                     value: state.isHalfDay,
                     onChanged: (bool? value) {
                       bloc.add(GetIsHalfDay(isHalfDay: value!));
+                    },
+                  ),
+                  CheckboxListTile(
+                    contentPadding: EdgeInsets.zero,
+                    visualDensity: VisualDensity.compact,
+                    controlAffinity: ListTileControlAffinity.leading,
+                    title: TextB(
+                      text: LocaleKeys.isEmergency.tr(),
+                      fontSize: 16,
+                    ),
+                    value: state.isEmergency,
+                    onChanged: (bool? value) {
+                      bloc.add(GetIsEmergency(isEmergency: value!));
                     },
                   ),
                   const Gap(20),
@@ -277,7 +260,6 @@ class ParentApplyLeaveScreen extends StatelessWidget {
                           text: "Apply",
                           press: () {
                             bloc.add(PressToApply(
-                              titleFocusnode: titleFocusnode,
                               startFocusnode: startDateFocusnode,
                               endFocusnode: endDateFocusnode,
                               descFocusnode: descriptionFocusnode,

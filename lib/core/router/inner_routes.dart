@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:school_of_future/core/file_picker/file_picker_service.dart';
 import 'package:school_of_future/core/ioc/global.dart';
 import 'package:school_of_future/core/navigator/iflutter_navigator.dart';
 import 'package:school_of_future/core/router/route_constents.dart';
@@ -18,11 +16,10 @@ import 'package:school_of_future/features/presentation/class_work/student_classw
 import 'package:school_of_future/features/presentation/class_work/student_classwork_list/view/student_classwork_list_screen.dart';
 import 'package:school_of_future/features/presentation/class_work/teacher_classwork_list/bloc/classwork_list_bloc.dart';
 import 'package:school_of_future/features/presentation/class_work/teacher_classwork_list/view/teacher_classwork_list_screen.dart';
-import 'package:school_of_future/features/presentation/leave/parent_apply_leave/bloc/apply_leave_bloc.dart';
-import 'package:school_of_future/features/presentation/leave/parent_apply_leave/view/parent_apply_leave_screen.dart';
-import 'package:school_of_future/features/presentation/leave/leave_details/view/leave_details_screen.dart';
 import 'package:school_of_future/features/presentation/leave/student_leave_list/bloc/student_leave_list_bloc.dart';
 import 'package:school_of_future/features/presentation/leave/student_leave_list/view/student_leave_list_screen.dart';
+import 'package:school_of_future/features/presentation/leave/teacher_own_leave_list/bloc/teacher_own_leave_bloc.dart';
+import 'package:school_of_future/features/presentation/leave/teacher_own_leave_list/view/teacher_own_leave_list_screen.dart';
 import 'package:school_of_future/features/presentation/lesson_plan/lesson_plan_list/bloc/lesson_plan_list_bloc.dart';
 import 'package:school_of_future/features/presentation/lesson_plan/lesson_plan_list/view/lesson_plan_list_screen.dart';
 import 'package:school_of_future/features/presentation/meeting/teacher_meeting_list/bloc/theacher_meeting_list_bloc.dart';
@@ -111,6 +108,15 @@ Route<dynamic>? studentsRoutes(RouteSettings settings) {
           create: (context) => StudentLeaveListBloc(getIt<ApiRepo>(),
               getIt<IFlutterNavigator>(), getIt<LocalStorageRepo>()),
           child: const StudentLeaveListScreen(),
+        ),
+      );
+    case teacherOwnleaveListScreen:
+      return MaterialPageRoute(
+        settings: settings,
+        builder: (BuildContext context) => BlocProvider(
+          create: (context) => TeacherOwnLeaveBloc(getIt<ApiRepo>(),
+              getIt<IFlutterNavigator>(), getIt<LocalStorageRepo>()),
+          child: const TeacherOwnLeaveListScreen(),
         ),
       );
     case studentAssignmentListScreen:

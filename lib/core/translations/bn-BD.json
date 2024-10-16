@@ -435,8 +435,10 @@
   "Roll Number": "রোল নাম্বার",
   "Mid Term": "মিড টার্ম",
   "Emergency": "জরুরী",
+  "Is Emergency": "জরুরী",
   "Video link": "ভিডিও লিংক",
   "please select at least one file": "কম পক্ষে একটি ফাইল সিলেক্ট করুন ",
   "Leave type": "ছুটির ধরণ",
-  "Select leave type": "ছুটির ধরণ নির্বাচন করুন "
+  "Select leave type": "ছুটির ধরণ নির্বাচন করুন ",
+  "EntrReason": "দয়া করে কারণ লিখুন"
 }

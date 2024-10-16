@@ -95,11 +95,18 @@ String studentQuizClassTestSyllabusEndPoint({required String sId}) =>
 String studentLeaveListEndPoint({required String sId}) =>
     "${version1}student-leave/student-leave-application-list/$sId";
 
+String teacherFullSyllabusDtlsEndPoint({required String syllabusId}) =>
+    "${version1}syllabus/full-syllabus/$syllabusId";
+
 String studentLeaveEndPoint = "${version1}student-leave";
+String teacherOwnLeaveEndPoint = "${version1}teacher-leave";
 
 String studentLeaveDtlsEndPoint({required int id}) =>
     "${version1}student-leave/$id";
+String teacherOwnLeaveDtlsEndPoint({required int id}) =>
+    "${version1}teacher-leave/$id";
 
 String studentLeaveTypeEndPoint = "${version1}student-leave/leave-type";
+String teacherLeaveTypeEndPoint = "${version1}teacher-leave/leave-type";
 String studentLeaveUpdateEndPoint({required String status, required int id}) =>
     "${version1}student-leave/action/$id/$status";

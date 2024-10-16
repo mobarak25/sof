@@ -435,8 +435,10 @@
   "Roll Number": "Roll Number",
   "Mid Term": "Mid Term",
   "Emergency": "Emergency",
+  "Is Emergency": "Is Emergency",
   "Video link": "Video link",
   "please select at least one file": "please select at least one file",
   "Leave type": "Leave type",
-  "Select leave type": "Select leave type"
+  "Select leave type": "Select leave type",
+  "EntrReason": "Please enter reason"
 }

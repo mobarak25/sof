@@ -7,8 +7,12 @@ class LeaveDetailsState extends Equatable {
 
   final StudentLeaveLDetails details;
 
-  LeaveDetailsState copyWith({StudentLeaveLDetails? details}) {
-    return LeaveDetailsState(details: details ?? this.details);
+  LeaveDetailsState copyWith({
+    StudentLeaveLDetails? details,
+  }) {
+    return LeaveDetailsState(
+      details: details ?? this.details,
+    );
   }
 
   @override

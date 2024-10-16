@@ -42,7 +42,7 @@ Future<dynamic> openLeaveRejectSheet(BuildContext context,
                     press: () {
                       myState(() {
                         if (feedbackController.text.isEmpty) {
-                          feedbackErrorText = LocaleKeys.reason.tr();
+                          feedbackErrorText = LocaleKeys.entrReason.tr();
                         } else {
                           feedbackErrorText = null;
                           press(feedbackController.text.trim());

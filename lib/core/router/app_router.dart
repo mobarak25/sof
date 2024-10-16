@@ -6,7 +6,6 @@ import 'package:school_of_future/core/navigator/iflutter_navigator.dart';
 import 'package:school_of_future/core/utils/utilities.dart';
 import 'package:school_of_future/core/widgets/doc_viewer_page.dart';
 import 'package:school_of_future/core/widgets/image_view_page.dart';
-import 'package:school_of_future/features/domain/entities/lesson_plan_details_response.dart';
 import 'package:school_of_future/features/domain/repositories/api_repo.dart';
 import 'package:school_of_future/features/domain/repositories/local_storage_repo.dart';
 import 'package:school_of_future/core/router/route_constents.dart';
@@ -39,6 +38,10 @@ import 'package:school_of_future/features/presentation/leave/leave_details/bloc/
 import 'package:school_of_future/features/presentation/leave/leave_details/view/leave_details_screen.dart';
 import 'package:school_of_future/features/presentation/leave/parent_apply_leave/bloc/apply_leave_bloc.dart';
 import 'package:school_of_future/features/presentation/leave/parent_apply_leave/view/parent_apply_leave_screen.dart';
+import 'package:school_of_future/features/presentation/leave/teacher_apply_leave/bloc/teacher_apply_leave_bloc.dart';
+import 'package:school_of_future/features/presentation/leave/teacher_apply_leave/view/teacher_apply_leave.screen.dart';
+import 'package:school_of_future/features/presentation/leave/teacher_leave_details/bloc/teacher_leave_details_bloc.dart';
+import 'package:school_of_future/features/presentation/leave/teacher_leave_details/view/teacher_leave_details_screen.dart';
 import 'package:school_of_future/features/presentation/lesson_plan/attach_resource/bloc/attach_resource_bloc.dart';
 import 'package:school_of_future/features/presentation/lesson_plan/attach_resource/view/attach_resource_screen.dart';
 import 'package:school_of_future/features/presentation/lesson_plan/lesson_plan_create/bloc/lesson_plan_create_bloc.dart';
@@ -434,6 +437,18 @@ class AppRouter {
             child: const LeaveDetailsScreen(),
           ),
         );
+      case teacherLeaveDetailsScreen:
+        final leaveId = settings.arguments as int;
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (BuildContext context) => BlocProvider(
+            create: (context) => TeacherLeaveDetailsBloc(getIt<ApiRepo>(),
+                getIt<IFlutterNavigator>(), getIt<LocalStorageRepo>())
+              ..add(GetTeacherLeaveDetails(leaveId: leaveId)),
+            child: const TeacherLeaveDetailsScreen(),
+          ),
+        );
+
       case parentApplyLeaveScreen:
         final leaveId = settings.arguments as int;
         return MaterialPageRoute(
@@ -446,6 +461,20 @@ class AppRouter {
                 getIt<FilePickerRepo>())
               ..add(LeaveIdForEdit(leaveId: leaveId)),
             child: const ParentApplyLeaveScreen(),
+          ),
+        );
+      case teacherOwnApplyLeaveScreen:
+        final leaveId = settings.arguments as int;
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (BuildContext context) => BlocProvider(
+            create: (context) => TeacherApplyLeaveBloc(
+                getIt<ApiRepo>(),
+                getIt<IFlutterNavigator>(),
+                getIt<LocalStorageRepo>(),
+                getIt<FilePickerRepo>())
+              ..add(OwnLeaveIdForEdit(leaveId: leaveId)),
+            child: const TeacherApplyLeaveScreen(),
           ),
         );
 

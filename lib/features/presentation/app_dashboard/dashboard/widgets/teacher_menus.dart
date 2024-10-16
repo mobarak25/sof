@@ -98,6 +98,10 @@ class TeacherMenus extends StatelessWidget {
                     panelController.close();
                     navigatorKey.currentState!.pushNamedAndRemoveUntil(
                         leaveListScreen, ModalRoute.withName('/'));
+                  } else {
+                    panelController.close();
+                    navigatorKey.currentState!.pushNamedAndRemoveUntil(
+                        teacherOwnleaveListScreen, ModalRoute.withName('/'));
                   }
                 },
               ),

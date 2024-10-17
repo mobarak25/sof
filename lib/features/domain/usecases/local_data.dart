@@ -14,4 +14,10 @@ class LocalData {
     final userType = localStorageRepo.read(key: userTypeDB);
     return userType == '2' ? true : false;
   }
+
+  static Future<String>? loginId(
+      {required LocalStorageRepo localStorageRepo}) async {
+    final userType = localStorageRepo.read(key: loginIdDB)!;
+    return userType;
+  }
 }

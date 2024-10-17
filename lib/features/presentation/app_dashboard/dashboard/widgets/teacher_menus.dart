@@ -159,6 +159,15 @@ class TeacherMenus extends StatelessWidget {
                 teacherSyllabusListScreen, ModalRoute.withName('/'));
           },
         ),
+        FeatureItem(
+          iconName: "assets/images/feature_icons_svg/ic_transport.svg",
+          title: context.tr(LocaleKeys.transport),
+          press: () {
+            panelController.close();
+            navigatorKey.currentState!.pushNamedAndRemoveUntil(
+                transportScreen, ModalRoute.withName('/'));
+          },
+        ),
       ],
     );
   }

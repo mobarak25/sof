@@ -38,6 +38,7 @@ import 'package:school_of_future/features/domain/entities/teacher_leave_details_
 import 'package:school_of_future/features/domain/entities/teacher_own_leave_list_response.dart';
 import 'package:school_of_future/features/domain/entities/teacher_profile_response.dart';
 import 'package:school_of_future/features/domain/entities/teacher_summited_assinent_response.dart';
+import 'package:school_of_future/features/domain/entities/transport_response.dart';
 
 class EntityMap {
   static T? fromJson<T, K>(dynamic json) {
@@ -122,6 +123,8 @@ class EntityMap {
         return TeacherOwnLeaveList.fromJson(json) as T;
       case const (TeacherLeaveDetails):
         return TeacherLeaveDetails.fromJson(json) as T;
+      case const (Transport):
+        return Transport.fromJson(json) as T;
 
       default:
         throw Exception('Unknown class');

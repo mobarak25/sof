@@ -43,6 +43,7 @@ const meetingDetailsScreen = "/meeting-details-screen";
 const routineScreen = "/routine-screen";
 const syllabusClassQuizScreen = "/syllabus-class-quiz-screen";
 const syllabusDetailsScreen = "/syllabus-details-screen";
+const transportScreen = "/transport-screen";
 
 //Student routes
 const studentSyllabusListScreen = "/student-syllabus-list-screen";

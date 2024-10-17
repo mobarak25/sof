@@ -42,6 +42,8 @@ import 'package:school_of_future/features/presentation/syllabus/student_syllabus
 import 'package:school_of_future/features/presentation/syllabus/student_syllabus/view/student_syllabus_screen.dart';
 import 'package:school_of_future/features/presentation/syllabus/teacher_full_syllabus_list/bloc/teacher_syllabus_list_bloc.dart';
 import 'package:school_of_future/features/presentation/syllabus/teacher_full_syllabus_list/view/teacher_syllabus_list_screen.dart';
+import 'package:school_of_future/features/presentation/transport/transport/bloc/transport_bloc.dart';
+import 'package:school_of_future/features/presentation/transport/transport/view/transport_screen.dart';
 
 Route<dynamic>? studentsRoutes(RouteSettings settings) {
   print(settings.name);
@@ -255,6 +257,16 @@ Route<dynamic>? studentsRoutes(RouteSettings settings) {
           create: (context) => StudentSyllabusBloc(getIt<ApiRepo>(),
               getIt<IFlutterNavigator>(), getIt<LocalStorageRepo>()),
           child: const StudentSyllabusScreen(),
+        ),
+      );
+
+    case transportScreen:
+      return MaterialPageRoute(
+        settings: settings,
+        builder: (BuildContext context) => BlocProvider(
+          create: (context) => TransportBloc(getIt<ApiRepo>(),
+              getIt<IFlutterNavigator>(), getIt<LocalStorageRepo>()),
+          child: const TransportScreen(),
         ),
       );
 

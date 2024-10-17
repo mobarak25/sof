@@ -110,3 +110,5 @@ String studentLeaveTypeEndPoint = "${version1}student-leave/leave-type";
 String teacherLeaveTypeEndPoint = "${version1}teacher-leave/leave-type";
 String studentLeaveUpdateEndPoint({required String status, required int id}) =>
     "${version1}student-leave/action/$id/$status";
+String transportEndPoint({required String loingId}) =>
+    "${version1}transport/passenger-schedule/$loingId";

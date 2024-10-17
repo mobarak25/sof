@@ -9,9 +9,8 @@ import 'package:school_of_future/core/widgets/app_bar.dart';
 import 'package:school_of_future/core/widgets/body.dart';
 import 'package:school_of_future/core/widgets/text.dart';
 import 'package:school_of_future/features/presentation/routine/teacher_routine/bloc/teacher_routine_bloc.dart';
-import 'package:school_of_future/features/presentation/routine/teacher_routine/widgets/month_week_day_calander.dart';
+import 'package:school_of_future/core/widgets/month_week_day_calander.dart';
 import 'package:school_of_future/features/presentation/routine/teacher_routine/widgets/time_line_row.dart';
-import 'package:table_calendar/table_calendar.dart';
 
 class RoutineScreen extends StatelessWidget {
   const RoutineScreen({super.key});

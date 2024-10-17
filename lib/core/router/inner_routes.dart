@@ -12,6 +12,8 @@ import 'package:school_of_future/features/presentation/assignment/student_assign
 import 'package:school_of_future/features/presentation/assignment/student_assignment_list/view/student_assinment_list_screen.dart';
 import 'package:school_of_future/features/presentation/assignment/teacher_assignment_list/bloc/teacher_assignment_list_bloc.dart';
 import 'package:school_of_future/features/presentation/assignment/teacher_assignment_list/view/teacher_assinment_list_screen.dart';
+import 'package:school_of_future/features/presentation/attendance/teacher_attendance/bloc/teacher_attendance_bloc.dart';
+import 'package:school_of_future/features/presentation/attendance/teacher_attendance/view/teacher_attendance_screen.dart';
 import 'package:school_of_future/features/presentation/class_work/student_classwork_list/bloc/student_classwork_list_bloc.dart';
 import 'package:school_of_future/features/presentation/class_work/student_classwork_list/view/student_classwork_list_screen.dart';
 import 'package:school_of_future/features/presentation/class_work/teacher_classwork_list/bloc/classwork_list_bloc.dart';
@@ -267,6 +269,15 @@ Route<dynamic>? studentsRoutes(RouteSettings settings) {
           create: (context) => TransportBloc(getIt<ApiRepo>(),
               getIt<IFlutterNavigator>(), getIt<LocalStorageRepo>()),
           child: const TransportScreen(),
+        ),
+      );
+    case teacherAttendanceScreen:
+      return MaterialPageRoute(
+        settings: settings,
+        builder: (BuildContext context) => BlocProvider(
+          create: (context) => TeacherAttendanceBloc(getIt<ApiRepo>(),
+              getIt<IFlutterNavigator>(), getIt<LocalStorageRepo>()),
+          child: const TeacherAttendanceScreen(),
         ),
       );
 

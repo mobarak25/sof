@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:school_of_future/core/utils/colors.dart';
 import 'package:school_of_future/core/utils/text_styles.dart';
 import 'package:school_of_future/core/widgets/text.dart';
-import 'package:school_of_future/features/presentation/routine/teacher_routine/widgets/month_calander.dart';
+import 'package:school_of_future/core/widgets/month_calander.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class MonthWeekDayCalendar extends StatefulWidget {

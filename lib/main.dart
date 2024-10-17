@@ -7,6 +7,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:school_of_future/app.dart';
 import 'package:school_of_future/core/ioc/global.dart';
 import 'package:school_of_future/core/utils/colors.dart';
+import 'package:school_of_future/core/network_info/app_connection.dart';
 
 Future<void> main() async {
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
@@ -34,6 +35,8 @@ Future<void> main() async {
       child: const MyApp(),
     ),
   );
+
+  ConnectivityService().initialize();
 }
 
 Future<void> initGetStorage() async {

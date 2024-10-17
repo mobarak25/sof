@@ -18,7 +18,7 @@ class TeacherFullSyllabusDetailsScreen extends StatelessWidget {
     return BlocBuilder<TeacherFullSyllabusDetailsBloc,
         TeacherFullSyllabusDetailsState>(
       builder: (context, state) {
-        final bloc = context.read<TeacherFullSyllabusDetailsBloc>();
+        //final bloc = context.read<TeacherFullSyllabusDetailsBloc>();
 
         return Body(
           isFullScreen: true,

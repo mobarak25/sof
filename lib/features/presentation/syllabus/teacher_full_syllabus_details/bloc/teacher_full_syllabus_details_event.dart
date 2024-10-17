@@ -6,3 +6,8 @@ sealed class TeacherFullSyllabusDetailsEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+
+class GetTeacherSyllabusDetails extends TeacherFullSyllabusDetailsEvent {
+  const GetTeacherSyllabusDetails({required this.syllabusId});
+  final int syllabusId;
+}

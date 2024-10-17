@@ -61,3 +61,4 @@ const teacherMeetingListScreen = "/teacher-meeting-list-screen";
 const teacherMeetingCreateScreen = "/teacher-meeting-create-screen";
 const teacherSyllabusListScreen = "/teacher-syllabus-list-screen";
 const teacherSyllabusCreateScreen = "/teacher-syllabus-create-screen";
+const teacherFullSyllabusDtlsScreen = "/teacher-full-syllabus-details-screen";

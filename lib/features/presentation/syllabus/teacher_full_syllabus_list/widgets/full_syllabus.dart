@@ -61,7 +61,7 @@ class FullSyllabusView extends StatelessWidget {
                             onTap: () {
                               Navigator.of(context, rootNavigator: true)
                                   .pushNamed(
-                                classworkDetailsScreen,
+                                teacherFullSyllabusDtlsScreen,
                                 arguments: dataItem.id,
                               );
                             },

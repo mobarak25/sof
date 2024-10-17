@@ -8,8 +8,8 @@ import 'package:school_of_future/core/widgets/body.dart';
 import 'package:school_of_future/core/widgets/doc_viewer.dart';
 import 'package:school_of_future/features/presentation/syllabus/teacher_full_syllabus_details/bloc/teacher_full_syllabus_details_bloc.dart';
 
-class StudentSyllabusScreen extends StatelessWidget {
-  const StudentSyllabusScreen({super.key});
+class TeacherFullSyllabusDetailsScreen extends StatelessWidget {
+  const TeacherFullSyllabusDetailsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -29,13 +29,17 @@ class StudentSyllabusScreen extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.symmetric(vertical: 13, horizontal: 15),
             color: bInnerBg,
-            child: SizedBox(
-              height: size.height,
-              width: size.width,
-              child: DocViewer(
-                url: state.studentFullSyllabus.data![index].url!,
-              ),
-            ),
+            child: state.details.data != null
+                ? SizedBox(
+                    height: size.height,
+                    width: size.width,
+                    child: DocViewer(
+                      url: state.details.data!.attachment!.url!,
+                    ),
+                  )
+                : const Center(
+                    child: CircularProgressIndicator(),
+                  ),
           ),
         );
       },

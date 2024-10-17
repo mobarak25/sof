@@ -12,6 +12,7 @@ import 'package:school_of_future/features/domain/entities/due_task_response.dart
 import 'package:school_of_future/features/domain/entities/entity_map/student_full_syllabus_response.dart';
 import 'package:school_of_future/features/domain/entities/entity_map/student_leave_details_response.dart';
 import 'package:school_of_future/features/domain/entities/entity_map/syllabus_details_response.dart';
+import 'package:school_of_future/features/domain/entities/full_syllabus_details_response.dart';
 import 'package:school_of_future/features/domain/entities/full_syllabus_teacher_response.dart';
 import 'package:school_of_future/features/domain/entities/get_batch_as_section_response.dart';
 import 'package:school_of_future/features/domain/entities/leave_types_response.dart';
@@ -109,6 +110,8 @@ class EntityMap {
         return SyllabusDetails.fromJson(json) as T;
       case const (StudentFullSyllabus):
         return StudentFullSyllabus.fromJson(json) as T;
+      case const (FullSyllabusDetails):
+        return FullSyllabusDetails.fromJson(json) as T;
       case const (StudentLeaveList):
         return StudentLeaveList.fromJson(json) as T;
       case const (StudentLeaveLDetails):

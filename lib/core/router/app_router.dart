@@ -72,6 +72,8 @@ import 'package:school_of_future/features/presentation/syllabus/syllabus_create/
 import 'package:school_of_future/features/presentation/syllabus/syllabus_create/view/syllabus_create_screen.dart';
 import 'package:school_of_future/features/presentation/syllabus/syllabus_details/bloc/syllabus_details_bloc.dart';
 import 'package:school_of_future/features/presentation/syllabus/syllabus_details/view/syllabus_details_screen.dart';
+import 'package:school_of_future/features/presentation/syllabus/teacher_full_syllabus_details/bloc/teacher_full_syllabus_details_bloc.dart';
+import 'package:school_of_future/features/presentation/syllabus/teacher_full_syllabus_details/view/teacher_full_syllabus_details_screen.dart';
 
 class AppRouter {
   Route<dynamic>? generateRoute(RouteSettings settings) {
@@ -400,6 +402,17 @@ class AppRouter {
               getIt<LocalStorageRepo>(),
             )..add(GetSyllabusDetails(id: syllabusId)),
             child: const SyllabusDetailsScreen(),
+          ),
+        );
+      case teacherFullSyllabusDtlsScreen:
+        final syllabusId = settings.arguments as int;
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (BuildContext context) => BlocProvider(
+            create: (context) => TeacherFullSyllabusDetailsBloc(
+              getIt<ApiRepo>(),
+            )..add(GetTeacherSyllabusDetails(syllabusId: syllabusId)),
+            child: const TeacherFullSyllabusDetailsScreen(),
           ),
         );
 

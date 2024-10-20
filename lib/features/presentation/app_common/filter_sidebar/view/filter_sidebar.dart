@@ -4,9 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:school_of_future/core/translations/local_keys.dart';
 import 'package:school_of_future/core/utils/colors.dart';
+import 'package:school_of_future/core/utils/enums.dart';
+import 'package:school_of_future/core/utils/text_styles.dart';
 import 'package:school_of_future/core/widgets/button.dart';
 import 'package:school_of_future/core/widgets/date_picker.dart';
 import 'package:school_of_future/core/widgets/dropdown_field.dart';
+import 'package:school_of_future/core/widgets/text.dart';
 import 'package:school_of_future/core/widgets/text_field.dart';
 import 'package:school_of_future/features/presentation/app_common/filter_sidebar/bloc/filter_sidebar_bloc.dart';
 
@@ -24,6 +27,7 @@ class FilterSidebar extends StatelessWidget {
     this.showSubjectForStudent = false,
     this.canPop = true,
     this.paddingTop = 30,
+    this.checkValidation = false,
     required this.btnText,
   });
   final VoidCallback pressFilterBtn;
@@ -35,7 +39,8 @@ class FilterSidebar extends StatelessWidget {
       showSection,
       showChapter,
       showSubjectForStudent,
-      canPop;
+      canPop,
+      checkValidation;
   final double paddingTop;
   final String btnText;
 
@@ -131,6 +136,7 @@ class FilterSidebar extends StatelessWidget {
               //=============Version==============
               if (showVersion)
                 Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     DropdownFieldB(
                       dropdownHeight: 50,
@@ -142,12 +148,20 @@ class FilterSidebar extends StatelessWidget {
                       },
                       items: state.versionList,
                     ),
+                    if (state.forms == Forms.invalid &&
+                        state.selectedVersionId == -1)
+                      TextB(
+                        text: LocaleKeys.selectVersion.tr(),
+                        textStyle: bBase2,
+                        fontColor: bRed,
+                      ),
                     const Gap(10),
                   ],
                 ),
               //=============Class================
               if (showClass)
                 Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     DropdownFieldB(
                       dropdownHeight: 50,
@@ -160,12 +174,20 @@ class FilterSidebar extends StatelessWidget {
                       },
                       items: state.classList,
                     ),
+                    if (state.forms == Forms.invalid &&
+                        state.selectedClassId == -1)
+                      TextB(
+                        text: LocaleKeys.selectClass.tr(),
+                        textStyle: bBase2,
+                        fontColor: bRed,
+                      ),
                     const Gap(10),
                   ],
                 ),
               //=============Subject==============
               if (showSubject)
                 Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     DropdownFieldB(
                       dropdownHeight: 50,
@@ -178,6 +200,13 @@ class FilterSidebar extends StatelessWidget {
                       },
                       items: state.subjectList,
                     ),
+                    if (state.forms == Forms.invalid &&
+                        state.selectedSubjectId == -1)
+                      TextB(
+                        text: LocaleKeys.plsSelectSubject.tr(),
+                        textStyle: bBase2,
+                        fontColor: bRed,
+                      ),
                     const Gap(10),
                   ],
                 ),
@@ -192,7 +221,6 @@ class FilterSidebar extends StatelessWidget {
                       labelColor: bBlack,
                       dropDownValue: state.selectSubjectIdForStudent,
                       selected: (dynamic type) {
-                        print(type);
                         bloc.add(SelectSubjectIdForStudent(id: type));
                       },
                       items: state.studentSubjectList,
@@ -203,6 +231,7 @@ class FilterSidebar extends StatelessWidget {
               //=============Section==============
               if (showSection)
                 Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     DropdownFieldB(
                       dropdownHeight: 50,
@@ -215,6 +244,13 @@ class FilterSidebar extends StatelessWidget {
                       },
                       items: state.sectionList,
                     ),
+                    if (state.forms == Forms.invalid &&
+                        state.selectSectionId == -1)
+                      TextB(
+                        text: LocaleKeys.selectSection.tr(),
+                        textStyle: bBase2,
+                        fontColor: bRed,
+                      ),
                     const Gap(10),
                   ],
                 ),
@@ -242,7 +278,18 @@ class FilterSidebar extends StatelessWidget {
                 heigh: 60,
                 text: btnText,
                 press: () {
-                  pressFilterBtn();
+                  if (checkValidation) {
+                    bloc.add(CheckValidation());
+                  }
+                  if (checkValidation && state.isValid) {
+                    pressFilterBtn();
+                  }
+
+                  if (!checkValidation) {
+                    print("no valid");
+                    pressFilterBtn();
+                  }
+
                   if (canPop) {
                     Navigator.pop(context);
                   }

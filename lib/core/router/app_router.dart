@@ -24,6 +24,8 @@ import 'package:school_of_future/features/presentation/assignment/teacher_assign
 import 'package:school_of_future/features/presentation/assignment/teacher_assignment_create/view/assignment_create_screen.dart';
 import 'package:school_of_future/features/presentation/assignment/teacher_view_submission/bloc/teacher_view_submission_bloc.dart';
 import 'package:school_of_future/features/presentation/assignment/teacher_view_submission/view/teacher_view_submission_screen.dart';
+import 'package:school_of_future/features/presentation/attendance/take_attendance/bloc/take_attendance_bloc.dart';
+import 'package:school_of_future/features/presentation/attendance/take_attendance/view/take_attendance_screen.dart';
 import 'package:school_of_future/features/presentation/change_password/bloc/change_password_bloc.dart';
 import 'package:school_of_future/features/presentation/change_password/view/change_password_screen.dart';
 import 'package:school_of_future/features/presentation/class_work/classwork_details/bloc/classwork_details_bloc.dart';
@@ -488,6 +490,23 @@ class AppRouter {
                 getIt<FilePickerRepo>())
               ..add(OwnLeaveIdForEdit(leaveId: leaveId)),
             child: const TeacherApplyLeaveScreen(),
+          ),
+        );
+      case teacherTakeAttendanceScreen:
+        final params = settings.arguments as Map<String, dynamic>;
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (BuildContext context) => BlocProvider(
+            create: (context) => TakeAttendanceBloc(getIt<ApiRepo>(),
+                getIt<IFlutterNavigator>(), getIt<LocalStorageRepo>())
+              ..add(
+                GetParams(
+                  subjectId: params["subject_id"],
+                  batchId: params["batch_id"],
+                  classInfo: params["class_name"],
+                ),
+              ),
+            child: const TakeAttendanceScreen(),
           ),
         );
 

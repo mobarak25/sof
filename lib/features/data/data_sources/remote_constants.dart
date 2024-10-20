@@ -112,3 +112,8 @@ String studentLeaveUpdateEndPoint({required String status, required int id}) =>
     "${version1}student-leave/action/$id/$status";
 String transportEndPoint({required String loingId}) =>
     "${version1}transport/passenger-schedule/$loingId";
+String subjectWiseAttendanceEndPoint =
+    "${version1}attendance/reports/employee/overview";
+
+String studentListForAttendanceEndPoint({required int batchId}) =>
+    "${version1}attendance/get-student-list-for-attendance/$batchId";

@@ -65,3 +65,5 @@ class GetChapter extends FilterSidebarEvent {
   const GetChapter({required this.subjectId});
   final dynamic subjectId;
 }
+
+class CheckValidation extends FilterSidebarEvent {}

@@ -2,7 +2,9 @@ part of 'filter_sidebar_bloc.dart';
 
 class FilterSidebarState extends Equatable {
   const FilterSidebarState({
+    this.forms = Forms.initial,
     this.isTeacher = false,
+    this.isValid = false,
     this.startDate = '',
     this.endDate = '',
     this.setClass = false,
@@ -24,7 +26,9 @@ class FilterSidebarState extends Equatable {
     this.bacthAsSection = const GetBacthAsSections(),
   });
 
+  final Forms forms;
   final bool isTeacher;
+  final bool isValid;
   final String startDate;
   final String endDate;
   final bool setClass;
@@ -46,7 +50,9 @@ class FilterSidebarState extends Equatable {
   final GetBacthAsSections bacthAsSection;
 
   FilterSidebarState copyWith({
+    Forms? forms,
     bool? isTeacher,
+    bool? isValid,
     String? startDate,
     String? endDate,
     bool? setClass,
@@ -68,7 +74,9 @@ class FilterSidebarState extends Equatable {
     GetBacthAsSections? bacthAsSection,
   }) {
     return FilterSidebarState(
+      forms: forms ?? this.forms,
       isTeacher: isTeacher ?? this.isTeacher,
+      isValid: isValid ?? this.isValid,
       startDate: startDate ?? this.startDate,
       endDate: endDate ?? this.endDate,
       setClass: setClass ?? false,
@@ -94,6 +102,8 @@ class FilterSidebarState extends Equatable {
 
   @override
   List<Object> get props => [
+        forms,
+        isValid,
         startDate,
         endDate,
         setClass,

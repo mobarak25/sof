@@ -64,3 +64,4 @@ const teacherSyllabusListScreen = "/teacher-syllabus-list-screen";
 const teacherSyllabusCreateScreen = "/teacher-syllabus-create-screen";
 const teacherFullSyllabusDtlsScreen = "/teacher-full-syllabus-details-screen";
 const teacherAttendanceScreen = "/teacher-attendance-screen";
+const teacherTakeAttendanceScreen = "/teacher-take-attendance-screen";

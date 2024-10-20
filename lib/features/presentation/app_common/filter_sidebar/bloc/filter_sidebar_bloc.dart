@@ -3,6 +3,8 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:school_of_future/core/form_validator/validator.dart';
+import 'package:school_of_future/core/utils/enums.dart';
 import 'package:school_of_future/core/utils/utilities.dart';
 import 'package:school_of_future/features/data/data_sources/local_db_keys.dart';
 import 'package:school_of_future/features/data/data_sources/remote_constants.dart';
@@ -31,6 +33,7 @@ class FilterSidebarBloc extends Bloc<FilterSidebarEvent, FilterSidebarState> {
     on<SelectSubjectIdForStudent>(_selectSubjectIdForStudent);
     on<GetChapter>(_getChapter);
     on<GetSubjectForStudent>(_getSubjectForStudent);
+    on<CheckValidation>(_checkValidation);
 
     add(IsTeacher());
     add(GetSubjectForStudent());
@@ -277,5 +280,30 @@ class FilterSidebarBloc extends Bloc<FilterSidebarEvent, FilterSidebarState> {
       chapterList: [const DropdownItem(name: "Select", value: -1)],
     ));
     add(GetChapter(subjectId: event.id));
+  }
+
+  FutureOr<void> _checkValidation(
+      CheckValidation event, Emitter<FilterSidebarState> emit) {
+    if (isValid(event)) {
+      emit(state.copyWith(isValid: true));
+    } else {
+      emit(state.copyWith(forms: Forms.invalid));
+    }
+  }
+
+  bool isValid(CheckValidation event) {
+    // final validate = Validator.isValidated(items: [
+    //   FormItem(text: state.title, focusNode: event.titleFocusnode),
+    // ], navigator: _iFlutterNavigator);
+
+    // if (!validate) return false;
+
+    if (state.selectedVersionId == -1 ||
+        state.selectedClassId == -1 ||
+        state.selectedSubjectId == -1 ||
+        state.selectedVersionId == -1) {
+      return false;
+    }
+    return true;
   }
 }

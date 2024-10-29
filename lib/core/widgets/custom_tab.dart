@@ -36,39 +36,40 @@ class _CustomTabState extends State<CustomTab> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-              color: bWhite, borderRadius: BorderRadius.circular(10)),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              ...List.generate(
-                widget.tabList.length,
-                (index) => Expanded(
-                  child: GestureDetector(
-                    onTap: () {
-                      pageController.jumpToPage(index);
-                      //widget.onTabChanged(index);
-                    },
-                    child: Container(
-                      height: 45,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: activePage == index ? bJungleGreen : bWhite,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: TextB(
-                        text: widget.tabList[index],
-                        fontColor: activePage == index ? bWhite : bGray,
+        if (widget.tabList.isNotEmpty)
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+                color: bWhite, borderRadius: BorderRadius.circular(10)),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                ...List.generate(
+                  widget.tabList.length,
+                  (index) => Expanded(
+                    child: GestureDetector(
+                      onTap: () {
+                        pageController.jumpToPage(index);
+                        //widget.onTabChanged(index);
+                      },
+                      child: Container(
+                        height: 45,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: activePage == index ? bJungleGreen : bWhite,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: TextB(
+                          text: widget.tabList[index],
+                          fontColor: activePage == index ? bWhite : bGray,
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
         if (widget.showSearch)
           Column(
             children: [
@@ -105,30 +106,44 @@ class _CustomTabState extends State<CustomTab> {
             ],
           ),
         const Gap(10),
-        Expanded(
-          child: PageView.builder(
-            controller: pageController,
-            itemCount: widget.tabList.length,
-            onPageChanged: (int page) {
-              setState(() {
-                activePage = page;
-              });
-              widget.onTabChanged(page);
-            },
-            itemBuilder: (BuildContext context, int index) {
-              return widget.loading
-                  ? const Column(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.all(20),
-                          child: CircularProgressIndicator(),
-                        ),
-                      ],
-                    )
-                  : widget.child;
-            },
-          ),
-        ),
+        if (widget.tabList.isNotEmpty)
+          Expanded(
+            child: PageView.builder(
+              controller: pageController,
+              itemCount: widget.tabList.length,
+              onPageChanged: (int page) {
+                setState(() {
+                  activePage = page;
+                });
+                widget.onTabChanged(page);
+              },
+              itemBuilder: (BuildContext context, int index) {
+                return widget.loading
+                    ? const Column(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.all(20),
+                            child: CircularProgressIndicator(),
+                          ),
+                        ],
+                      )
+                    : widget.child;
+              },
+            ),
+          )
+        else
+          Expanded(
+            child: widget.loading
+                ? const Column(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.all(20),
+                        child: CircularProgressIndicator(),
+                      ),
+                    ],
+                  )
+                : widget.child,
+          )
       ],
     );
   }

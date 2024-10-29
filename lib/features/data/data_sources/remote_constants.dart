@@ -117,3 +117,19 @@ String subjectWiseAttendanceEndPoint =
 
 String studentListForAttendanceEndPoint({required int batchId}) =>
     "${version1}attendance/get-student-list-for-attendance/$batchId";
+String teacherAttendanceEndPoint = "${version1}attendance";
+String subjectWiseAttendanceSaveEndPoint = "${version1}attendance/subject-wise";
+String absentStudentsEndPoint =
+    "${version1}attendance/reports/employee/absent-students";
+String attendanceOverViewEndPoint({required String sId}) =>
+    "${version1}attendance/reports/student/overview/$sId";
+String attendanceCalanderOverViewEndPoint({required String sId}) =>
+    "${version1}attendance/reports/student/calender/$sId";
+
+String todayAttendanceEndPoint({required String sId}) =>
+    "${version1}attendance/reports/student/today-attendance/$sId";
+String questionBankEndPoint = "${version1}question-bank";
+String questionLevelEndPoint = "${version1}question-level";
+
+String questionDtlsEndPoint({required int qId}) =>
+    "$version1/question-bank/$qId";

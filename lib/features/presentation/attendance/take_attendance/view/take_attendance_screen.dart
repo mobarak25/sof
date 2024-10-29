@@ -8,9 +8,10 @@ import 'package:school_of_future/core/utils/text_styles.dart';
 import 'package:school_of_future/core/utils/utilities.dart';
 import 'package:school_of_future/core/widgets/app_bar.dart';
 import 'package:school_of_future/core/widgets/body.dart';
+import 'package:school_of_future/core/widgets/button.dart';
 import 'package:school_of_future/core/widgets/text.dart';
 import 'package:school_of_future/features/presentation/attendance/take_attendance/bloc/take_attendance_bloc.dart';
-import 'package:school_of_future/features/presentation/attendance/take_attendance/widgets/screen_deader.dart';
+import 'package:school_of_future/features/presentation/attendance/take_attendance/widgets/screen_header.dart';
 
 class TakeAttendanceScreen extends StatelessWidget {
   const TakeAttendanceScreen({super.key});
@@ -42,7 +43,12 @@ class TakeAttendanceScreen extends StatelessWidget {
                           text:
                               "Date: ${getDate(value: DateTime.now().toString(), formate: "dd - MMMM, yyyy")}"),
                       const Gap(15),
-                      const ScreenHeader(),
+                      ScreenHeader(
+                        present: state.presentCount,
+                        absent: state.absentCount,
+                        late: state.lateCount,
+                        leave: state.leaveCount,
+                      ),
                       Expanded(
                         child: ListView.builder(
                           padding: const EdgeInsets.symmetric(
@@ -72,7 +78,11 @@ class TakeAttendanceScreen extends StatelessWidget {
                                 ),
                                 InkWell(
                                   onTap: () {
-                                    bloc.add(ChangeStatus(index: index));
+                                    if (state.tempStudents[index]
+                                            .attendanceStatus !=
+                                        2) {
+                                      bloc.add(ChangeStatus(index: index));
+                                    }
                                   },
                                   child: Container(
                                     width: 55,
@@ -99,6 +109,36 @@ class TakeAttendanceScreen extends StatelessWidget {
                           },
                         ),
                       ),
+                      if (!state.isDetails)
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 15, vertical: 10),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: ButtonB(
+                                  heigh: 50,
+                                  text: LocaleKeys.save.tr(),
+                                  press: () {
+                                    bloc.add(Save());
+                                  },
+                                ),
+                              ),
+                              const Gap(10),
+                              Expanded(
+                                child: ButtonB(
+                                  heigh: 50,
+                                  bgColor: bGray12,
+                                  textColor: bGray100,
+                                  text: LocaleKeys.reset.tr(),
+                                  press: () {
+                                    bloc.add(Reset());
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
                     ],
                   )
                 : const Center(

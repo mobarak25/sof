@@ -80,10 +80,9 @@ class TeacherAttendanceScreen extends StatelessWidget {
                                       press: (int subjectId, int batchId,
                                           String className) {
                                         bloc.add(GetIdList(
-                                          subjectId: subjectId,
-                                          batchId: batchId,
-                                          className: className,
-                                        ));
+                                            subjectId: subjectId,
+                                            batchId: batchId,
+                                            className: className));
                                       },
                                     ),
                                   ),
@@ -132,6 +131,7 @@ class TeacherAttendanceScreen extends StatelessWidget {
                                 "subject_id": state.subjectId,
                                 "batch_id": state.batchId,
                                 "class_name": state.className,
+                                "is_view_details": false,
                               },
                             );
                           },
@@ -199,7 +199,18 @@ class TeacherAttendanceScreen extends StatelessWidget {
                               borderColor: bGray12,
                               textColor: const Color(0XFF9B9BA5),
                               bgColor: bGray100.withOpacity(0.04),
-                              press: () {},
+                              press: () {
+                                Navigator.of(context, rootNavigator: true)
+                                    .pushNamed(
+                                  teacherTakeAttendanceScreen,
+                                  arguments: {
+                                    "subject_id": state.subjectId,
+                                    "batch_id": state.batchId,
+                                    "class_name": state.className,
+                                    "is_view_details": true,
+                                  },
+                                );
+                              },
                             ),
                           ],
                         ),
@@ -214,7 +225,17 @@ class TeacherAttendanceScreen extends StatelessWidget {
                           borderColor: bGray4,
                           textColor: const Color(0XFF9B9BA5),
                           bgColor: bWhite,
-                          press: () {},
+                          press: () {
+                            Navigator.of(context, rootNavigator: true)
+                                .pushNamed(
+                              absentStudentsScreen,
+                              arguments: {
+                                "subject_id": state.subjectId,
+                                "batch_id": state.batchId,
+                                "class_name": state.className,
+                              },
+                            );
+                          },
                         ),
                       ),
                       const Gap(100),
@@ -244,7 +265,7 @@ class TeacherAttendanceScreen extends StatelessWidget {
                   child: InkWell(
                     onTap: () {
                       press(sections[k].batchId,
-                          "${classList[i].className} - ${sections[k].sectionName}");
+                          "${classList[j].className} - ${sections[k].sectionName}");
                     },
                     child: Container(
                       width: double.infinity,
@@ -280,36 +301,31 @@ class TeacherAttendanceScreen extends StatelessWidget {
           list.add(
             Column(
               children: [
-                Material(
+                Container(
+                  width: double.infinity,
                   color: bWhite,
-                  child: InkWell(
-                    onTap: () {},
-                    child: Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10, horizontal: 0),
-                      child: Theme(
-                        data: Theme.of(ctx)
-                            .copyWith(dividerColor: Colors.transparent),
-                        child: ExpansionTile(
-                          shape: null,
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
+                  child: Theme(
+                    data: Theme.of(ctx)
+                        .copyWith(dividerColor: Colors.transparent),
+                    child: ExpansionTile(
+                      shape: null,
+                      title: TextB(
+                        text:
+                            "Version: ${data[i].versionName!}, ${classList[j].className!}, Subject: ${subjects[k].subjectName}",
+                      ),
+                      children: List.generate(
+                        sections.length,
+                        (index) => ListTile(
+                          onTap: () {
+                            press(
+                                subjects[k].subjectId,
+                                sections[index].batchId,
+                                "${classList[j].className} - ${subjects[k].subjectName} - ${sections[index].sectionName}");
+                          },
                           title: TextB(
-                            text:
-                                "Version: ${data[i].versionName!}, ${classList[j].className!}, Subject: ${subjects[k].subjectName}",
-                          ),
-                          children: List.generate(
-                            sections.length,
-                            (index) => ListTile(
-                              onTap: () {
-                                press(
-                                  subjects[k].subjectId,
-                                  sections[index].batchId,
-                                );
-                              },
-                              title: TextB(
-                                text: sections[index].sectionName!,
-                              ),
-                            ),
+                            text: sections[index].sectionName!,
                           ),
                         ),
                       ),

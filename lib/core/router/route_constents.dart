@@ -47,6 +47,7 @@ const transportScreen = "/transport-screen";
 
 //Student routes
 const studentSyllabusListScreen = "/student-syllabus-list-screen";
+const studentAttendanceScreen = "/student-attendance-screen";
 
 //Teacher routes
 const teacherAssignmentListScreen = "/teacher-assignment-screen";
@@ -65,3 +66,6 @@ const teacherSyllabusCreateScreen = "/teacher-syllabus-create-screen";
 const teacherFullSyllabusDtlsScreen = "/teacher-full-syllabus-details-screen";
 const teacherAttendanceScreen = "/teacher-attendance-screen";
 const teacherTakeAttendanceScreen = "/teacher-take-attendance-screen";
+const absentStudentsScreen = "/absent-students-screen";
+const questionBankScreen = "/question-bank-screen";
+const questionCreateScreen = "/question-create-screen";

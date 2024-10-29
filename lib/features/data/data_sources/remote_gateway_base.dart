@@ -145,9 +145,14 @@ class RemoteGatewayBase {
 
     try {
       data![fileFieldName] = await filesUploadAndGotUrls(headers!, files!);
+
       if (thumbFieldName != null && thumbFiles!.isNotEmpty) {
+        print("object==============");
+
         data[thumbFieldName] =
-            (await filesUploadAndGotUrls(headers, thumbFiles))[0];
+            (await filesUploadAndGotUrls(headers, thumbFiles));
+        // data[thumbFieldName] =
+        //     (await filesUploadAndGotUrls(headers, thumbFiles))[0];
       }
 
       final body = json.encode(data);
@@ -170,6 +175,11 @@ class RemoteGatewayBase {
     }
     return null;
   }
+
+  // bool allItemsAreSame(List<File> list) {
+  //   return list
+  //       .every((item) => (item.path == "02943e5368adf6cc72f4a2e0a435090b.pdf"));
+  // }
 
   Future<T?> postUrlEncodeMethod<T, K>(
       {required String endpoint, dynamic data}) async {
@@ -202,12 +212,14 @@ class RemoteGatewayBase {
     request.headers.addAll(headers);
 
     for (File pdf in files) {
-      request.files.add(
-        await http.MultipartFile.fromPath(
-          "files", // The key (name) of the file field in your API
-          pdf.path,
-        ),
-      );
+      if (pdf.path != "02943e5368adf6cc72f4a2e0a435090b.pdf") {
+        request.files.add(
+          await http.MultipartFile.fromPath(
+            "files", // The key (name) of the file field in your API
+            pdf.path,
+          ),
+        );
+      }
     }
     final response = await request.send();
     var streamResponse = await http.Response.fromStream(response);

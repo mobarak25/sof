@@ -143,6 +143,15 @@ class AgendaInput {
   final TextEditingController textEditingController;
 }
 
+class MCQOptions {
+  const MCQOptions({
+    required this.focusnode,
+    required this.textEditingController,
+  });
+  final FocusNode focusnode;
+  final TextEditingController textEditingController;
+}
+
 String generateValidUrl(String url) {
   // Replace backslashes with empty string to remove them
   String validUrl = url.replaceAll(r'\\', '');
@@ -151,4 +160,14 @@ String generateValidUrl(String url) {
   validUrl = Uri.decodeComponent(validUrl);
 
   return validUrl;
+}
+
+DateTime getLastDayOfMonth(DateTime date) {
+  // Create a DateTime object for the first day of the next month
+  DateTime firstDayOfNextMonth = (date.month < 12)
+      ? DateTime(date.year, date.month + 1, 1)
+      : DateTime(date.year + 1, 1, 1); // If December, go to next year
+
+  // Subtract one day to get the last day of the current month
+  return firstDayOfNextMonth.subtract(const Duration(days: 1));
 }

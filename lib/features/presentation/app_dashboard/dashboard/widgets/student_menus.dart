@@ -113,6 +113,15 @@ class StudentMenus extends StatelessWidget {
                 transportScreen, ModalRoute.withName('/'));
           },
         ),
+        FeatureItem(
+          iconName: "assets/images/feature_icons_svg/ic_attendance.svg",
+          title: context.tr(LocaleKeys.attendance),
+          press: () {
+            panelController.close();
+            navigatorKey.currentState!.pushNamedAndRemoveUntil(
+                studentAttendanceScreen, ModalRoute.withName('/'));
+          },
+        ),
       ],
     );
   }

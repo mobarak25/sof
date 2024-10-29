@@ -4,7 +4,17 @@ import 'package:school_of_future/core/utils/text_styles.dart';
 import 'package:school_of_future/core/widgets/text.dart';
 
 class ScreenHeader extends StatelessWidget {
-  const ScreenHeader({super.key});
+  const ScreenHeader(
+      {super.key,
+      required this.present,
+      required this.absent,
+      required this.late,
+      required this.leave});
+
+  final int present;
+  final int absent;
+  final int late;
+  final int leave;
 
   @override
   Widget build(BuildContext context) {
@@ -17,17 +27,17 @@ class ScreenHeader extends StatelessWidget {
       decoration: const BoxDecoration(
         color: bGray4,
       ),
-      child: const Row(
+      child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Row(
             children: [
-              TextB(
+              const TextB(
                 text: "Present: ",
                 textStyle: bBody2,
               ),
               TextB(
-                text: "17",
+                text: "$present",
                 textStyle: bBody1B,
                 fontColor: kPrimaryColor,
               ),
@@ -35,12 +45,25 @@ class ScreenHeader extends StatelessWidget {
           ),
           Row(
             children: [
+              const TextB(
+                text: "Late: ",
+                textStyle: bBody2,
+              ),
               TextB(
+                text: "$late",
+                textStyle: bBody1B,
+                fontColor: kSecondaryColor,
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              const TextB(
                 text: "Absent: ",
                 textStyle: bBody2,
               ),
               TextB(
-                text: "17",
+                text: "$absent",
                 textStyle: bBody1B,
                 fontColor: bRed,
               ),
@@ -48,12 +71,12 @@ class ScreenHeader extends StatelessWidget {
           ),
           Row(
             children: [
-              TextB(
-                text: "Late: ",
+              const TextB(
+                text: "Leave: ",
                 textStyle: bBody2,
               ),
               TextB(
-                text: "17",
+                text: "$leave",
                 textStyle: bBody1B,
                 fontColor: kSecondaryColor,
               ),

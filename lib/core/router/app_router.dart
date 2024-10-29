@@ -24,6 +24,8 @@ import 'package:school_of_future/features/presentation/assignment/teacher_assign
 import 'package:school_of_future/features/presentation/assignment/teacher_assignment_create/view/assignment_create_screen.dart';
 import 'package:school_of_future/features/presentation/assignment/teacher_view_submission/bloc/teacher_view_submission_bloc.dart';
 import 'package:school_of_future/features/presentation/assignment/teacher_view_submission/view/teacher_view_submission_screen.dart';
+import 'package:school_of_future/features/presentation/attendance/absent_student/bloc/absent_student_bloc.dart';
+import 'package:school_of_future/features/presentation/attendance/absent_student/view/absent_student_screen.dart';
 import 'package:school_of_future/features/presentation/attendance/take_attendance/bloc/take_attendance_bloc.dart';
 import 'package:school_of_future/features/presentation/attendance/take_attendance/view/take_attendance_screen.dart';
 import 'package:school_of_future/features/presentation/change_password/bloc/change_password_bloc.dart';
@@ -58,6 +60,8 @@ import 'package:school_of_future/features/presentation/meeting/meeting_details/b
 import 'package:school_of_future/features/presentation/meeting/meeting_details/view/meeting_details_screen.dart';
 import 'package:school_of_future/features/presentation/menu/bloc/menu_bloc.dart';
 import 'package:school_of_future/features/presentation/menu/view/menu_screen.dart';
+import 'package:school_of_future/features/presentation/question_bank/question_create/bloc/question_create_bloc.dart';
+import 'package:school_of_future/features/presentation/question_bank/question_create/view/question_create_screen.dart';
 import 'package:school_of_future/features/presentation/resources/resources_details/bloc/resources_details_bloc.dart';
 import 'package:school_of_future/features/presentation/resources/resources_details/view/resources_details_screen.dart';
 import 'package:school_of_future/features/presentation/resources/teacher_resources_create/bloc/resources_create_bloc.dart';
@@ -504,9 +508,42 @@ class AppRouter {
                   subjectId: params["subject_id"],
                   batchId: params["batch_id"],
                   classInfo: params["class_name"],
+                  isViewDetails: params["is_view_details"],
                 ),
               ),
             child: const TakeAttendanceScreen(),
+          ),
+        );
+      case absentStudentsScreen:
+        final params = settings.arguments as Map<String, dynamic>;
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (BuildContext context) => BlocProvider(
+            create: (context) => AbsentStudentBloc(getIt<ApiRepo>(),
+                getIt<IFlutterNavigator>(), getIt<LocalStorageRepo>())
+              ..add(
+                GetStudents(
+                  subjectId: params["subject_id"],
+                  batchId: params["batch_id"],
+                  classInfo: params["class_name"],
+                ),
+              ),
+            child: const AbsentStudentsScreen(),
+          ),
+        );
+
+      case questionCreateScreen:
+        final id = settings.arguments as int;
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (BuildContext context) => BlocProvider(
+            create: (context) => QuestionCreateBloc(
+                getIt<ApiRepo>(),
+                getIt<IFlutterNavigator>(),
+                getIt<LocalStorageRepo>(),
+                getIt<FilePickerRepo>())
+              ..add(QuestionIdForEdit(qId: id)),
+            child: const QuestionCreateScreen(),
           ),
         );
 

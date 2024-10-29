@@ -6,6 +6,7 @@ import 'package:school_of_future/core/translations/local_keys.dart';
 import 'package:school_of_future/core/utils/colors.dart';
 import 'package:school_of_future/core/utils/enums.dart';
 import 'package:school_of_future/core/utils/text_styles.dart';
+import 'package:school_of_future/core/utils/utilities.dart';
 import 'package:school_of_future/core/widgets/button.dart';
 import 'package:school_of_future/core/widgets/date_picker.dart';
 import 'package:school_of_future/core/widgets/dropdown_field.dart';
@@ -48,11 +49,21 @@ class FilterSidebar extends StatelessWidget {
   Widget build(BuildContext context) {
     final startDateFocusnode = FocusNode();
     final endDateFocusnode = FocusNode();
-    final startDateController = TextEditingController();
-    final endDateController = TextEditingController();
+
     return BlocBuilder<FilterSidebarBloc, FilterSidebarState>(
       builder: (context, state) {
+        final startDateController = TextEditingController(
+          text: state.startDate.isNotEmpty
+              ? getDate(value: state.startDate, formate: "dd MMM yyyy")
+              : '',
+        );
+        final endDateController = TextEditingController(
+          text: state.endDate.isNotEmpty
+              ? getDate(value: state.endDate, formate: "dd MMM yyyy")
+              : '',
+        );
         final bloc = context.read<FilterSidebarBloc>();
+
         return Container(
           padding: EdgeInsets.only(top: paddingTop),
           child: Column(

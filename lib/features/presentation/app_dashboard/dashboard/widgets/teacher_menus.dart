@@ -177,6 +177,16 @@ class TeacherMenus extends StatelessWidget {
                 teacherAttendanceScreen, ModalRoute.withName('/'));
           },
         ),
+        FeatureItem(
+          iconName:
+              "assets/images/feature_icons_svg/icon_digital_rep_inner.svg",
+          title: context.tr(LocaleKeys.question),
+          press: () {
+            panelController.close();
+            navigatorKey.currentState!.pushNamedAndRemoveUntil(
+                questionBankScreen, ModalRoute.withName('/'));
+          },
+        ),
       ],
     );
   }

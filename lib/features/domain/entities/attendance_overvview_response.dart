@@ -17,14 +17,16 @@ class AttendanceOverview {
 
 class Data {
   final int? totalStudent;
+  final int? classes;
   final int? absent;
   final int? present;
   final int? leave;
   final int? late;
-  final int? percentage;
+  final num? percentage;
 
   const Data({
     this.totalStudent,
+    this.classes,
     this.absent,
     this.present,
     this.leave,
@@ -34,6 +36,7 @@ class Data {
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
         totalStudent: json["total_student"],
+        classes: json["classes"],
         absent: json["absent"],
         present: json["present"],
         leave: json["leave"],
@@ -43,6 +46,7 @@ class Data {
 
   Map<String, dynamic> toJson() => {
         "total_student": totalStudent,
+        "classes": classes,
         "absent": absent,
         "present": present,
         "leave": leave,

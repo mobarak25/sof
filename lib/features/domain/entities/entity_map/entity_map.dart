@@ -1,9 +1,11 @@
+import 'package:school_of_future/features/domain/entities/absent_students_response.dart';
 import 'package:school_of_future/features/domain/entities/assignment_assign_student_response.dart';
 import 'package:school_of_future/features/domain/entities/assignment_details_response.dart';
 import 'package:school_of_future/features/domain/entities/assignment_feedback_response.dart';
 import 'package:school_of_future/features/domain/entities/assignment_list_response.dart';
 import 'package:school_of_future/features/domain/entities/attendance_overvview_response.dart';
 import 'package:school_of_future/features/domain/entities/batch_wise_student.dart';
+import 'package:school_of_future/features/domain/entities/calander_attendance_overview_response.dart';
 import 'package:school_of_future/features/domain/entities/chapter_response.dart';
 import 'package:school_of_future/features/domain/entities/child_list_response.dart';
 import 'package:school_of_future/features/domain/entities/classwork_details_response.dart';
@@ -26,6 +28,9 @@ import 'package:school_of_future/features/domain/entities/meeting_list_response.
 import 'package:school_of_future/features/domain/entities/notice_details_response.dart';
 import 'package:school_of_future/features/domain/entities/notice_response.dart';
 import 'package:school_of_future/features/domain/entities/profile_attendance_response.dart';
+import 'package:school_of_future/features/domain/entities/question_bank_response.dart';
+import 'package:school_of_future/features/domain/entities/question_details_response.dart';
+import 'package:school_of_future/features/domain/entities/question_level_response.dart';
 import 'package:school_of_future/features/domain/entities/resource_details_response.dart';
 import 'package:school_of_future/features/domain/entities/resources_response.dart';
 import 'package:school_of_future/features/domain/entities/routine_response.dart';
@@ -40,6 +45,7 @@ import 'package:school_of_future/features/domain/entities/teacher_leave_details_
 import 'package:school_of_future/features/domain/entities/teacher_own_leave_list_response.dart';
 import 'package:school_of_future/features/domain/entities/teacher_profile_response.dart';
 import 'package:school_of_future/features/domain/entities/teacher_summited_assinent_response.dart';
+import 'package:school_of_future/features/domain/entities/today_attendance_response.dart';
 import 'package:school_of_future/features/domain/entities/transport_response.dart';
 
 class EntityMap {
@@ -131,6 +137,18 @@ class EntityMap {
         return AttendanceOverview.fromJson(json) as T;
       case const (StudentsForAttendance):
         return StudentsForAttendance.fromJson(json) as T;
+      case const (AbsentStudents):
+        return AbsentStudents.fromJson(json) as T;
+      case const (CalanderAttendanceOverview):
+        return CalanderAttendanceOverview.fromJson(json) as T;
+      case const (TodayAttendanceStatus):
+        return TodayAttendanceStatus.fromJson(json) as T;
+      case const (QuestionBankList):
+        return QuestionBankList.fromJson(json) as T;
+      case const (QuestionDetails):
+        return QuestionDetails.fromJson(json) as T;
+      case const (QuestionLevel):
+        return QuestionLevel.fromJson(json) as T;
 
       default:
         throw Exception('Unknown class');

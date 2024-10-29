@@ -12,6 +12,8 @@ import 'package:school_of_future/features/presentation/assignment/student_assign
 import 'package:school_of_future/features/presentation/assignment/student_assignment_list/view/student_assinment_list_screen.dart';
 import 'package:school_of_future/features/presentation/assignment/teacher_assignment_list/bloc/teacher_assignment_list_bloc.dart';
 import 'package:school_of_future/features/presentation/assignment/teacher_assignment_list/view/teacher_assinment_list_screen.dart';
+import 'package:school_of_future/features/presentation/attendance/student_attendance/bloc/student_attendance_bloc.dart';
+import 'package:school_of_future/features/presentation/attendance/student_attendance/view/student_attendance_screen.dart';
 import 'package:school_of_future/features/presentation/attendance/teacher_attendance/bloc/teacher_attendance_bloc.dart';
 import 'package:school_of_future/features/presentation/attendance/teacher_attendance/view/teacher_attendance_screen.dart';
 import 'package:school_of_future/features/presentation/class_work/student_classwork_list/bloc/student_classwork_list_bloc.dart';
@@ -36,6 +38,8 @@ import 'package:school_of_future/features/presentation/profile/teacher/bloc/teac
 import 'package:school_of_future/features/presentation/profile/teacher/view/teacher_profile_screen.dart';
 import 'package:school_of_future/features/presentation/app_dashboard/Student_home/bloc/student_home_bloc.dart';
 import 'package:school_of_future/features/presentation/app_dashboard/Student_home/view/student_home_screen.dart';
+import 'package:school_of_future/features/presentation/question_bank/question_list/bloc/question_bank_bloc.dart';
+import 'package:school_of_future/features/presentation/question_bank/question_list/view/question_bank_screen.dart';
 import 'package:school_of_future/features/presentation/resources/resources_list/bloc/teacher_resource_list_bloc.dart';
 import 'package:school_of_future/features/presentation/resources/resources_list/view/teacher_resources_list_screen.dart';
 import 'package:school_of_future/features/presentation/routine/teacher_routine/bloc/teacher_routine_bloc.dart';
@@ -278,6 +282,42 @@ Route<dynamic>? studentsRoutes(RouteSettings settings) {
           create: (context) => TeacherAttendanceBloc(getIt<ApiRepo>(),
               getIt<IFlutterNavigator>(), getIt<LocalStorageRepo>()),
           child: const TeacherAttendanceScreen(),
+        ),
+      );
+
+    case studentAttendanceScreen:
+      return MaterialPageRoute(
+        settings: settings,
+        builder: (BuildContext context) => MultiBlocProvider(
+          providers: [
+            BlocProvider<StudentAttendanceBloc>(
+              create: (context) => StudentAttendanceBloc(getIt<ApiRepo>(),
+                  getIt<IFlutterNavigator>(), getIt<LocalStorageRepo>()),
+            ),
+            BlocProvider<FilterSidebarBloc>(
+              create: (context) => FilterSidebarBloc(
+                  getIt<ApiRepo>(), getIt<LocalStorageRepo>()),
+            ),
+          ],
+          child: const StudentAttendanceScreen(),
+        ),
+      );
+
+    case questionBankScreen:
+      return MaterialPageRoute(
+        settings: settings,
+        builder: (BuildContext context) => MultiBlocProvider(
+          providers: [
+            BlocProvider<QuestionBankBloc>(
+              create: (context) => QuestionBankBloc(getIt<ApiRepo>(),
+                  getIt<IFlutterNavigator>(), getIt<LocalStorageRepo>()),
+            ),
+            BlocProvider<FilterSidebarBloc>(
+              create: (context) => FilterSidebarBloc(
+                  getIt<ApiRepo>(), getIt<LocalStorageRepo>()),
+            ),
+          ],
+          child: const QuestionBankScreen(),
         ),
       );
 

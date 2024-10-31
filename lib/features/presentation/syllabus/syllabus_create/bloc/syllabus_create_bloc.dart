@@ -72,26 +72,41 @@ class SyllabusCreateBloc
       }
 
       emit(state.copyWith(versionList: list, bacthAsSection: versionList));
+
+      if (state.syllabusId != -1) {
+        final details = await _apiRepo.get<SyllabusDetails>(
+          endpoint: syllabusDetailsEndPoint(syllabusId: state.syllabusId),
+        );
+
+        if (details != null) {
+          emit(state.copyWith(details: details));
+
+          final data = state.details.data!;
+
+          add(SelectVersionId(id: data.versionId));
+          add(SelectClassId(id: data.classId));
+          add(SelectSubjectId(id: data.subjectId));
+          add(SelectSectionId(id: data.sectionId));
+
+          add(AddData(
+            title: data.title!,
+            content: data.content,
+            date: data.date!,
+            marks: data.mark!.toString(),
+            syllabusType: data.type,
+            selectedVersionId: data.versionId,
+            selectedClassId: data.classId,
+            selectedSubjectId: data.subjectId,
+            selectedSectionId: data.sectionId,
+          ));
+        }
+      }
     }
   }
 
   FutureOr<void> _syllabusIdForEdit(
       SyllabusIdForEdit event, Emitter<SyllabusCreateState> emit) async {
     emit(state.copyWith(syllabusId: event.syllabusId));
-
-    if (event.syllabusId != -1) {
-      final details = await _apiRepo.get<SyllabusDetails>(
-        endpoint: syllabusDetailsEndPoint(syllabusId: event.syllabusId),
-      );
-
-      if (details != null) {
-        emit(state.copyWith(details: details));
-        add(SelectVersionId(id: state.details.data!.versionId));
-        add(SelectClassId(id: state.details.data!.classId));
-        add(SelectSubjectId(id: state.details.data!.subjectId));
-        add(SelectSectionId(id: state.details.data!.sectionId));
-      }
-    }
   }
 
   FutureOr<void> _changeTitle(
@@ -313,6 +328,7 @@ class SyllabusCreateBloc
     if (state.isFirstTime) {
       emit(state.copyWith(
         title: event.title,
+        content: event.content,
         date: getDate(value: event.date, formate: "yyyy-MM-dd"),
         marks: event.marks,
         syllabusType: event.syllabusType,

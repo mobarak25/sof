@@ -72,6 +72,8 @@ class PressToCreate extends LessonPlanCreateEvent {
 
 class PressToCancel extends LessonPlanCreateEvent {}
 
+class PressToConfirmCancel extends LessonPlanCreateEvent {}
+
 class AddData extends LessonPlanCreateEvent {
   const AddData({
     required this.title,

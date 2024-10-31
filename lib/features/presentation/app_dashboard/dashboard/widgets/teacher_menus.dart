@@ -187,6 +187,15 @@ class TeacherMenus extends StatelessWidget {
                 questionBankScreen, ModalRoute.withName('/'));
           },
         ),
+        FeatureItem(
+          iconName: "assets/images/feature_icons_svg/ic_question_paper.svg",
+          title: context.tr(LocaleKeys.questionPaper),
+          press: () {
+            panelController.close();
+            navigatorKey.currentState!.pushNamedAndRemoveUntil(
+                questionPaperListScreen, ModalRoute.withName('/'));
+          },
+        ),
       ],
     );
   }

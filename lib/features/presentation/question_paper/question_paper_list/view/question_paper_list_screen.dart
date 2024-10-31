@@ -13,19 +13,20 @@ import 'package:school_of_future/core/widgets/floating_button.dart';
 import 'package:school_of_future/core/widgets/text.dart';
 import 'package:school_of_future/features/presentation/app_common/filter_sidebar/bloc/filter_sidebar_bloc.dart';
 import 'package:school_of_future/features/presentation/app_common/filter_sidebar/view/filter_sidebar.dart';
-import 'package:school_of_future/features/presentation/question_bank/question_list/bloc/question_bank_bloc.dart';
 import 'package:school_of_future/features/presentation/question_bank/question_list/widgets/question_card.dart';
+import 'package:school_of_future/features/presentation/question_paper/question_paper_list/bloc/question_paper_list_bloc.dart';
+import 'package:school_of_future/features/presentation/question_paper/question_paper_list/widgets/qst_paper_card.dart';
 
-class QuestionBankScreen extends StatelessWidget {
-  const QuestionBankScreen({super.key});
+class QuestionPaperListScreen extends StatelessWidget {
+  const QuestionPaperListScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     final scroll = ScrollController();
 
-    return BlocBuilder<QuestionBankBloc, QuestionBankState>(
+    return BlocBuilder<QuestionPaperListBloc, QuestionPaperListState>(
       builder: (context, state) {
-        final bloc = context.read<QuestionBankBloc>();
+        final bloc = context.read<QuestionPaperListBloc>();
         final filterBloc = context.read<FilterSidebarBloc>();
 
         scroll.addListener(() {
@@ -37,7 +38,7 @@ class QuestionBankScreen extends StatelessWidget {
           isFullScreen: true,
           appBar: FutureAppBar(
             actions: const [SizedBox()],
-            title: LocaleKeys.questionBank.tr(),
+            title: LocaleKeys.questionPaper.tr(),
           ),
           drawerChild: Padding(
             padding: EdgeInsets.only(
@@ -62,7 +63,7 @@ class QuestionBankScreen extends StatelessWidget {
                 padding:
                     const EdgeInsets.symmetric(vertical: 13, horizontal: 15),
                 color: bInnerBg,
-                child: state.questionList.data != null
+                child: state.qstPapers.data != null
                     ? CustomTab(
                         loading: state.loading,
                         tabList: const [],
@@ -78,20 +79,23 @@ class QuestionBankScreen extends StatelessWidget {
                                 controller: scroll,
                                 children: [
                                   ...List.generate(
-                                    state.questionList.data!.length,
+                                    state.qstPapers.data!.length,
                                     (index) {
-                                      return QuestionItemView(
-                                        data: state.questionList.data![index],
-                                        press: () {},
-                                        prssToEditDel:
-                                            (String pressTo, int id) {
-                                          bloc.add(PressToDelEdit(
-                                              type: pressTo, id: id));
-                                        },
+                                      return Column(
+                                        children: [
+                                          QstItemCard(
+                                            item: state.qstPapers.data![index],
+                                            pressTo: (String pressTo, int id) {
+                                              bloc.add(PressToDelEdit(
+                                                  type: pressTo, id: id));
+                                            },
+                                          ),
+                                          const Gap(15),
+                                        ],
                                       );
                                     },
                                   ),
-                                  if (state.questionList.data!.isEmpty)
+                                  if (state.qstPapers.data!.isEmpty)
                                     TextB(
                                       text: LocaleKeys.noResultFound.tr(),
                                       textStyle: bBody1B,

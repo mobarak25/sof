@@ -1,34 +1,34 @@
-part of 'question_bank_bloc.dart';
+part of 'question_paper_list_bloc.dart';
 
-sealed class QuestionBankEvent extends Equatable {
-  const QuestionBankEvent();
+sealed class QuestionPaperListEvent extends Equatable {
+  const QuestionPaperListEvent();
 
   @override
   List<Object> get props => [];
 }
 
-class GetQuestion extends QuestionBankEvent {}
+class GetQstPaper extends QuestionPaperListEvent {}
 
-class ChangeSearch extends QuestionBankEvent {
+class ChangeSearch extends QuestionPaperListEvent {
   const ChangeSearch({required this.searchText, required this.filterBloc});
   final String searchText;
   final FilterSidebarBloc filterBloc;
 }
 
-class PressFilter extends QuestionBankEvent {
+class PressFilter extends QuestionPaperListEvent {
   const PressFilter({required this.filterBloc});
   final FilterSidebarBloc filterBloc;
 }
 
-class PressToDelEdit extends QuestionBankEvent {
+class PressToDelEdit extends QuestionPaperListEvent {
   const PressToDelEdit({required this.id, required this.type});
   final int id;
   final String type;
 }
 
-class DeleteQuestion extends QuestionBankEvent {
+class DeleteQuestion extends QuestionPaperListEvent {
   const DeleteQuestion({required this.qId});
   final int qId;
 }
 
-class PageIncrement extends QuestionBankEvent {}
+class PageIncrement extends QuestionPaperListEvent {}

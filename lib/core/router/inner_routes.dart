@@ -40,6 +40,8 @@ import 'package:school_of_future/features/presentation/app_dashboard/Student_hom
 import 'package:school_of_future/features/presentation/app_dashboard/Student_home/view/student_home_screen.dart';
 import 'package:school_of_future/features/presentation/question_bank/question_list/bloc/question_bank_bloc.dart';
 import 'package:school_of_future/features/presentation/question_bank/question_list/view/question_bank_screen.dart';
+import 'package:school_of_future/features/presentation/question_paper/question_paper_list/bloc/question_paper_list_bloc.dart';
+import 'package:school_of_future/features/presentation/question_paper/question_paper_list/view/question_paper_list_screen.dart';
 import 'package:school_of_future/features/presentation/resources/resources_list/bloc/teacher_resource_list_bloc.dart';
 import 'package:school_of_future/features/presentation/resources/resources_list/view/teacher_resources_list_screen.dart';
 import 'package:school_of_future/features/presentation/routine/teacher_routine/bloc/teacher_routine_bloc.dart';
@@ -318,6 +320,24 @@ Route<dynamic>? studentsRoutes(RouteSettings settings) {
             ),
           ],
           child: const QuestionBankScreen(),
+        ),
+      );
+
+    case questionPaperListScreen:
+      return MaterialPageRoute(
+        settings: settings,
+        builder: (BuildContext context) => MultiBlocProvider(
+          providers: [
+            BlocProvider<QuestionPaperListBloc>(
+              create: (context) => QuestionPaperListBloc(getIt<ApiRepo>(),
+                  getIt<IFlutterNavigator>(), getIt<LocalStorageRepo>()),
+            ),
+            BlocProvider<FilterSidebarBloc>(
+              create: (context) => FilterSidebarBloc(
+                  getIt<ApiRepo>(), getIt<LocalStorageRepo>()),
+            ),
+          ],
+          child: const QuestionPaperListScreen(),
         ),
       );
 

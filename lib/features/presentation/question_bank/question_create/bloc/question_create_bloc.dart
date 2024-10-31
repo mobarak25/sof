@@ -13,10 +13,10 @@ import 'package:school_of_future/core/router/route_constents.dart';
 import 'package:school_of_future/core/snackbar/show_snackbar.dart';
 import 'package:school_of_future/core/utils/enums.dart';
 import 'package:school_of_future/core/utils/utilities.dart';
+import 'package:school_of_future/core/widgets/confirm_cancel_dialog.dart';
 import 'package:school_of_future/features/data/data_sources/remote_constants.dart';
 import 'package:school_of_future/features/domain/entities/default_response.dart';
 import 'package:school_of_future/features/domain/entities/get_batch_as_section_response.dart';
-import 'package:school_of_future/features/domain/entities/lesson_plan_details_response.dart';
 import 'package:school_of_future/features/domain/entities/question_details_response.dart';
 import 'package:school_of_future/features/domain/entities/question_level_response.dart';
 import 'package:school_of_future/features/domain/repositories/api_repo.dart';
@@ -47,7 +47,11 @@ class QuestionCreateBloc
     on<AddOptions>(_addOptions);
     on<SelectMcqOptions>(_selectMcqOptions);
     on<Explanation>(_explanation);
+    on<ChangeCorAns>(_changeCorAns);
     on<PressToCreate>(_pressToCreate);
+    on<PressToCancel>(_pressToCancel);
+    on<PressToConfirmCancel>(_pressToConfirmCancel);
+    on<AddData>(_addData);
 
     add(GetVersionList());
     add(GetQuestionLevel());
@@ -61,20 +65,6 @@ class QuestionCreateBloc
   FutureOr<void> _questionIdForEdit(
       QuestionIdForEdit event, Emitter<QuestionCreateState> emit) async {
     emit(state.copyWith(qId: event.qId));
-
-    if (event.qId != -1) {
-      final details = await _apiRepo.get<QuestionDetails>(
-        endpoint: questionDtlsEndPoint(qId: event.qId),
-      );
-
-      if (details != null) {
-        emit(state.copyWith(questionDtls: details));
-
-        add(SelectVersionId(id: state.questionDtls.data!.subject!.versionId!));
-        add(SelectClassId(id: state.questionDtls.data!.subject!.classId));
-        add(SelectSubjectId(id: state.questionDtls.data!.subjectId));
-      }
-    }
   }
 
   FutureOr<void> _changeTitle(
@@ -90,6 +80,11 @@ class QuestionCreateBloc
   FutureOr<void> _explanation(
       Explanation event, Emitter<QuestionCreateState> emit) {
     emit(state.copyWith(explanation: event.explanation));
+  }
+
+  FutureOr<void> _changeCorAns(
+      ChangeCorAns event, Emitter<QuestionCreateState> emit) {
+    emit(state.copyWith(correctAns: event.corAns));
   }
 
   FutureOr<void> _getFile(
@@ -139,6 +134,8 @@ class QuestionCreateBloc
           hasOptionImg: updatedHasOptionImg,
         ),
       );
+
+      print("has image===============${state.hasOptionImg}");
     } else {}
   }
 
@@ -151,8 +148,14 @@ class QuestionCreateBloc
   FutureOr<void> _removeOptionFile(
       RemoveOptionFile event, Emitter<QuestionCreateState> emit) {
     List<File> updateFiles = List.from(state.optionImage);
+    List<int> updateHasImg = List.from(state.hasOptionImg);
+
     updateFiles[event.index] = File('02943e5368adf6cc72f4a2e0a435090b.pdf');
-    emit(state.copyWith(optionImage: updateFiles));
+    updateHasImg[event.index] = 0;
+
+    emit(state.copyWith(optionImage: updateFiles, hasOptionImg: updateHasImg));
+
+    print(state.hasOptionImg);
   }
 
   FutureOr<void> _getVersionList(
@@ -174,6 +177,56 @@ class QuestionCreateBloc
       }
 
       emit(state.copyWith(versionList: list, bacthAsSection: versionList));
+
+      if (state.qId != -1) {
+        final details = await _apiRepo.get<QuestionDetails>(
+          endpoint: questionDtlsEndPoint(qId: state.qId),
+        );
+
+        if (details != null) {
+          emit(state.copyWith(questionDtls: details));
+          final data = state.questionDtls.data!;
+
+          add(SelectVersionId(id: data.subject!.versionId!));
+          add(SelectClassId(id: data.subject!.classId));
+          add(SelectSubjectId(id: data.subjectId));
+
+          List<MCQOptions> option = [];
+          List<int> checked = [];
+          List<int> hasOptionImg = [];
+          List<File> optionImage = [];
+
+          for (int i = 0; i < data.questionOptions!.length; i++) {
+            option.add(MCQOptions(
+              textEditingController:
+                  TextEditingController(text: data.questionOptions![i].options),
+              focusnode: FocusNode(),
+            ));
+            checked.add(data.questionOptions![i].isCorrect!);
+            hasOptionImg.add(data.questionOptions![i].imgHas!);
+            optionImage.add(File("02943e5368adf6cc72f4a2e0a435090b.pdf"));
+          }
+
+          add(
+            AddData(
+              title: data.title!,
+              explanation: data.questionExplanation!,
+              mark: data.mark.toString(),
+              selectedVersionId: data.subject!.versionId!,
+              selectedClassId: data.subject!.classId!,
+              selectedSubjectId: data.subjectId,
+              selectLevelId: data.questionLevelId,
+              questionTypeId: data.type,
+              mcqOptions: option,
+              checked: checked,
+              hasOptionImg: hasOptionImg,
+              selectedMcqOption: checked.indexOf(1),
+              optionImage: optionImage,
+              correctAns: data.correctAnswer,
+            ),
+          );
+        }
+      }
     }
   }
 
@@ -289,12 +342,19 @@ class QuestionCreateBloc
       ),
     );
 
-    print(state.checked);
+    print("Checked===========: ${state.checked}");
+    print("has option image===========: ${state.hasOptionImg}");
   }
 
   FutureOr<void> _selectMcqOptions(
       SelectMcqOptions event, Emitter<QuestionCreateState> emit) {
-    List<int> updatedChecked = List<int>.filled(state.checked.length, 0);
+    List<int> updatedChecked = List<int>.filled(
+        state.questionTypeId == 1
+            ? state.checked.length
+            : state.questionTypeId == 2
+                ? 2
+                : 1,
+        0);
     updatedChecked[event.optionIndex] = 1;
 
     emit(state.copyWith(
@@ -321,18 +381,26 @@ class QuestionCreateBloc
           "mark": state.mark,
           "question_level_id": state.selectLevelId,
           "type": state.questionTypeId,
-          "options": optionList,
+          "options": state.questionTypeId == 1
+              ? optionList
+              : state.questionTypeId == 2
+                  ? ["True", "False"]
+                  : [],
           "subject_id": state.selectedSubjectId,
-          "correct_answer": "c",
+          "correct_answer": state.correctAns,
           "question_explanation": state.explanation,
           "checked": state.checked,
-          "img_has": state.hasOptionImg,
+          "img_has": state.questionTypeId == 1
+              ? state.hasOptionImg
+              : state.questionTypeId == 2
+                  ? [0, 0]
+                  : [],
           "_method": state.qId == -1 ? "POST" : "PUT",
         },
         fileFieldName: "question_thumbnail",
         thumbFieldName: "thumbnails",
         files: state.fileList,
-        thumbFiles: state.optionImage,
+        thumbFiles: state.questionTypeId == 1 ? state.optionImage : [],
       );
 
       if (create != null) {
@@ -351,12 +419,51 @@ class QuestionCreateBloc
   bool isValid(PressToCreate event) {
     final validate = Validator.isValidated(items: [
       FormItem(text: state.title, focusNode: event.titleFocusnode),
+      FormItem(text: state.mark, focusNode: event.markFocusnode),
     ], navigator: _iFlutterNavigator);
 
     if (!validate) return false;
-    if (state.title.isEmpty) {
+    if (state.title.isEmpty ||
+        state.mark.isEmpty ||
+        state.selectedSubjectId == -1 ||
+        state.questionTypeId == -1 ||
+        state.selectLevelId == -1) {
       return false;
     }
     return true;
+  }
+
+  FutureOr<void> _pressToCancel(
+      PressToCancel event, Emitter<QuestionCreateState> emit) {
+    showCancelDialog(_iFlutterNavigator.context, pressToYes: () {
+      add(PressToConfirmCancel());
+    });
+  }
+
+  FutureOr<void> _pressToConfirmCancel(
+      PressToConfirmCancel event, Emitter<QuestionCreateState> emit) {
+    Navigator.of(_iFlutterNavigator.context).popUntil((route) => route.isFirst);
+  }
+
+  FutureOr<void> _addData(AddData event, Emitter<QuestionCreateState> emit) {
+    if (state.isFirstTime) {
+      emit(state.copyWith(
+        title: event.title,
+        selectedVersionId: event.selectedVersionId,
+        selectedClassId: event.selectedClassId,
+        selectedSubjectId: event.selectedSubjectId,
+        selectLevelId: event.selectLevelId,
+        questionTypeId: event.questionTypeId,
+        mark: event.mark,
+        isFirstTime: false,
+        mcqOptions: event.mcqOptions,
+        hasOptionImg: event.hasOptionImg,
+        selectedMcqOption: event.selectedMcqOption,
+        checked: event.checked,
+        optionImage: event.optionImage,
+        explanation: event.explanation,
+        correctAns: event.correctAns,
+      ));
+    }
   }
 }

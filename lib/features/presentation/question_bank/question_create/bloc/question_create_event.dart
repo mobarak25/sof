@@ -27,6 +27,11 @@ class Explanation extends QuestionCreateEvent {
   final String explanation;
 }
 
+class ChangeCorAns extends QuestionCreateEvent {
+  const ChangeCorAns({required this.corAns});
+  final String corAns;
+}
+
 class GetFile extends QuestionCreateEvent {}
 
 class GetOptionFile extends QuestionCreateEvent {
@@ -78,17 +83,39 @@ class GetQuestionLevel extends QuestionCreateEvent {}
 
 class PressToCancel extends QuestionCreateEvent {}
 
+class PressToConfirmCancel extends QuestionCreateEvent {}
+
 class AddData extends QuestionCreateEvent {
   const AddData({
     required this.title,
+    required this.explanation,
+    required this.correctAns,
     required this.selectedVersionId,
     required this.selectedClassId,
     required this.selectedSubjectId,
+    required this.selectLevelId,
+    required this.questionTypeId,
+    required this.selectedMcqOption,
+    required this.mark,
+    required this.mcqOptions,
+    required this.checked,
+    required this.hasOptionImg,
+    required this.optionImage,
   });
   final String title;
+  final String explanation;
+  final String correctAns;
   final dynamic selectedVersionId;
   final dynamic selectedClassId;
   final dynamic selectedSubjectId;
+  final dynamic selectLevelId;
+  final dynamic questionTypeId;
+  final dynamic selectedMcqOption;
+  final String mark;
+  final List<MCQOptions> mcqOptions;
+  final List<int> checked;
+  final List<int> hasOptionImg;
+  final List<File> optionImage;
 }
 
 class AddOptions extends QuestionCreateEvent {}
@@ -101,9 +128,11 @@ class SelectMcqOptions extends QuestionCreateEvent {
 class PressToCreate extends QuestionCreateEvent {
   const PressToCreate({
     required this.titleFocusnode,
+    required this.markFocusnode,
     required this.isDraft,
   });
 
   final bool isDraft;
   final FocusNode titleFocusnode;
+  final FocusNode markFocusnode;
 }

@@ -132,4 +132,5 @@ String questionBankEndPoint = "${version1}question-bank";
 String questionLevelEndPoint = "${version1}question-level";
 
 String questionDtlsEndPoint({required int qId}) =>
-    "$version1/question-bank/$qId";
+    "${version1}question-bank/$qId";
+String questionPaperListEndPoint = "${version1}question-paper";

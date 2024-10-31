@@ -12,6 +12,7 @@ import 'package:school_of_future/core/router/route_constents.dart';
 import 'package:school_of_future/core/snackbar/show_snackbar.dart';
 import 'package:school_of_future/core/utils/enums.dart';
 import 'package:school_of_future/core/utils/utilities.dart';
+import 'package:school_of_future/core/widgets/confirm_cancel_dialog.dart';
 import 'package:school_of_future/features/data/data_sources/remote_constants.dart';
 import 'package:school_of_future/features/domain/entities/default_response.dart';
 import 'package:school_of_future/features/domain/entities/get_batch_as_section_response.dart';
@@ -41,6 +42,7 @@ class LessonPlanCreateBloc
     on<GetSelectedResourceIds>(_getSelectedResourceIds);
     on<PressToCreate>(_pressToCreate);
     on<PressToCancel>(_pressToCancel);
+    on<PressToConfirmCancel>(_pressToConfirmCancel);
     on<AddData>(_addData);
 
     add(GetVersionList());
@@ -321,7 +323,16 @@ class LessonPlanCreateBloc
   }
 
   FutureOr<void> _pressToCancel(
-      PressToCancel event, Emitter<LessonPlanCreateState> emit) {}
+      PressToCancel event, Emitter<LessonPlanCreateState> emit) {
+    showCancelDialog(_iFlutterNavigator.context, pressToYes: () {
+      add(PressToConfirmCancel());
+    });
+  }
+
+  FutureOr<void> _pressToConfirmCancel(
+      PressToConfirmCancel event, Emitter<LessonPlanCreateState> emit) {
+    Navigator.of(_iFlutterNavigator.context).popUntil((route) => route.isFirst);
+  }
 
   FutureOr<void> _addData(AddData event, Emitter<LessonPlanCreateState> emit) {
     if (state.isFirstTime) {

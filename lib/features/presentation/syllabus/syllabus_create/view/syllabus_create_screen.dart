@@ -40,38 +40,43 @@ class SyllabusCreateScreen extends StatelessWidget {
 
     return BlocBuilder<SyllabusCreateBloc, SyllabusCreateState>(
       builder: (context, state) {
-        if (state.isFirstTime) {
-          if (state.details.data != null) {
-            final data = state.details.data!;
+        // if (state.isFirstTime) {
+        //   if (state.details.data != null) {
+        //     final data = state.details.data!;
 
-            var noteDelta = HtmlToDelta().convert(data.content!);
-            qcontroller.document = Document.fromDelta(noteDelta);
+        //     var noteDelta = HtmlToDelta().convert(data.content!);
+        //     qcontroller.document = Document.fromDelta(noteDelta);
 
-            bloc.add(
-              AddData(
-                title: data.title!,
-                date: data.date!,
-                marks: data.mark!.toString(),
-                syllabusType: data.type,
-                selectedVersionId: data.versionId,
-                selectedClassId: data.classId,
-                selectedSubjectId: data.subjectId,
-                selectedSectionId: data.sectionId,
-              ),
-            );
-          } else if (state.details.data == null && state.syllabusId != -1) {
-            return Body(
-              isFullScreen: true,
-              appBar: FutureAppBar(
-                actions: const [SizedBox()],
-                title: LocaleKeys.syllabus.tr(),
-                isLoading: state.loading,
-              ),
-              child: const Center(
-                child: CircularProgressIndicator(),
-              ),
-            );
-          }
+        //     bloc.add(
+        //       AddData(
+        //         title: data.title!,
+        //         date: data.date!,
+        //         marks: data.mark!.toString(),
+        //         syllabusType: data.type,
+        //         selectedVersionId: data.versionId,
+        //         selectedClassId: data.classId,
+        //         selectedSubjectId: data.subjectId,
+        //         selectedSectionId: data.sectionId,
+        //       ),
+        //     );
+        //   } else if (state.details.data == null && state.syllabusId != -1) {
+        //     return Body(
+        //       isFullScreen: true,
+        //       appBar: FutureAppBar(
+        //         actions: const [SizedBox()],
+        //         title: LocaleKeys.syllabus.tr(),
+        //         isLoading: state.loading,
+        //       ),
+        //       child: const Center(
+        //         child: CircularProgressIndicator(),
+        //       ),
+        //     );
+        //   }
+        // }
+
+        if (state.details.data != null) {
+          var noteDelta = HtmlToDelta().convert(state.details.data!.content);
+          qcontroller.document = Document.fromDelta(noteDelta);
         }
 
         titleController.text = state.title;
@@ -88,247 +93,231 @@ class SyllabusCreateScreen extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.symmetric(vertical: 13, horizontal: 15),
             color: bInnerBg,
-            child: ListView(
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    TextFieldB(
-                      isMandatory: true,
-                      fieldTitle: LocaleKeys.title.tr(),
-                      hintText: LocaleKeys.enterTitle.tr(),
-                      borderColor: bGray12,
-                      focusNode: titleFocusnode,
-                      controller: titleController,
-                      onChanged: (String value) {
-                        bloc.add(ChangeTitle(title: value));
-                      },
-                      errorText:
-                          state.forms == Forms.invalid && state.title.isEmpty
-                              ? LocaleKeys.enterTitle.tr()
-                              : '',
-                    ),
-                    const Gap(20),
-                    //==============Contents===================================
-                    const TextB(
-                      text: "Contents",
-                      textStyle: TextStyle(fontSize: 16),
-                      fontColor: bGray100,
-                    ),
-                    const Gap(5),
-                    Container(
-                      clipBehavior: Clip.hardEdge,
-                      decoration: BoxDecoration(
-                        color: bWhite,
-                        border: Border.all(color: bGray12),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      height: 240,
-                      child: Column(
+            child: state.bacthAsSection.data != null
+                ? ListView(
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          QuillSimpleToolbar(
-                            controller: qcontroller,
-                            configurations:
-                                const QuillSimpleToolbarConfigurations(
-                              multiRowsDisplay: false,
-                              toolbarSize: 45,
+                          TextFieldB(
+                            isMandatory: true,
+                            fieldTitle: LocaleKeys.title.tr(),
+                            hintText: LocaleKeys.enterTitle.tr(),
+                            borderColor: bGray12,
+                            focusNode: titleFocusnode,
+                            controller: titleController,
+                            onChanged: (String value) {
+                              bloc.add(ChangeTitle(title: value));
+                            },
+                            errorText: state.forms == Forms.invalid &&
+                                    state.title.isEmpty
+                                ? LocaleKeys.enterTitle.tr()
+                                : '',
+                          ),
+                          const Gap(20),
+                          //==============Contents===================================
+                          const TextB(
+                            text: "Contents",
+                            textStyle: TextStyle(fontSize: 16),
+                            fontColor: bGray100,
+                          ),
+                          const Gap(5),
+                          Container(
+                            clipBehavior: Clip.hardEdge,
+                            decoration: BoxDecoration(
+                              color: bWhite,
+                              border: Border.all(color: bGray12),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            height: 240,
+                            child: Column(
+                              children: [
+                                QuillSimpleToolbar(
+                                  controller: qcontroller,
+                                  configurations:
+                                      const QuillSimpleToolbarConfigurations(
+                                    multiRowsDisplay: false,
+                                    toolbarSize: 45,
+                                  ),
+                                ),
+                                Expanded(
+                                  child: QuillEditor.basic(
+                                    controller: qcontroller,
+                                    configurations:
+                                        const QuillEditorConfigurations(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 10, vertical: 10),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                          Expanded(
-                            child: QuillEditor.basic(
-                              controller: qcontroller,
-                              configurations: const QuillEditorConfigurations(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 10),
+                          Column(
+                            children: [
+                              const Gap(15),
+                              ShowFileName(
+                                selectedFile: state.fileList,
+                                press: (int index) {
+                                  bloc.add(RemoveFile(index: index));
+                                },
                               ),
+                            ],
+                          ),
+                          const Gap(10),
+                          DottedButtonB(
+                            title: LocaleKeys.uploadSyllabus.tr(),
+                            verticalPadding: 20,
+                            bgColor: kPrimaryColor,
+                            borderColor: kPrimaryColor,
+                            textColor: bWhite,
+                            svgIcon: fileAttachSvg,
+                            svgColor: bWhite,
+                            svgHeight: 30,
+                            press: () {
+                              bloc.add(GetFile());
+                            },
+                          ),
+
+                          const Gap(20),
+                          TextFieldB(
+                            isMandatory: true,
+                            fieldTitle: LocaleKeys.date.tr(),
+                            hintText: "yyyy-mm-dd",
+                            textInputType: TextInputType.number,
+                            borderColor: bGray12,
+                            focusNode: dateFocusnode,
+                            controller: dateController,
+                            isReadOnly: true,
+                            suffixIcon: const Icon(
+                              Icons.calendar_month,
+                              size: 30,
+                              color: bGray32,
                             ),
+                            onChanged: (String value) {},
+                            onTouch: () async {
+                              dateController.text =
+                                  await showDateTimePickerDialog(context,
+                                          initialdate: state.date) ??
+                                      '';
+                              bloc.add(PublishDate(
+                                  publishedAt: dateController.text));
+                            },
                           ),
-                        ],
-                      ),
-                    ),
-                    Column(
-                      children: [
-                        const Gap(15),
-                        ShowFileName(
-                          selectedFile: state.fileList,
-                          press: (int index) {
-                            bloc.add(RemoveFile(index: index));
-                          },
-                        ),
-                      ],
-                    ),
-                    const Gap(10),
-                    DottedButtonB(
-                      title: LocaleKeys.uploadSyllabus.tr(),
-                      verticalPadding: 20,
-                      bgColor: kPrimaryColor,
-                      borderColor: kPrimaryColor,
-                      textColor: bWhite,
-                      svgIcon: fileAttachSvg,
-                      svgColor: bWhite,
-                      svgHeight: 30,
-                      press: () {
-                        bloc.add(GetFile());
-                      },
-                    ),
-
-                    const Gap(20),
-                    TextFieldB(
-                      isMandatory: true,
-                      fieldTitle: LocaleKeys.date.tr(),
-                      hintText: "yyyy-mm-dd",
-                      textInputType: TextInputType.number,
-                      borderColor: bGray12,
-                      focusNode: dateFocusnode,
-                      controller: dateController,
-                      isReadOnly: true,
-                      suffixIcon: const Icon(
-                        Icons.calendar_month,
-                        size: 30,
-                        color: bGray32,
-                      ),
-                      onChanged: (String value) {},
-                      onTouch: () async {
-                        dateController.text = await showDateTimePickerDialog(
-                                context,
-                                initialdate: state.date) ??
-                            '';
-                        bloc.add(PublishDate(publishedAt: dateController.text));
-                      },
-                    ),
-                    if (state.forms == Forms.invalid && state.date.isEmpty)
-                      TextB(
-                        text: LocaleKeys.noDateIsSelected.tr(),
-                        fontColor: bRed,
-                      ),
-                    const Gap(10),
-                    TextFieldB(
-                      textInputType: TextInputType.number,
-                      fieldTitle: LocaleKeys.marks.tr(),
-                      hintText: LocaleKeys.enterMark.tr(),
-                      borderColor: bGray12,
-                      focusNode: marksFocusnode,
-                      controller: marksController,
-                      onChanged: (String value) {
-                        bloc.add(ChangeMarks(marks: value));
-                      },
-                    ),
-                    const Gap(10),
-                    DropdownFieldB(
-                      dropdownHeight: 50,
-                      label: LocaleKeys.type.tr(),
-                      labelColor: bBlack,
-                      dropDownValue: state.syllabusType,
-                      selected: (dynamic type) {
-                        bloc.add(SelectSyllabusType(type: type));
-                      },
-                      items: const [
-                        DropdownItem(name: "Select", value: -1),
-                        DropdownItem(name: "Class test", value: "class-test"),
-                        DropdownItem(name: "Quiz test", value: "quiz-test"),
-                      ],
-                    ),
-                    if (state.forms == Forms.invalid &&
-                        state.syllabusType == -1)
-                      TextB(
-                          text: LocaleKeys.noTypeIsSelected.tr(),
-                          fontColor: bRed),
-                    const Gap(10),
-
-                    DropdownFieldB(
-                      dropdownHeight: 50,
-                      label: LocaleKeys.version.tr(),
-                      labelColor: bBlack,
-                      dropDownValue: state.selectedVersionId,
-                      selected: (dynamic type) {
-                        bloc.add(SelectVersionId(id: type));
-                      },
-                      items: state.versionList,
-                    ),
-                    if (state.forms == Forms.invalid &&
-                        state.selectedVersionId == -1)
-                      TextB(
-                          text: LocaleKeys.selectVersion.tr(), fontColor: bRed),
-                    const Gap(10),
-                    DropdownFieldB(
-                      dropdownHeight: 50,
-                      setState: state.setClass,
-                      label: LocaleKeys.classStr.tr(),
-                      labelColor: bBlack,
-                      dropDownValue: state.selectedClassId,
-                      selected: (dynamic type) {
-                        bloc.add(SelectClassId(id: type));
-                      },
-                      items: state.classList,
-                    ),
-                    if (state.forms == Forms.invalid &&
-                        state.selectedClassId == -1)
-                      TextB(text: LocaleKeys.selectClass.tr(), fontColor: bRed),
-                    const Gap(10),
-                    DropdownFieldB(
-                      dropdownHeight: 50,
-                      label: LocaleKeys.subject.tr(),
-                      labelColor: bBlack,
-                      setState: state.setSubject,
-                      dropDownValue: state.selectedSubjectId,
-                      selected: (dynamic type) {
-                        bloc.add(SelectSubjectId(id: type));
-                      },
-                      items: state.subjectList,
-                    ),
-                    if (state.forms == Forms.invalid &&
-                        state.selectedSubjectId == -1)
-                      TextB(
-                          text: LocaleKeys.selectSubject.tr(), fontColor: bRed),
-                    const Gap(10),
-                    DropdownFieldB(
-                      dropdownHeight: 50,
-                      label: LocaleKeys.section.tr(),
-                      labelColor: bBlack,
-                      setState: state.setSection,
-                      dropDownValue: state.selectSectionId,
-                      selected: (dynamic type) {
-                        bloc.add(SelectSectionId(id: type));
-                      },
-                      items: state.sectionList,
-                    ),
-                    if (state.forms == Forms.invalid &&
-                        state.selectSectionId == -1)
-                      TextB(
-                          text: LocaleKeys.selectSection.tr(), fontColor: bRed),
-                    const Gap(30),
-                    ButtonB(
-                      heigh: 60,
-                      text: state.syllabusId == -1
-                          ? LocaleKeys.create.tr()
-                          : LocaleKeys.save.tr(),
-                      press: () {
-                        List jsonContent =
-                            qcontroller.document.toDelta().toJson();
-
-                        final htmlContent =
-                            QuillJsonToHTML.encodeJson(jsonContent);
-
-                        bloc.add(
-                          PressToCreate(
-                            isDraft: false,
-                            content: htmlContent,
-                            titleFocusnode: titleFocusnode,
+                          if (state.forms == Forms.invalid &&
+                              state.date.isEmpty)
+                            TextB(
+                              text: LocaleKeys.noDateIsSelected.tr(),
+                              fontColor: bRed,
+                            ),
+                          const Gap(10),
+                          TextFieldB(
+                            textInputType: TextInputType.number,
+                            fieldTitle: LocaleKeys.marks.tr(),
+                            hintText: LocaleKeys.enterMark.tr(),
+                            borderColor: bGray12,
+                            focusNode: marksFocusnode,
+                            controller: marksController,
+                            onChanged: (String value) {
+                              bloc.add(ChangeMarks(marks: value));
+                            },
                           ),
-                        );
-                      },
-                    ),
+                          const Gap(10),
+                          DropdownFieldB(
+                            dropdownHeight: 50,
+                            label: LocaleKeys.type.tr(),
+                            labelColor: bBlack,
+                            dropDownValue: state.syllabusType,
+                            selected: (dynamic type) {
+                              bloc.add(SelectSyllabusType(type: type));
+                            },
+                            items: const [
+                              DropdownItem(name: "Select", value: -1),
+                              DropdownItem(
+                                  name: "Class test", value: "class-test"),
+                              DropdownItem(
+                                  name: "Quiz test", value: "quiz-test"),
+                            ],
+                          ),
+                          if (state.forms == Forms.invalid &&
+                              state.syllabusType == -1)
+                            TextB(
+                                text: LocaleKeys.noTypeIsSelected.tr(),
+                                fontColor: bRed),
+                          const Gap(10),
 
-                    const Gap(20),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: ButtonB(
+                          DropdownFieldB(
+                            dropdownHeight: 50,
+                            label: LocaleKeys.version.tr(),
+                            labelColor: bBlack,
+                            dropDownValue: state.selectedVersionId,
+                            selected: (dynamic type) {
+                              bloc.add(SelectVersionId(id: type));
+                            },
+                            items: state.versionList,
+                          ),
+                          if (state.forms == Forms.invalid &&
+                              state.selectedVersionId == -1)
+                            TextB(
+                                text: LocaleKeys.selectVersion.tr(),
+                                fontColor: bRed),
+                          const Gap(10),
+                          DropdownFieldB(
+                            dropdownHeight: 50,
+                            setState: state.setClass,
+                            label: LocaleKeys.classStr.tr(),
+                            labelColor: bBlack,
+                            dropDownValue: state.selectedClassId,
+                            selected: (dynamic type) {
+                              bloc.add(SelectClassId(id: type));
+                            },
+                            items: state.classList,
+                          ),
+                          if (state.forms == Forms.invalid &&
+                              state.selectedClassId == -1)
+                            TextB(
+                                text: LocaleKeys.selectClass.tr(),
+                                fontColor: bRed),
+                          const Gap(10),
+                          DropdownFieldB(
+                            dropdownHeight: 50,
+                            label: LocaleKeys.subject.tr(),
+                            labelColor: bBlack,
+                            setState: state.setSubject,
+                            dropDownValue: state.selectedSubjectId,
+                            selected: (dynamic type) {
+                              bloc.add(SelectSubjectId(id: type));
+                            },
+                            items: state.subjectList,
+                          ),
+                          if (state.forms == Forms.invalid &&
+                              state.selectedSubjectId == -1)
+                            TextB(
+                                text: LocaleKeys.selectSubject.tr(),
+                                fontColor: bRed),
+                          const Gap(10),
+                          DropdownFieldB(
+                            dropdownHeight: 50,
+                            label: LocaleKeys.section.tr(),
+                            labelColor: bBlack,
+                            setState: state.setSection,
+                            dropDownValue: state.selectSectionId,
+                            selected: (dynamic type) {
+                              bloc.add(SelectSectionId(id: type));
+                            },
+                            items: state.sectionList,
+                          ),
+                          if (state.forms == Forms.invalid &&
+                              state.selectSectionId == -1)
+                            TextB(
+                                text: LocaleKeys.selectSection.tr(),
+                                fontColor: bRed),
+                          const Gap(30),
+                          ButtonB(
                             heigh: 60,
-                            fontSize: 15,
-                            bgColor: kSecondaryColor,
-                            horizontalPadding: 5,
-                            text: LocaleKeys.saveAsDraft.tr(),
+                            text: state.syllabusId == -1
+                                ? LocaleKeys.create.tr()
+                                : LocaleKeys.save.tr(),
                             press: () {
                               List jsonContent =
                                   qcontroller.document.toDelta().toJson();
@@ -338,33 +327,63 @@ class SyllabusCreateScreen extends StatelessWidget {
 
                               bloc.add(
                                 PressToCreate(
-                                  isDraft: true,
+                                  isDraft: false,
                                   content: htmlContent,
                                   titleFocusnode: titleFocusnode,
                                 ),
                               );
                             },
                           ),
-                        ),
-                        const Gap(10),
-                        Expanded(
-                          child: ButtonB(
-                            heigh: 60,
-                            bgColor: kTextDefaultColor.withOpacity(0.2),
-                            textColor: kTextAnotherColor,
-                            text: LocaleKeys.cancel.tr(),
-                            press: () {
-                              bloc.add(PressToCancel());
-                            },
+
+                          const Gap(20),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: ButtonB(
+                                  heigh: 60,
+                                  fontSize: 15,
+                                  bgColor: kSecondaryColor,
+                                  horizontalPadding: 5,
+                                  text: LocaleKeys.saveAsDraft.tr(),
+                                  press: () {
+                                    List jsonContent =
+                                        qcontroller.document.toDelta().toJson();
+
+                                    final htmlContent =
+                                        QuillJsonToHTML.encodeJson(jsonContent);
+
+                                    bloc.add(
+                                      PressToCreate(
+                                        isDraft: true,
+                                        content: htmlContent,
+                                        titleFocusnode: titleFocusnode,
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                              const Gap(10),
+                              Expanded(
+                                child: ButtonB(
+                                  heigh: 60,
+                                  bgColor: kTextDefaultColor.withOpacity(0.2),
+                                  textColor: kTextAnotherColor,
+                                  text: LocaleKeys.cancel.tr(),
+                                  press: () {
+                                    bloc.add(PressToCancel());
+                                  },
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                      ],
-                    ),
-                    const Gap(20),
-                  ],
-                ),
-              ],
-            ),
+                          const Gap(20),
+                        ],
+                      ),
+                    ],
+                  )
+                : const Center(
+                    child: CircularProgressIndicator(),
+                  ),
           ),
         );
       },

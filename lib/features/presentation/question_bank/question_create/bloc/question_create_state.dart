@@ -8,6 +8,7 @@ class QuestionCreateState extends Equatable {
     this.title = '',
     this.mark = '',
     this.explanation = '',
+    this.correctAns = '',
     this.fileList = const [],
     this.optionImage = const [],
     //dependable
@@ -39,6 +40,7 @@ class QuestionCreateState extends Equatable {
   final String title;
   final String mark;
   final String explanation;
+  final String correctAns;
   final List<File> fileList;
   final List<File> optionImage;
   //dependable dropdown
@@ -72,6 +74,7 @@ class QuestionCreateState extends Equatable {
     String? title,
     String? mark,
     String? explanation,
+    String? correctAns,
     String? videoLink,
     //
     GetBacthAsSections? bacthAsSection,
@@ -102,6 +105,7 @@ class QuestionCreateState extends Equatable {
       title: title ?? this.title,
       mark: mark ?? this.mark,
       explanation: explanation ?? this.explanation,
+      correctAns: correctAns ?? this.correctAns,
       fileList: fileList ?? this.fileList,
       optionImage: optionImage ?? this.optionImage,
       //dropdown
@@ -135,6 +139,7 @@ class QuestionCreateState extends Equatable {
         forms,
         mark,
         explanation,
+        correctAns,
         title,
         fileList,
         optionImage,

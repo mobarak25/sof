@@ -81,6 +81,7 @@ class PressToCancel extends SyllabusCreateEvent {}
 class AddData extends SyllabusCreateEvent {
   const AddData({
     required this.title,
+    required this.content,
     required this.date,
     required this.marks,
     required this.syllabusType,
@@ -91,6 +92,7 @@ class AddData extends SyllabusCreateEvent {
   });
 
   final String title;
+  final String content;
   final String date;
   final String marks;
   final dynamic syllabusType;

@@ -6,6 +6,7 @@ class SyllabusCreateState extends Equatable {
     this.syllabusId = -1,
     this.forms = Forms.initial,
     this.title = '',
+    this.content = '',
     this.marks = '',
     this.date = '',
     this.fileList = const [],
@@ -32,6 +33,7 @@ class SyllabusCreateState extends Equatable {
   final int syllabusId;
   final Forms forms;
   final String title;
+  final String content;
   final String marks;
   final String date;
   final List<File> fileList;
@@ -58,6 +60,7 @@ class SyllabusCreateState extends Equatable {
     int? syllabusId,
     Forms? forms,
     String? title,
+    String? content,
     String? marks,
     String? date,
     List<File>? fileList,
@@ -84,6 +87,7 @@ class SyllabusCreateState extends Equatable {
       syllabusId: syllabusId ?? this.syllabusId,
       forms: forms ?? this.forms,
       title: title ?? this.title,
+      content: content ?? this.content,
       marks: marks ?? this.marks,
       date: date ?? this.date,
       fileList: fileList ?? this.fileList,
@@ -113,6 +117,7 @@ class SyllabusCreateState extends Equatable {
         syllabusId,
         forms,
         title,
+        content,
         marks,
         date,
         fileList,

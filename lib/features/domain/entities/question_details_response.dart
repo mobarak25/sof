@@ -23,11 +23,10 @@ class Data {
   final int? questionLevelId;
   final int? type;
   final String? questionExplanation;
-  final String? correctAnswer;
-  final List<Option>? options;
-  final String? questionThumbnail;
+  final dynamic correctAnswer;
   final Subject? subject;
   final Level? level;
+  final List<QuestionOption>? questionOptions;
 
   const Data({
     this.id,
@@ -38,10 +37,9 @@ class Data {
     this.type,
     this.questionExplanation,
     this.correctAnswer,
-    this.options,
-    this.questionThumbnail,
     this.subject,
     this.level,
+    this.questionOptions,
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
@@ -53,14 +51,13 @@ class Data {
         type: json["type"],
         questionExplanation: json["question_explanation"],
         correctAnswer: json["correct_answer"],
-        options: json["options"] == null
-            ? []
-            : List<Option>.from(
-                json["options"]!.map((x) => Option.fromJson(x))),
-        questionThumbnail: json["question_thumbnail"],
         subject:
             json["subject"] == null ? null : Subject.fromJson(json["subject"]),
         level: json["level"] == null ? null : Level.fromJson(json["level"]),
+        questionOptions: json["question_options"] == null
+            ? []
+            : List<QuestionOption>.from(json["question_options"]!
+                .map((x) => QuestionOption.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -72,12 +69,11 @@ class Data {
         "type": type,
         "question_explanation": questionExplanation,
         "correct_answer": correctAnswer,
-        "options": options == null
-            ? []
-            : List<dynamic>.from(options!.map((x) => x.toJson())),
-        "question_thumbnail": questionThumbnail,
         "subject": subject?.toJson(),
         "level": level?.toJson(),
+        "question_options": questionOptions == null
+            ? []
+            : List<dynamic>.from(questionOptions!.map((x) => x.toJson())),
       };
 }
 
@@ -101,30 +97,32 @@ class Level {
       };
 }
 
-class Option {
+class QuestionOption {
   final int? id;
   final int? questionId;
-  final String? options;
+  final dynamic options;
   final int? isCorrect;
   final int? imgHas;
-  final String? thumbnails;
+  final Attachment? attachment;
 
-  const Option({
+  const QuestionOption({
     this.id,
     this.questionId,
     this.options,
     this.isCorrect,
     this.imgHas,
-    this.thumbnails,
+    this.attachment,
   });
 
-  factory Option.fromJson(Map<String, dynamic> json) => Option(
+  factory QuestionOption.fromJson(Map<String, dynamic> json) => QuestionOption(
         id: json["id"],
         questionId: json["question_id"],
         options: json["options"],
         isCorrect: json["is_correct"],
         imgHas: json["img_has"],
-        thumbnails: json["thumbnails"],
+        attachment: json["attachment"] == null
+            ? null
+            : Attachment.fromJson(json["attachment"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -133,7 +131,31 @@ class Option {
         "options": options,
         "is_correct": isCorrect,
         "img_has": imgHas,
-        "thumbnails": thumbnails,
+        "attachment": attachment?.toJson(),
+      };
+}
+
+class Attachment {
+  final int? id;
+  final String? file;
+  final int? questionsOptionId;
+
+  const Attachment({
+    this.id,
+    this.file,
+    this.questionsOptionId,
+  });
+
+  factory Attachment.fromJson(Map<String, dynamic> json) => Attachment(
+        id: json["id"],
+        file: json["file"],
+        questionsOptionId: json["questions_option_id"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "file": file,
+        "questions_option_id": questionsOptionId,
       };
 }
 

@@ -13,19 +13,20 @@ import 'package:school_of_future/core/widgets/floating_button.dart';
 import 'package:school_of_future/core/widgets/text.dart';
 import 'package:school_of_future/features/presentation/app_common/filter_sidebar/bloc/filter_sidebar_bloc.dart';
 import 'package:school_of_future/features/presentation/app_common/filter_sidebar/view/filter_sidebar.dart';
-import 'package:school_of_future/features/presentation/question_bank/question_list/bloc/question_bank_bloc.dart';
-import 'package:school_of_future/features/presentation/question_bank/question_list/widgets/question_card.dart';
+import 'package:school_of_future/features/presentation/question_paper/add_question/bloc/add_question_bloc.dart';
+import 'package:school_of_future/features/presentation/question_paper/add_question/widgets/bottom_modal.dart';
+import 'package:school_of_future/features/presentation/question_paper/add_question/widgets/question_item_card.dart';
 
-class QuestionBankScreen extends StatelessWidget {
-  const QuestionBankScreen({super.key});
+class AddQuestionScreen extends StatelessWidget {
+  const AddQuestionScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     final scroll = ScrollController();
 
-    return BlocBuilder<QuestionBankBloc, QuestionBankState>(
+    return BlocBuilder<AddQuestionBloc, AddQuestionState>(
       builder: (context, state) {
-        final bloc = context.read<QuestionBankBloc>();
+        final bloc = context.read<AddQuestionBloc>();
         final filterBloc = context.read<FilterSidebarBloc>();
 
         scroll.addListener(() {
@@ -82,13 +83,15 @@ class QuestionBankScreen extends StatelessWidget {
                                   ...List.generate(
                                     state.questionList.data!.length,
                                     (index) {
-                                      return QuestionItemView(
+                                      return QuestionItemCard(
                                         data: state.questionList.data![index],
-                                        press: () {},
-                                        prssToEditDel:
-                                            (String pressTo, int id) {
-                                          bloc.add(PressToDelEdit(
-                                              type: pressTo, id: id));
+                                        isChecked:
+                                            state.checkUncheck[index].isChecked,
+                                        press: (bool value) {
+                                          bloc.add(CheckToggle(
+                                              isChecked: value,
+                                              item: state
+                                                  .questionList.data![index]));
                                         },
                                       );
                                     },
@@ -132,7 +135,18 @@ class QuestionBankScreen extends StatelessWidget {
                   Navigator.of(context, rootNavigator: true)
                       .pushNamed(questionCreateScreen, arguments: -1);
                 },
-              )
+              ),
+              BottomModal(
+                totalQst: state.totalQst,
+                marks: state.totalMarks,
+                data: state.tempQst,
+                updateMarks: () {
+                  bloc.add(UpdateMarks());
+                },
+                remove: (int id) {
+                  bloc.add(RemoveTempQst(id: id));
+                },
+              ),
             ],
           ),
         );

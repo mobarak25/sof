@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:school_of_future/features/domain/entities/get_batch_as_section_response.dart';
 
 String getDate({required String value, required String formate}) {
   DateTime tempDate = DateTime.parse(value);
@@ -170,4 +171,28 @@ DateTime getLastDayOfMonth(DateTime date) {
 
   // Subtract one day to get the last day of the current month
   return firstDayOfNextMonth.subtract(const Duration(days: 1));
+}
+
+class QstTempChecked {
+  QstTempChecked({
+    required this.id,
+    required this.isChecked,
+  });
+
+  final int id;
+  final bool isChecked;
+}
+
+class TempQuestion {
+  TempQuestion({
+    required this.id,
+    required this.title,
+    required this.focusnode,
+    required this.textEditingController,
+  });
+
+  final int id;
+  final String title;
+  final FocusNode focusnode;
+  final TextEditingController textEditingController;
 }

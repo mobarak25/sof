@@ -62,6 +62,10 @@ import 'package:school_of_future/features/presentation/menu/bloc/menu_bloc.dart'
 import 'package:school_of_future/features/presentation/menu/view/menu_screen.dart';
 import 'package:school_of_future/features/presentation/question_bank/question_create/bloc/question_create_bloc.dart';
 import 'package:school_of_future/features/presentation/question_bank/question_create/view/question_create_screen.dart';
+import 'package:school_of_future/features/presentation/question_paper/add_question/bloc/add_question_bloc.dart';
+import 'package:school_of_future/features/presentation/question_paper/add_question/view/add_question_screen.dart';
+import 'package:school_of_future/features/presentation/question_paper/question_paper_create/bloc/question_paper_create_bloc.dart';
+import 'package:school_of_future/features/presentation/question_paper/question_paper_create/view/question_paper_create_screen.dart';
 import 'package:school_of_future/features/presentation/resources/resources_details/bloc/resources_details_bloc.dart';
 import 'package:school_of_future/features/presentation/resources/resources_details/view/resources_details_screen.dart';
 import 'package:school_of_future/features/presentation/resources/teacher_resources_create/bloc/resources_create_bloc.dart';
@@ -544,6 +548,40 @@ class AppRouter {
                 getIt<FilePickerRepo>())
               ..add(QuestionIdForEdit(qId: id)),
             child: const QuestionCreateScreen(),
+          ),
+        );
+      case questionPaperCreateScreen:
+        final id = settings.arguments as int;
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (BuildContext context) => BlocProvider(
+            create: (context) => QuestionPaperCreateBloc(
+              getIt<ApiRepo>(),
+              getIt<IFlutterNavigator>(),
+              getIt<LocalStorageRepo>(),
+            )..add(QuestionPaperIdForEdit(qPaperId: id)),
+            child: const QuestionPaperCreateScreen(),
+          ),
+        );
+      case addQuestionPScreen:
+        final tempQst = settings.arguments as Map<String, dynamic>;
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (BuildContext context) => MultiBlocProvider(
+            providers: [
+              BlocProvider<AddQuestionBloc>(
+                create: (context) => AddQuestionBloc(getIt<ApiRepo>(),
+                    getIt<IFlutterNavigator>(), getIt<LocalStorageRepo>())
+                  ..add(GetQuestion(
+                      tempQst: tempQst["selectedQstns"],
+                      subjectId: tempQst['subject_id'])),
+              ),
+              BlocProvider<FilterSidebarBloc>(
+                create: (context) => FilterSidebarBloc(
+                    getIt<ApiRepo>(), getIt<LocalStorageRepo>()),
+              ),
+            ],
+            child: const AddQuestionScreen(),
           ),
         );
 

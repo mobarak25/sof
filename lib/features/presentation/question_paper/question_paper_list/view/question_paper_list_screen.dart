@@ -13,7 +13,6 @@ import 'package:school_of_future/core/widgets/floating_button.dart';
 import 'package:school_of_future/core/widgets/text.dart';
 import 'package:school_of_future/features/presentation/app_common/filter_sidebar/bloc/filter_sidebar_bloc.dart';
 import 'package:school_of_future/features/presentation/app_common/filter_sidebar/view/filter_sidebar.dart';
-import 'package:school_of_future/features/presentation/question_bank/question_list/widgets/question_card.dart';
 import 'package:school_of_future/features/presentation/question_paper/question_paper_list/bloc/question_paper_list_bloc.dart';
 import 'package:school_of_future/features/presentation/question_paper/question_paper_list/widgets/qst_paper_card.dart';
 
@@ -49,7 +48,9 @@ class QuestionPaperListScreen extends StatelessWidget {
             ),
             child: SingleChildScrollView(
               child: FilterSidebar(
-                showSubjectForStudent: true,
+                showVersion: true,
+                showClass: true,
+                showSubject: true,
                 btnText: LocaleKeys.filter.tr(),
                 pressFilterBtn: () {
                   bloc.add(PressFilter(filterBloc: filterBloc));
@@ -90,7 +91,7 @@ class QuestionPaperListScreen extends StatelessWidget {
                                                   type: pressTo, id: id));
                                             },
                                           ),
-                                          const Gap(15),
+                                          const Gap(10),
                                         ],
                                       );
                                     },
@@ -132,7 +133,7 @@ class QuestionPaperListScreen extends StatelessWidget {
               FloatingButton(
                 press: () {
                   Navigator.of(context, rootNavigator: true)
-                      .pushNamed(questionCreateScreen, arguments: -1);
+                      .pushNamed(questionPaperCreateScreen, arguments: -1);
                 },
               )
             ],

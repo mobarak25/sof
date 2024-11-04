@@ -6,6 +6,7 @@ import 'package:school_of_future/core/translations/local_keys.dart';
 import 'package:school_of_future/core/utils/colors.dart';
 import 'package:school_of_future/core/utils/subject_image_generator.dart';
 import 'package:school_of_future/core/utils/text_styles.dart';
+import 'package:school_of_future/core/utils/utilities.dart';
 import 'package:school_of_future/core/widgets/text.dart';
 import 'package:school_of_future/features/domain/entities/question_paper_list_response.dart';
 
@@ -42,7 +43,7 @@ class QstItemCard extends StatelessWidget {
                         height: 60,
                         width: 60,
                         child: appGenerateSvgWidgetFromId(
-                          id: item.subject!.id!,
+                          id: item.subject!.id ?? 0,
                         ),
                       ),
                     ),
@@ -77,6 +78,23 @@ class QstItemCard extends StatelessWidget {
                               ),
                             ],
                           ),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              TextB(
+                                text: '${LocaleKeys.date.tr()}: ',
+                                fontColor: bPrimaryColor,
+                              ),
+                              Flexible(
+                                child: TextB(
+                                  text: getDate(
+                                      value: item.datetime!,
+                                      formate: "dd MMM, yyyy"),
+                                  fontColor: kLabelColor,
+                                ),
+                              ),
+                            ],
+                          ),
                         ],
                       ),
                     ),
@@ -103,7 +121,7 @@ class QstItemCard extends StatelessWidget {
                           ),
                           const Gap(5),
                           TextB(
-                            text: LocaleKeys.resources.tr(),
+                            text: LocaleKeys.question.tr(),
                             fontColor: kTextDefaultColor,
                           ),
                         ],
@@ -125,7 +143,7 @@ class QstItemCard extends StatelessWidget {
                           ),
                           const Gap(5),
                           TextB(
-                            text: LocaleKeys.attachment.tr(),
+                            text: LocaleKeys.marks.tr(),
                             fontColor: kTextDefaultColor,
                           ),
                         ],

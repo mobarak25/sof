@@ -70,3 +70,5 @@ const absentStudentsScreen = "/absent-students-screen";
 const questionBankScreen = "/question-bank-screen";
 const questionCreateScreen = "/question-create-screen";
 const questionPaperListScreen = "/question-paper-list-screen";
+const questionPaperCreateScreen = "/question-paper-create-screen";
+const addQuestionPScreen = "/add-question-screen";

@@ -31,6 +31,7 @@ import 'package:school_of_future/features/domain/entities/profile_attendance_res
 import 'package:school_of_future/features/domain/entities/question_bank_response.dart';
 import 'package:school_of_future/features/domain/entities/question_details_response.dart';
 import 'package:school_of_future/features/domain/entities/question_level_response.dart';
+import 'package:school_of_future/features/domain/entities/question_paper_details_response.dart';
 import 'package:school_of_future/features/domain/entities/question_paper_list_response.dart';
 import 'package:school_of_future/features/domain/entities/resource_details_response.dart';
 import 'package:school_of_future/features/domain/entities/resources_response.dart';
@@ -152,6 +153,8 @@ class EntityMap {
         return QuestionLevel.fromJson(json) as T;
       case const (QuestionPaperList):
         return QuestionPaperList.fromJson(json) as T;
+      case const (QuestionPaperDtls):
+        return QuestionPaperDtls.fromJson(json) as T;
 
       default:
         throw Exception('Unknown class');

@@ -7,7 +7,6 @@ import 'package:school_of_future/core/translations/local_keys.dart';
 import 'package:school_of_future/core/utils/colors.dart';
 import 'package:school_of_future/core/utils/html_text.dart';
 import 'package:school_of_future/core/utils/text_styles.dart';
-import 'package:school_of_future/core/widgets/network_image.dart';
 import 'package:school_of_future/core/widgets/text.dart';
 import 'package:school_of_future/features/domain/entities/lesson_plan_details_response.dart';
 import 'package:school_of_future/features/presentation/assignment/student_assignment_details/widgets/item_attachment.dart';

@@ -12,8 +12,6 @@ class FilePickerRepoImpl implements FilePickerRepo {
 
   @override
   Future<FilePickerResult?> filePicker({bool? isMultiple = true}) async {
-    return await FilePicker.platform.pickFiles(
-      allowMultiple: isMultiple!,
-    );
+    return await FilePicker.platform.pickFiles(allowMultiple: isMultiple!);
   }
 }

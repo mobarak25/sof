@@ -31,6 +31,7 @@ class QuestionPaperListBloc
     on<PressFilter>(_pressFilter);
     on<PressToDelEdit>(_pressToDelEdit);
     on<DeleteQuestion>(_deleteQuestion);
+
     on<PageIncrement>(_pageIncrement);
 
     add(GetQstPaper());

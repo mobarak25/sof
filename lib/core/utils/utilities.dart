@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:school_of_future/features/domain/entities/get_batch_as_section_response.dart';
 
 String getDate({required String value, required String formate}) {
   DateTime tempDate = DateTime.parse(value);

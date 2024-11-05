@@ -85,7 +85,7 @@ class QuestionCreateScreen extends StatelessWidget {
                           ),
                           const Gap(10),
                           DottedButtonB(
-                            title: LocaleKeys.attachment.tr(),
+                            title: LocaleKeys.quesImage.tr(),
                             verticalPadding: 20,
                             bgColor: kPrimaryColor,
                             borderColor: kPrimaryColor,
@@ -284,9 +284,12 @@ class QuestionCreateScreen extends StatelessWidget {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.end,
                                             children: [
-                                              TextB(
-                                                text: getFileName(state
-                                                    .optionImage[index].path),
+                                              Expanded(
+                                                child: TextB(
+                                                  text: getFileName(state
+                                                      .optionImage[index].path),
+                                                  maxLines: 1,
+                                                ),
                                               ),
                                               IconButton(
                                                 onPressed: () {

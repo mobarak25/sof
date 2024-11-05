@@ -84,12 +84,25 @@ class QuestionPaperListScreen extends StatelessWidget {
                                     (index) {
                                       return Column(
                                         children: [
-                                          QstItemCard(
-                                            item: state.qstPapers.data![index],
-                                            pressTo: (String pressTo, int id) {
-                                              bloc.add(PressToDelEdit(
-                                                  type: pressTo, id: id));
+                                          GestureDetector(
+                                            onTap: () {
+                                              Navigator.of(context,
+                                                      rootNavigator: true)
+                                                  .pushNamed(
+                                                questionPaperDtlsScreen,
+                                                arguments: state
+                                                    .qstPapers.data![index].id,
+                                              );
                                             },
+                                            child: QstItemCard(
+                                              item:
+                                                  state.qstPapers.data![index],
+                                              pressTo:
+                                                  (String pressTo, int id) {
+                                                bloc.add(PressToDelEdit(
+                                                    type: pressTo, id: id));
+                                              },
+                                            ),
                                           ),
                                           const Gap(10),
                                         ],

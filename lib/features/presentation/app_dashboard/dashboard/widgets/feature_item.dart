@@ -10,11 +10,13 @@ class FeatureItem extends StatelessWidget {
     required this.iconName,
     required this.title,
     required this.press,
+    this.fontSize,
   });
 
   final String iconName;
   final String title;
   final VoidCallback press;
+  final double? fontSize;
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +25,7 @@ class FeatureItem extends StatelessWidget {
         press();
       },
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
             width: 60,
@@ -44,8 +47,9 @@ class FeatureItem extends StatelessWidget {
           const Gap(5),
           TextB(
             text: title,
-            fontSize: 10,
+            fontSize: fontSize ?? 10,
             fontColor: kMenuTextColor,
+            alignMent: TextAlign.center,
           ),
         ],
       ),

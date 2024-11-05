@@ -2,14 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:school_of_future/core/utils/colors.dart';
 
 class FloatingButton extends StatelessWidget {
-  const FloatingButton({super.key, required this.press});
+  const FloatingButton(
+      {super.key, required this.press, this.bottom, this.icon});
 
   final VoidCallback press;
+  final double? bottom;
+  final Icon? icon;
 
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      bottom: 100,
+      bottom: bottom ?? 100,
       right: 15,
       child: Material(
         color: kPrimaryColor,
@@ -25,11 +28,12 @@ class FloatingButton extends StatelessWidget {
             decoration: const BoxDecoration(
               shape: BoxShape.circle,
             ),
-            child: const Icon(
-              Icons.add,
-              size: 30,
-              color: bWhite,
-            ),
+            child: icon ??
+                const Icon(
+                  Icons.add,
+                  size: 30,
+                  color: bWhite,
+                ),
           ),
         ),
       ),

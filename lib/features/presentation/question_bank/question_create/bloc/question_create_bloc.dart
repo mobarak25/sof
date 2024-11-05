@@ -11,6 +11,7 @@ import 'package:school_of_future/core/navigator/iflutter_navigator.dart';
 import 'package:school_of_future/core/navigator/navigator_key.dart';
 import 'package:school_of_future/core/router/route_constents.dart';
 import 'package:school_of_future/core/snackbar/show_snackbar.dart';
+import 'package:school_of_future/core/utils/colors.dart';
 import 'package:school_of_future/core/utils/enums.dart';
 import 'package:school_of_future/core/utils/utilities.dart';
 import 'package:school_of_future/core/widgets/confirm_cancel_dialog.dart';
@@ -110,6 +111,22 @@ class QuestionCreateBloc
 
       emit(state.copyWith(fileList: state.fileList + tempFileList));
     } else {}
+
+    if (result != null) {
+      List<String?> validJpgFiles = result.paths
+          .where((path) =>
+              path != null && (path.endsWith('.jpg') || path.endsWith('.png')))
+          .toList();
+
+      if (validJpgFiles.isEmpty) {
+        ShowSnackBar(
+          message: "Please select a valid JPG or PNG file",
+          navigator: _iFlutterNavigator,
+          color: bRed,
+        );
+        emit(state.copyWith(fileList: []));
+      }
+    }
   }
 
   FutureOr<void> _getOptionFile(
@@ -130,13 +147,36 @@ class QuestionCreateBloc
 
       emit(
         state.copyWith(
-          optionImage: updatedOptionImages,
-          hasOptionImg: updatedHasOptionImg,
-        ),
+            optionImage: updatedOptionImages,
+            hasOptionImg: updatedHasOptionImg),
       );
 
       print("has image===============${state.hasOptionImg}");
     } else {}
+
+    if (result != null) {
+      List<String?> validJpgFiles = result.paths
+          .where((path) =>
+              path != null && (path.endsWith('.jpg') || path.endsWith('.png')))
+          .toList();
+
+      if (validJpgFiles.isEmpty) {
+        ShowSnackBar(
+          message: "Please select a valid JPG or PNG file",
+          navigator: _iFlutterNavigator,
+          color: bRed,
+        );
+        List<File> updateFiles = List.from(state.optionImage);
+        List<int> updateHasImg = List.from(state.hasOptionImg);
+
+        updateFiles[event.index] = File('02943e5368adf6cc72f4a2e0a435090b.pdf');
+        updateHasImg[event.index] = 0;
+
+        emit(
+          state.copyWith(optionImage: updateFiles, hasOptionImg: updateHasImg),
+        );
+      }
+    }
   }
 
   FutureOr<void> _removeFile(

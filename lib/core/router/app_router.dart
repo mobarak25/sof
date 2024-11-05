@@ -66,6 +66,8 @@ import 'package:school_of_future/features/presentation/question_paper/add_questi
 import 'package:school_of_future/features/presentation/question_paper/add_question/view/add_question_screen.dart';
 import 'package:school_of_future/features/presentation/question_paper/question_paper_create/bloc/question_paper_create_bloc.dart';
 import 'package:school_of_future/features/presentation/question_paper/question_paper_create/view/question_paper_create_screen.dart';
+import 'package:school_of_future/features/presentation/question_paper/question_paper_details/bloc/question_paper_details_bloc.dart';
+import 'package:school_of_future/features/presentation/question_paper/question_paper_details/view/question_paper_details_screen.dart';
 import 'package:school_of_future/features/presentation/resources/resources_details/bloc/resources_details_bloc.dart';
 import 'package:school_of_future/features/presentation/resources/resources_details/view/resources_details_screen.dart';
 import 'package:school_of_future/features/presentation/resources/teacher_resources_create/bloc/resources_create_bloc.dart';
@@ -582,6 +584,18 @@ class AppRouter {
               ),
             ],
             child: const AddQuestionScreen(),
+          ),
+        );
+
+      case questionPaperDtlsScreen:
+        final qPaperId = settings.arguments as int;
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (BuildContext context) => BlocProvider(
+            create: (context) => QuestionPaperDetailsBloc(getIt<ApiRepo>(),
+                getIt<IFlutterNavigator>(), getIt<LocalStorageRepo>())
+              ..add(QuestionPaperDetails(paperId: qPaperId)),
+            child: const QuestionPaperDetailScreen(),
           ),
         );
 

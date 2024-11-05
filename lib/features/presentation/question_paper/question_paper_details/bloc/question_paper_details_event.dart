@@ -6,3 +6,8 @@ sealed class QuestionPaperDetailsEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+
+class QuestionPaperDetails extends QuestionPaperDetailsEvent {
+  const QuestionPaperDetails({required this.paperId});
+  final int paperId;
+}

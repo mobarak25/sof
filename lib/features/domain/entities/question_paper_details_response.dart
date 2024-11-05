@@ -87,7 +87,7 @@ class Batch {
   final int? versionId;
   final int? classId;
 
-  Batch({
+  const Batch({
     this.id,
     this.name,
     this.versionId,
@@ -116,7 +116,7 @@ class QuestionPaperContent {
   final int? questionMark;
   final Questions? questions;
 
-  QuestionPaperContent({
+  const QuestionPaperContent({
     this.id,
     this.questionPaperId,
     this.questionId,
@@ -152,10 +152,10 @@ class Questions {
   final String? correctAnswer;
   final int? imgHas;
   final int? type;
-  final List<dynamic>? questionOptions;
-  final Attachment? attachment;
+  final List<QuestionOption>? questionOptions;
+  final QuestionsAttachment? attachment;
 
-  Questions({
+  const Questions({
     this.id,
     this.title,
     this.mark,
@@ -177,10 +177,11 @@ class Questions {
         type: json["type"],
         questionOptions: json["question_options"] == null
             ? []
-            : List<dynamic>.from(json["question_options"]!.map((x) => x)),
+            : List<QuestionOption>.from(json["question_options"]!
+                .map((x) => QuestionOption.fromJson(x))),
         attachment: json["attachment"] == null
             ? null
-            : Attachment.fromJson(json["attachment"]),
+            : QuestionsAttachment.fromJson(json["attachment"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -193,23 +194,24 @@ class Questions {
         "type": type,
         "question_options": questionOptions == null
             ? []
-            : List<dynamic>.from(questionOptions!.map((x) => x)),
+            : List<dynamic>.from(questionOptions!.map((x) => x.toJson())),
         "attachment": attachment?.toJson(),
       };
 }
 
-class Attachment {
+class QuestionsAttachment {
   final int? id;
   final String? file;
   final int? questionId;
 
-  Attachment({
+  const QuestionsAttachment({
     this.id,
     this.file,
     this.questionId,
   });
 
-  factory Attachment.fromJson(Map<String, dynamic> json) => Attachment(
+  factory QuestionsAttachment.fromJson(Map<String, dynamic> json) =>
+      QuestionsAttachment(
         id: json["id"],
         file: json["file"],
         questionId: json["question_id"],
@@ -219,6 +221,69 @@ class Attachment {
         "id": id,
         "file": file,
         "question_id": questionId,
+      };
+}
+
+class QuestionOption {
+  final int? id;
+  final int? questionId;
+  final String? options;
+  final int? isCorrect;
+  final int? imgHas;
+  final QuestionOptionAttachment? attachment;
+
+  const QuestionOption({
+    this.id,
+    this.questionId,
+    this.options,
+    this.isCorrect,
+    this.imgHas,
+    this.attachment,
+  });
+
+  factory QuestionOption.fromJson(Map<String, dynamic> json) => QuestionOption(
+        id: json["id"],
+        questionId: json["question_id"],
+        options: json["options"],
+        isCorrect: json["is_correct"],
+        imgHas: json["img_has"],
+        attachment: json["attachment"] == null
+            ? null
+            : QuestionOptionAttachment.fromJson(json["attachment"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "question_id": questionId,
+        "options": options,
+        "is_correct": isCorrect,
+        "img_has": imgHas,
+        "attachment": attachment?.toJson(),
+      };
+}
+
+class QuestionOptionAttachment {
+  final int? id;
+  final String? file;
+  final int? questionsOptionId;
+
+  const QuestionOptionAttachment({
+    this.id,
+    this.file,
+    this.questionsOptionId,
+  });
+
+  factory QuestionOptionAttachment.fromJson(Map<String, dynamic> json) =>
+      QuestionOptionAttachment(
+        id: json["id"],
+        file: json["file"],
+        questionsOptionId: json["questions_option_id"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "file": file,
+        "questions_option_id": questionsOptionId,
       };
 }
 

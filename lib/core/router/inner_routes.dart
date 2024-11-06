@@ -42,6 +42,8 @@ import 'package:school_of_future/features/presentation/question_bank/question_li
 import 'package:school_of_future/features/presentation/question_bank/question_list/view/question_bank_screen.dart';
 import 'package:school_of_future/features/presentation/question_paper/question_paper_list/bloc/question_paper_list_bloc.dart';
 import 'package:school_of_future/features/presentation/question_paper/question_paper_list/view/question_paper_list_screen.dart';
+import 'package:school_of_future/features/presentation/repository/repository_list/bloc/repository_list_bloc.dart';
+import 'package:school_of_future/features/presentation/repository/repository_list/view/repository_list_screen.dart';
 import 'package:school_of_future/features/presentation/resources/resources_list/bloc/teacher_resource_list_bloc.dart';
 import 'package:school_of_future/features/presentation/resources/resources_list/view/teacher_resources_list_screen.dart';
 import 'package:school_of_future/features/presentation/routine/teacher_routine/bloc/teacher_routine_bloc.dart';
@@ -338,6 +340,16 @@ Route<dynamic>? studentsRoutes(RouteSettings settings) {
             ),
           ],
           child: const QuestionPaperListScreen(),
+        ),
+      );
+
+    case repositoryListScreen:
+      return MaterialPageRoute(
+        settings: settings,
+        builder: (BuildContext context) => BlocProvider(
+          create: (context) => RepositoryListBloc(getIt<ApiRepo>(),
+              getIt<IFlutterNavigator>(), getIt<LocalStorageRepo>()),
+          child: const RepositoryListScreen(),
         ),
       );
 

@@ -73,3 +73,5 @@ const questionPaperListScreen = "/question-paper-list-screen";
 const questionPaperCreateScreen = "/question-paper-create-screen";
 const addQuestionPScreen = "/add-question-screen";
 const questionPaperDtlsScreen = "/question-paper-details-screen";
+const repositoryListScreen = "/repository-list-screen";
+const repositoryDtlsScreen = "/repository-details-screen";

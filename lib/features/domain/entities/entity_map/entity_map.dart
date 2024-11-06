@@ -35,6 +35,8 @@ import 'package:school_of_future/features/domain/entities/question_paper_details
 import 'package:school_of_future/features/domain/entities/question_paper_list_response.dart';
 import 'package:school_of_future/features/domain/entities/resource_details_response.dart';
 import 'package:school_of_future/features/domain/entities/resources_response.dart';
+import 'package:school_of_future/features/domain/entities/respository_details.dart';
+import 'package:school_of_future/features/domain/entities/respsitory_list_response.dart';
 import 'package:school_of_future/features/domain/entities/routine_response.dart';
 import 'package:school_of_future/features/domain/entities/student_assignment_submissign_details_response.dart';
 import 'package:school_of_future/features/domain/entities/student_for_attendance_response.dart';
@@ -155,6 +157,10 @@ class EntityMap {
         return QuestionPaperList.fromJson(json) as T;
       case const (QuestionPaperDtls):
         return QuestionPaperDtls.fromJson(json) as T;
+      case const (Repositories):
+        return Repositories.fromJson(json) as T;
+      case const (RepositoryDetails):
+        return RepositoryDetails.fromJson(json) as T;
 
       default:
         throw Exception('Unknown class');

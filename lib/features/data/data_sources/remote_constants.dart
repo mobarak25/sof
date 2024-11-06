@@ -138,3 +138,8 @@ String questionPaperListEndPoint = "${version1}question-paper";
 
 String questionPaperDtlsEndPoint({required int qId}) =>
     "${version1}question-paper/$qId";
+
+String repositoryListEndPoint = "${version1}digital-repository";
+
+String repositoryDtlsEndPoint({required int id}) =>
+    "${version1}digital-repository/$id";

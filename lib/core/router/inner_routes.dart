@@ -20,6 +20,8 @@ import 'package:school_of_future/features/presentation/class_work/student_classw
 import 'package:school_of_future/features/presentation/class_work/student_classwork_list/view/student_classwork_list_screen.dart';
 import 'package:school_of_future/features/presentation/class_work/teacher_classwork_list/bloc/classwork_list_bloc.dart';
 import 'package:school_of_future/features/presentation/class_work/teacher_classwork_list/view/teacher_classwork_list_screen.dart';
+import 'package:school_of_future/features/presentation/event/bloc/event_bloc.dart';
+import 'package:school_of_future/features/presentation/event/view/event_screen.dart';
 import 'package:school_of_future/features/presentation/leave/student_leave_list/bloc/student_leave_list_bloc.dart';
 import 'package:school_of_future/features/presentation/leave/student_leave_list/view/student_leave_list_screen.dart';
 import 'package:school_of_future/features/presentation/leave/teacher_own_leave_list/bloc/teacher_own_leave_bloc.dart';
@@ -350,6 +352,15 @@ Route<dynamic>? studentsRoutes(RouteSettings settings) {
           create: (context) => RepositoryListBloc(getIt<ApiRepo>(),
               getIt<IFlutterNavigator>(), getIt<LocalStorageRepo>()),
           child: const RepositoryListScreen(),
+        ),
+      );
+    case eventScreen:
+      return MaterialPageRoute(
+        settings: settings,
+        builder: (BuildContext context) => BlocProvider(
+          create: (context) => EventBloc(getIt<ApiRepo>(),
+              getIt<IFlutterNavigator>(), getIt<LocalStorageRepo>()),
+          child: const EventScreen(),
         ),
       );
 

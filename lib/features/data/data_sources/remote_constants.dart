@@ -143,3 +143,5 @@ String repositoryListEndPoint = "${version1}digital-repository";
 
 String repositoryDtlsEndPoint({required int id}) =>
     "${version1}digital-repository/$id";
+
+String eventEndPoint = "${version1}event";

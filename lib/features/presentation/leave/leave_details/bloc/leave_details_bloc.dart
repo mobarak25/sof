@@ -4,7 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:school_of_future/core/navigator/iflutter_navigator.dart';
 import 'package:school_of_future/features/data/data_sources/remote_constants.dart';
-import 'package:school_of_future/features/domain/entities/entity_map/student_leave_details_response.dart';
+import 'package:school_of_future/features/domain/entities/student_leave_details_response.dart';
 import 'package:school_of_future/features/domain/repositories/api_repo.dart';
 import 'package:school_of_future/features/domain/repositories/local_storage_repo.dart';
 

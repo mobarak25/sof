@@ -75,3 +75,4 @@ const addQuestionPScreen = "/add-question-screen";
 const questionPaperDtlsScreen = "/question-paper-details-screen";
 const repositoryListScreen = "/repository-list-screen";
 const repositoryDtlsScreen = "/repository-details-screen";
+const eventScreen = "/event-screen";

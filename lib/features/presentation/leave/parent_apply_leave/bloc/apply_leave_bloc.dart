@@ -16,7 +16,7 @@ import 'package:school_of_future/core/utils/utilities.dart';
 import 'package:school_of_future/features/data/data_sources/local_db_keys.dart';
 import 'package:school_of_future/features/data/data_sources/remote_constants.dart';
 import 'package:school_of_future/features/domain/entities/default_response.dart';
-import 'package:school_of_future/features/domain/entities/entity_map/student_leave_details_response.dart';
+import 'package:school_of_future/features/domain/entities/student_leave_details_response.dart';
 import 'package:school_of_future/features/domain/entities/leave_types_response.dart';
 import 'package:school_of_future/features/domain/repositories/api_repo.dart';
 import 'package:school_of_future/features/domain/repositories/local_storage_repo.dart';

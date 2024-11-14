@@ -48,6 +48,9 @@ const transportScreen = "/transport-screen";
 //Student routes
 const studentSyllabusListScreen = "/student-syllabus-list-screen";
 const studentAttendanceScreen = "/student-attendance-screen";
+const studentQuizDetailsScreen = "/student-quiz-details-screen";
+const studentQuizListScreen = "/student-quiz-list-screen";
+const resultSummeryScreen = "/result-summery-screen";
 
 //Teacher routes
 const teacherAssignmentListScreen = "/teacher-assignment-screen";
@@ -76,3 +79,6 @@ const questionPaperDtlsScreen = "/question-paper-details-screen";
 const repositoryListScreen = "/repository-list-screen";
 const repositoryDtlsScreen = "/repository-details-screen";
 const eventScreen = "/event-screen";
+const eventDetailsScreen = "/event-details-screen";
+const quizListScreen = "/quiz-list-screen";
+const quizCreateScreen = "/quiz-create-screen";

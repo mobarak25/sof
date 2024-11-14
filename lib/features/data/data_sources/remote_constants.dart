@@ -145,3 +145,8 @@ String repositoryDtlsEndPoint({required int id}) =>
     "${version1}digital-repository/$id";
 
 String eventEndPoint = "${version1}event";
+String eventDtlsEndPoint({required int id}) => "${version1}event/$id";
+String quizEndPoint = "${version1}quiz";
+String quizDtlsEndPoint({required int id}) => "${version1}quiz/$id";
+String studentQuizListEndPoint({required String sId}) =>
+    "${version1}quiz/for-student/$sId";

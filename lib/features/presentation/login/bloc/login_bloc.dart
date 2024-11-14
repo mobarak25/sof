@@ -90,12 +90,16 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       //get profile data=========
 
       if (meResponse.userType == 3) {
-        // Navigator.pushReplacementNamed(
-        //     _iFlutterNavigator.context, studentDashboard);
+        await _localStorageRepo.write(
+            key: userIdDB, value: meResponse.id!.toString());
+
         _iFlutterNavigator.pushReplacementNamed(studentDashboard);
       } else if (meResponse.userType == 4) {
         add(GoToSelectChild());
       } else if (meResponse.userType == 2) {
+        await _localStorageRepo.write(
+            key: userIdDB, value: meResponse.id!.toString());
+
         _iFlutterNavigator.pushReplacementNamed(studentDashboard);
       }
     }

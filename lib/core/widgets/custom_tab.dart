@@ -105,6 +105,32 @@ class _CustomTabState extends State<CustomTab> {
               ),
             ],
           ),
+        // const Gap(5),
+        // Row(
+        //   children: [
+        //     Container(
+        //       padding: const EdgeInsets.fromLTRB(10, 0, 5, 3),
+        //       margin: const EdgeInsets.only(right: 10),
+        //       decoration: const BoxDecoration(
+        //         color: bWhite,
+        //       ),
+        //       child: const Row(
+        //         children: [
+        //           TextB(
+        //             text: "text",
+        //             fontColor: bGray52,
+        //           ),
+        //           Gap(5),
+        //           Icon(
+        //             Icons.close,
+        //             color: bGray32,
+        //           ),
+        //         ],
+        //       ),
+        //     ),
+        //   ],
+        // ),
+
         const Gap(10),
         if (widget.tabList.isNotEmpty)
           Expanded(

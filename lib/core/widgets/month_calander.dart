@@ -21,7 +21,8 @@ class AppMonthChanger extends StatefulWidget {
 }
 
 class AppMonthChangerState extends State<AppMonthChanger> {
-  var currentDate = DateTime.now();
+  late DateTime currentDate;
+
   var isFutureArrowDisable = false;
 
   @override
@@ -34,6 +35,7 @@ class AppMonthChangerState extends State<AppMonthChanger> {
 
   @override
   void initState() {
+    currentDate = widget.selectedDay ?? DateTime.now();
     if (!widget.canGoToFutureMonth &&
         currentDate.month == DateTime.now().month) {
       isFutureArrowDisable = true;

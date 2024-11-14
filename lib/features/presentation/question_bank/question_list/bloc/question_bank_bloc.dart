@@ -113,7 +113,7 @@ class QuestionBankBloc extends Bloc<QuestionBankEvent, QuestionBankState> {
         final queryParams = {
           "page": state.page,
           "search": state.searchText,
-          "subject_id": state.searchText,
+          "subject_id": state.subjectId,
         };
 
         final pagiQuestion = await _apiRepo.get<QuestionBankList>(

@@ -9,10 +9,11 @@ import 'package:school_of_future/core/utils/text_styles.dart';
 import 'package:school_of_future/core/widgets/app_bar.dart';
 import 'package:school_of_future/core/widgets/body.dart';
 import 'package:school_of_future/core/widgets/month_calander.dart';
-import 'package:school_of_future/core/widgets/month_week_day_calander.dart';
 import 'package:school_of_future/core/widgets/text.dart';
 import 'package:school_of_future/core/widgets/custom_tab.dart';
-import 'package:school_of_future/features/presentation/event/bloc/event_bloc.dart';
+import 'package:school_of_future/features/presentation/event/event_list/bloc/event_bloc.dart';
+import 'package:school_of_future/features/presentation/event/event_list/widgets/event_card.dart';
+import 'package:school_of_future/features/presentation/event/event_list/widgets/event_month_calendar.dart';
 
 class EventScreen extends StatelessWidget {
   const EventScreen({super.key});
@@ -28,12 +29,13 @@ class EventScreen extends StatelessWidget {
           appBar: FutureAppBar(
             actions: const [SizedBox()],
             title: LocaleKeys.academicCalendar.tr(),
+            isLoading: state.loading,
           ),
           child: Container(
             padding: const EdgeInsets.symmetric(vertical: 13, horizontal: 15),
             color: bInnerBg,
             child: CustomTab(
-              loading: state.loading,
+              loading: false,
               showSearch: false,
               tabList: [
                 LocaleKeys.listView.tr(),
@@ -46,17 +48,43 @@ class EventScreen extends StatelessWidget {
               child: state.eventList.data != null
                   ? Column(
                       children: [
-                        AppMonthChanger(
-                          canGoToFutureMonth: true,
-                          getMonthChange: (date) {
-                            print(date);
-                          },
-                          //  selectedDay: currentDate,
-                        ),
                         Expanded(
                           child: ListView(
                             controller: scroll,
                             children: [
+                              if (state.activeTab == "0")
+                                AppMonthChanger(
+                                  canGoToFutureMonth: true,
+                                  getMonthChange: (date) {
+                                    bloc.add(ChangeDate(date: date));
+                                  },
+                                  selectedDay: utcDateTime(state.startDate),
+                                ),
+                              if (state.activeTab == "1")
+                                Column(
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10, vertical: 0),
+                                      decoration: const BoxDecoration(
+                                        color: bWhite,
+                                      ),
+                                      child: EventMonthCalendar(
+                                        isLoading: false,
+                                        events: state.events,
+                                        activeDate:
+                                            utcDateTime(state.startDate),
+                                        onMonthChanged: (date) {
+                                          bloc.add(ChangeDate(date: date));
+                                        },
+                                        onDateChanged: (date) {
+                                          bloc.add(ChangeDay(date: date));
+                                        },
+                                      ),
+                                    ),
+                                    const Gap(20),
+                                  ],
+                                ),
                               ...List.generate(state.eventList.data!.length,
                                   (position) {
                                 final dataItem =
@@ -69,20 +97,13 @@ class EventScreen extends StatelessWidget {
                                         Navigator.of(context,
                                                 rootNavigator: true)
                                             .pushNamed(
-                                          meetingDetailsScreen,
+                                          eventDetailsScreen,
                                           arguments: dataItem.id,
                                         );
                                       },
-                                      child: const TextB(text: "text"),
-
-                                      //  MeetingCard(
-                                      //   item: dataItem,
-                                      //   isTeacher: state.isTeacher,
-                                      //   pressTo: (String pressTo, int id) {
-                                      //     bloc.add(PressToDelEdit(
-                                      //         type: pressTo, id: id));
-                                      //   },
-                                      // ),
+                                      child: EventCard(
+                                        item: dataItem,
+                                      ),
                                     ),
                                     const Gap(15),
                                   ],
@@ -117,11 +138,25 @@ class EventScreen extends StatelessWidget {
                         const Gap(65),
                       ],
                     )
-                  : const SizedBox(),
+                  : const Center(
+                      child: CircularProgressIndicator(),
+                    ),
             ),
           ),
         );
       },
     );
+  }
+
+  DateTime utcDateTime(String date) {
+    List<String> parts = date.split("-");
+
+    DateTime dateTime = DateTime.utc(
+      int.parse(parts[0]), // year
+      int.parse(parts[1]), // month
+      int.parse(parts[2]), // day
+    );
+
+    return dateTime;
   }
 }

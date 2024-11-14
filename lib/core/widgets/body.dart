@@ -25,7 +25,7 @@ class Body extends StatelessWidget {
     return Scaffold(
       backgroundColor: kScaffoldBGColor,
       appBar: appBar,
-      endDrawer: Drawer(child: drawerChild),
+      endDrawer: drawerChild != null ? Drawer(child: drawerChild) : null,
       body: Container(
         height: size.height,
         width: size.width,

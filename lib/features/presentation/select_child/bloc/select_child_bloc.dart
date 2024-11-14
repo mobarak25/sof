@@ -38,7 +38,11 @@ class SelectChildBloc extends Bloc<SelectChildEvent, SelectChildState> {
     }
   }
 
-  FutureOr<void> _selectedId(SelectedId event, Emitter<SelectChildState> emit) {
+  FutureOr<void> _selectedId(
+      SelectedId event, Emitter<SelectChildState> emit) async {
+    await _localStorageRepo.write(
+        key: userIdDB, value: event.userId.toString());
+
     emit(state.copyWith(selectedId: event.sId));
   }
 

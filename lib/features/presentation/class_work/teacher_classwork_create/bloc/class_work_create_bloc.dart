@@ -327,11 +327,13 @@ class ClassWorkCreateBloc
 
   FutureOr<void> _backWithUnselected(
       BackWithUnselected event, Emitter<ClassWorkCreateState> emit) {
+    emit(state.copyWith(batchLoading: true));
     List<List<CheckUncheckStudents>> updateStudents =
         state.listOfCheckUncheckStudent;
 
     updateStudents[event.index] = event.students;
-    emit(state.copyWith(listOfCheckUncheckStudent: updateStudents));
+    emit(state.copyWith(
+        listOfCheckUncheckStudent: updateStudents, batchLoading: false));
   }
 
   FutureOr<void> _pressToCreate(

@@ -258,11 +258,13 @@ class MeetingCreateBloc extends Bloc<MeetingCreateEvent, MeetingCreateState> {
 
   FutureOr<void> _backWithUnselected(
       BackWithUnselected event, Emitter<MeetingCreateState> emit) {
+    emit(state.copyWith(batchLoading: true));
     List<List<CheckUncheckStudents>> updateStudents =
         state.listOfCheckUncheckStudent;
 
     updateStudents[event.index] = event.students;
-    emit(state.copyWith(listOfCheckUncheckStudent: updateStudents));
+    emit(state.copyWith(
+        listOfCheckUncheckStudent: updateStudents, batchLoading: true));
   }
 
   FutureOr<void> _pressToCreate(

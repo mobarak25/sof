@@ -20,8 +20,8 @@ import 'package:school_of_future/features/presentation/class_work/student_classw
 import 'package:school_of_future/features/presentation/class_work/student_classwork_list/view/student_classwork_list_screen.dart';
 import 'package:school_of_future/features/presentation/class_work/teacher_classwork_list/bloc/classwork_list_bloc.dart';
 import 'package:school_of_future/features/presentation/class_work/teacher_classwork_list/view/teacher_classwork_list_screen.dart';
-import 'package:school_of_future/features/presentation/event/bloc/event_bloc.dart';
-import 'package:school_of_future/features/presentation/event/view/event_screen.dart';
+import 'package:school_of_future/features/presentation/event/event_list/bloc/event_bloc.dart';
+import 'package:school_of_future/features/presentation/event/event_list/view/event_screen.dart';
 import 'package:school_of_future/features/presentation/leave/student_leave_list/bloc/student_leave_list_bloc.dart';
 import 'package:school_of_future/features/presentation/leave/student_leave_list/view/student_leave_list_screen.dart';
 import 'package:school_of_future/features/presentation/leave/teacher_own_leave_list/bloc/teacher_own_leave_bloc.dart';
@@ -44,6 +44,10 @@ import 'package:school_of_future/features/presentation/question_bank/question_li
 import 'package:school_of_future/features/presentation/question_bank/question_list/view/question_bank_screen.dart';
 import 'package:school_of_future/features/presentation/question_paper/question_paper_list/bloc/question_paper_list_bloc.dart';
 import 'package:school_of_future/features/presentation/question_paper/question_paper_list/view/question_paper_list_screen.dart';
+import 'package:school_of_future/features/presentation/quiz/student_quiz_list/bloc/student_quiz_list_bloc.dart';
+import 'package:school_of_future/features/presentation/quiz/student_quiz_list/view/student_quiz_list_screen.dart';
+import 'package:school_of_future/features/presentation/quiz/teacher_quiz_list/bloc/quiz_list_screen_bloc.dart';
+import 'package:school_of_future/features/presentation/quiz/teacher_quiz_list/view/quiz_list_screen.dart';
 import 'package:school_of_future/features/presentation/repository/repository_list/bloc/repository_list_bloc.dart';
 import 'package:school_of_future/features/presentation/repository/repository_list/view/repository_list_screen.dart';
 import 'package:school_of_future/features/presentation/resources/resources_list/bloc/teacher_resource_list_bloc.dart';
@@ -361,6 +365,41 @@ Route<dynamic>? studentsRoutes(RouteSettings settings) {
           create: (context) => EventBloc(getIt<ApiRepo>(),
               getIt<IFlutterNavigator>(), getIt<LocalStorageRepo>()),
           child: const EventScreen(),
+        ),
+      );
+
+    case quizListScreen:
+      return MaterialPageRoute(
+        settings: settings,
+        builder: (BuildContext context) => MultiBlocProvider(
+          providers: [
+            BlocProvider<QuizListScreenBloc>(
+              create: (context) => QuizListScreenBloc(getIt<ApiRepo>(),
+                  getIt<IFlutterNavigator>(), getIt<LocalStorageRepo>()),
+            ),
+            BlocProvider<FilterSidebarBloc>(
+              create: (context) => FilterSidebarBloc(
+                  getIt<ApiRepo>(), getIt<LocalStorageRepo>()),
+            ),
+          ],
+          child: const QuizListScreen(),
+        ),
+      );
+    case studentQuizListScreen:
+      return MaterialPageRoute(
+        settings: settings,
+        builder: (BuildContext context) => MultiBlocProvider(
+          providers: [
+            BlocProvider<StudentQuizListBloc>(
+              create: (context) => StudentQuizListBloc(getIt<ApiRepo>(),
+                  getIt<IFlutterNavigator>(), getIt<LocalStorageRepo>()),
+            ),
+            BlocProvider<FilterSidebarBloc>(
+              create: (context) => FilterSidebarBloc(
+                  getIt<ApiRepo>(), getIt<LocalStorageRepo>()),
+            ),
+          ],
+          child: const StudentQuizListScreen(),
         ),
       );
 

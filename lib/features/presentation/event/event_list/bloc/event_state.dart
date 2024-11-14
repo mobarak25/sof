@@ -10,7 +10,9 @@ class EventState extends Equatable {
     this.activeTab = '0',
     this.startDate = '',
     this.endDate = '',
+    this.userId = '',
     this.eventList = const EventList(),
+    this.events = const {},
   });
 
   final int page;
@@ -21,7 +23,9 @@ class EventState extends Equatable {
   final String activeTab;
   final String startDate;
   final String endDate;
+  final String userId;
   final EventList eventList;
+  final Map<String, int> events;
 
   EventState copyWith({
     int? page,
@@ -32,8 +36,10 @@ class EventState extends Equatable {
     String? activeTab,
     String? startDate,
     String? endDate,
+    String? userId,
     String? searchText,
     EventList? eventList,
+    Map<String, int>? events,
   }) {
     return EventState(
       page: page ?? this.page,
@@ -44,7 +50,9 @@ class EventState extends Equatable {
       activeTab: activeTab ?? this.activeTab,
       startDate: startDate ?? this.startDate,
       endDate: endDate ?? this.endDate,
+      userId: userId ?? this.userId,
       eventList: eventList ?? this.eventList,
+      events: events ?? this.events,
     );
   }
 
@@ -58,7 +66,9 @@ class EventState extends Equatable {
         activeTab,
         startDate,
         endDate,
+        userId,
         eventList,
+        events
       ];
 }
 

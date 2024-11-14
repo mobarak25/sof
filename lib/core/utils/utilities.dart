@@ -163,13 +163,15 @@ String generateValidUrl(String url) {
 }
 
 DateTime getLastDayOfMonth(DateTime date) {
-  // Create a DateTime object for the first day of the next month
   DateTime firstDayOfNextMonth = (date.month < 12)
       ? DateTime(date.year, date.month + 1, 1)
       : DateTime(date.year + 1, 1, 1); // If December, go to next year
 
-  // Subtract one day to get the last day of the current month
   return firstDayOfNextMonth.subtract(const Duration(days: 1));
+}
+
+DateTime getFirstDateOfMonth(DateTime date) {
+  return DateTime(date.year, date.month, 1);
 }
 
 class QstTempChecked {

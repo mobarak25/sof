@@ -10,8 +10,9 @@ sealed class SelectChildEvent extends Equatable {
 class GetChilList extends SelectChildEvent {}
 
 class SelectedId extends SelectChildEvent {
-  const SelectedId({required this.sId});
+  const SelectedId({required this.sId, required this.userId});
   final int sId;
+  final int userId;
 }
 
 class PressToConfirm extends SelectChildEvent {}

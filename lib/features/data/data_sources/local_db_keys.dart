@@ -7,3 +7,4 @@ const String profileAttendanceDB = 'profileAttendanceDB';
 const String subjectListDB = 'subjectListDB';
 const String dashboardNoticeDb = 'dashboardNoticeDb';
 const String dashboardDueTaskDB = 'dashboardDueTaskDB';
+const String userIdDB = 'userIdDB';

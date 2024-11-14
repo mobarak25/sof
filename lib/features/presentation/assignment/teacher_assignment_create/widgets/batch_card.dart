@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:school_of_future/core/utils/colors.dart';
 import 'package:school_of_future/core/utils/text_styles.dart';
+import 'package:school_of_future/core/utils/utilities.dart';
 import 'package:school_of_future/core/widgets/text.dart';
 
 class BachCard extends StatelessWidget {
@@ -10,6 +11,7 @@ class BachCard extends StatelessWidget {
     required this.assignToBatchId,
     required this.selectedBatchName,
     required this.selecteClassName,
+    required this.listOfCheckUncheckStudent,
     required this.press,
   });
 
@@ -17,6 +19,7 @@ class BachCard extends StatelessWidget {
   final List<String> selectedBatchName;
   final String selecteClassName;
   final Function press;
+  final List<List<CheckUncheckStudents>>? listOfCheckUncheckStudent;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +39,7 @@ class BachCard extends StatelessWidget {
                   Flexible(
                     child: TextB(
                       text:
-                          "Students from $selecteClassName-${selectedBatchName[index]} is selected",
+                          "${numberOfStudent(listOfCheckUncheckStudent![index])} of ${listOfCheckUncheckStudent![index].length}  Students from $selecteClassName-${selectedBatchName[index]} is selected",
                       textStyle: bBody2,
                     ),
                   ),
@@ -63,5 +66,10 @@ class BachCard extends StatelessWidget {
         );
       }),
     );
+  }
+
+  int numberOfStudent(List<CheckUncheckStudents> list) {
+    int countOfOnes = list.where((item) => item.isChecked == true).length;
+    return countOfOnes;
   }
 }

@@ -399,6 +399,8 @@ class AssignmentCreateScreen extends StatelessWidget {
                         assignToBatchId: state.assignToBatchId,
                         selectedBatchName: state.selectedBatchName,
                         selecteClassName: state.selecteClassName,
+                        listOfCheckUncheckStudent:
+                            state.listOfCheckUncheckStudent,
                         press: (int index) {
                           Navigator.of(context, rootNavigator: true)
                               .pushNamed(selectedStudentsScreen,

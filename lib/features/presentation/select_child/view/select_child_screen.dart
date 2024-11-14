@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:school_of_future/core/utils/asset_image.dart';
+
 import 'package:school_of_future/core/utils/colors.dart';
 import 'package:school_of_future/core/utils/text_styles.dart';
 import 'package:school_of_future/core/widgets/app_bar.dart';
@@ -63,7 +63,8 @@ class SelectChildScreen extends StatelessWidget {
                         (index) => InkWell(
                           onTap: () {
                             bloc.add(SelectedId(
-                                sId: state.childList.data![index].id!));
+                                sId: state.childList.data![index].id!,
+                                userId: state.childList.data![index].userId!));
                           },
                           child: Container(
                             padding: const EdgeInsets.symmetric(

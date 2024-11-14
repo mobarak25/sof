@@ -51,6 +51,9 @@ const studentAttendanceScreen = "/student-attendance-screen";
 const studentQuizDetailsScreen = "/student-quiz-details-screen";
 const studentQuizListScreen = "/student-quiz-list-screen";
 const resultSummeryScreen = "/result-summery-screen";
+const quizExplanationScreen = "/quiz-explanation-screen";
+const quizFinishScreen = "/quiz-finish-screen";
+const quizMainScreen = "/quiz-main-screen";
 
 //Teacher routes
 const teacherAssignmentListScreen = "/teacher-assignment-screen";

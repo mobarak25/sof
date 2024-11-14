@@ -85,13 +85,23 @@ class StudentQuizListScreen extends StatelessWidget {
                                       return StudentQuizCard(
                                         data: state.quizList.data![index],
                                         press: () {
-                                          Navigator.of(context,
-                                                  rootNavigator: true)
-                                              .pushNamed(
-                                            studentQuizDetailsScreen,
-                                            arguments:
-                                                state.quizList.data![index].id,
-                                          );
+                                          if (index == 0) {
+                                            Navigator.of(context,
+                                                    rootNavigator: true)
+                                                .pushNamed(
+                                              quizMainScreen,
+                                              arguments: state
+                                                  .quizList.data![index].id,
+                                            );
+                                          } else {
+                                            Navigator.of(context,
+                                                    rootNavigator: true)
+                                                .pushNamed(
+                                              studentQuizDetailsScreen,
+                                              arguments: state
+                                                  .quizList.data![index].id,
+                                            );
+                                          }
                                         },
                                       );
                                     },

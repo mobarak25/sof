@@ -6,3 +6,8 @@ sealed class ExplanationEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+
+class GetQstIdForExplanation extends ExplanationEvent {
+  const GetQstIdForExplanation({required this.qstId});
+  final int qstId;
+}

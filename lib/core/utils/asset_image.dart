@@ -14,3 +14,5 @@ const fileUploadSvg = "${svgRoot}svg/file_upload.svg";
 const fileAttachSvg = "${svgRoot}file_attach_icon.svg";
 const avaterSvg = "${svgRoot}avatar.svg";
 const rightArrowSvg = "${svgRoot}right_arrow.svg";
+const nextArrowSvg = "${svgRoot}next.svg";
+const prevArrowSvg = "${svgRoot}prev.svg";

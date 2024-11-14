@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:school_of_future/core/router/route_constents.dart';
 import 'package:school_of_future/core/translations/local_keys.dart';
 import 'package:school_of_future/core/utils/colors.dart';
 import 'package:school_of_future/core/utils/text_styles.dart';
@@ -97,30 +98,39 @@ class ResultSummeryScreen extends StatelessWidget {
                         ),
                         itemCount: 20, // 5x5 grid
                         itemBuilder: (context, index) {
-                          return Container(
-                            width: 48,
-                            height: 48,
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
-                                colors: index != 2
-                                    ? [
-                                        const Color(0XFF48DB94),
-                                        const Color(0XFF069550)
-                                      ]
-                                    : [
-                                        const Color(0XFFF96F6F),
-                                        const Color(0XFFB13418)
-                                      ],
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.of(context, rootNavigator: true)
+                                  .pushNamed(
+                                quizExplanationScreen,
+                                arguments: 1, //state.quizList.data![index].id,
+                              );
+                            },
+                            child: Container(
+                              width: 48,
+                              height: 48,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                  colors: index != 2
+                                      ? [
+                                          const Color(0XFF48DB94),
+                                          const Color(0XFF069550)
+                                        ]
+                                      : [
+                                          const Color(0XFFF96F6F),
+                                          const Color(0XFFB13418)
+                                        ],
+                                ),
+                                borderRadius: BorderRadius.circular(10),
                               ),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: TextB(
-                              text: "${index + 1}",
-                              textStyle: bSub1SB,
-                              fontColor: bWhite,
+                              child: TextB(
+                                text: "${index + 1}",
+                                textStyle: bSub1SB,
+                                fontColor: bWhite,
+                              ),
                             ),
                           );
                         },

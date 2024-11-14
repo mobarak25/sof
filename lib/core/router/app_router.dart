@@ -70,8 +70,14 @@ import 'package:school_of_future/features/presentation/question_paper/question_p
 import 'package:school_of_future/features/presentation/question_paper/question_paper_create/view/question_paper_create_screen.dart';
 import 'package:school_of_future/features/presentation/question_paper/question_paper_details/bloc/question_paper_details_bloc.dart';
 import 'package:school_of_future/features/presentation/question_paper/question_paper_details/view/question_paper_details_screen.dart';
+import 'package:school_of_future/features/presentation/quiz/explanation/bloc/explanation_bloc.dart';
+import 'package:school_of_future/features/presentation/quiz/explanation/view/explanation_screen.dart';
 import 'package:school_of_future/features/presentation/quiz/quiz_create/bloc/create_quiz_bloc.dart';
 import 'package:school_of_future/features/presentation/quiz/quiz_create/view/quiz_create_screen.dart';
+import 'package:school_of_future/features/presentation/quiz/quiz_finish/bloc/quiz_finish_bloc.dart';
+import 'package:school_of_future/features/presentation/quiz/quiz_finish/view/quiz_finish_screen.dart';
+import 'package:school_of_future/features/presentation/quiz/quiz_main/bloc/quiz_main_bloc.dart';
+import 'package:school_of_future/features/presentation/quiz/quiz_main/view/quiz_main_screen.dart';
 import 'package:school_of_future/features/presentation/quiz/result_summery/bloc/result_summery_bloc.dart';
 import 'package:school_of_future/features/presentation/quiz/result_summery/view/result_summery_screen.dart';
 import 'package:school_of_future/features/presentation/quiz/student_quiz_details/bloc/student_quiz_details_bloc.dart';
@@ -671,6 +677,43 @@ class AppRouter {
               getIt<LocalStorageRepo>(),
             )..add(GetQuizIdForSummery(quizId: id)),
             child: const ResultSummeryScreen(),
+          ),
+        );
+      case quizExplanationScreen:
+        final id = settings.arguments as int;
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (BuildContext context) => BlocProvider(
+            create: (context) => ExplanationBloc(
+              getIt<ApiRepo>(),
+              getIt<IFlutterNavigator>(),
+              getIt<LocalStorageRepo>(),
+            )..add(GetQstIdForExplanation(qstId: id)),
+            child: const ExplanationScreen(),
+          ),
+        );
+      case quizFinishScreen:
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (BuildContext context) => BlocProvider(
+            create: (context) => QuizFinishBloc(
+              getIt<ApiRepo>(),
+              getIt<IFlutterNavigator>(),
+              getIt<LocalStorageRepo>(),
+            ),
+            child: const QuizFinishScreen(),
+          ),
+        );
+      case quizMainScreen:
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (BuildContext context) => BlocProvider(
+            create: (context) => QuizMainBloc(
+              getIt<ApiRepo>(),
+              getIt<IFlutterNavigator>(),
+              getIt<LocalStorageRepo>(),
+            ),
+            child: const QuizMainScreen(),
           ),
         );
 

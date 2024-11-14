@@ -1,0 +1,10 @@
+{
+  "configurations": [
+    {
+      "name": "Flutter (lib/features/presentation/quiz/quiz_main/widgets/timer.dart)",
+      "type": "dart",
+      "request": "launch",
+      "program": "lib/features/presentation/quiz/quiz_main/widgets/timer.dart"
+    }
+  ]
+}

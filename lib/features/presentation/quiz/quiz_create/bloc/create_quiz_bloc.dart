@@ -19,7 +19,7 @@ import 'package:school_of_future/features/domain/entities/batch_wise_student.dar
 import 'package:school_of_future/features/domain/entities/default_response.dart';
 import 'package:school_of_future/features/domain/entities/get_batch_as_section_response.dart';
 import 'package:school_of_future/features/domain/entities/question_level_response.dart';
-import 'package:school_of_future/features/domain/entities/quiz_details_response.dart';
+import 'package:school_of_future/features/domain/entities/quiz_details_for_teacher_response.dart';
 import 'package:school_of_future/features/domain/repositories/api_repo.dart';
 import 'package:school_of_future/features/domain/repositories/local_storage_repo.dart';
 
@@ -69,7 +69,7 @@ class CreateQuizBloc extends Bloc<CreateQuizEvent, CreateQuizState> {
     emit(state.copyWith(quizId: event.quizId));
 
     if (event.quizId != -1) {
-      final details = await _apiRepo.get<QuizDetails>(
+      final details = await _apiRepo.get<QuizDetailsForTeacher>(
         endpoint: quizDtlsEndPoint(id: event.quizId),
       );
 
@@ -164,7 +164,7 @@ class CreateQuizBloc extends Bloc<CreateQuizEvent, CreateQuizState> {
       emit(state.copyWith(versionList: list, bacthAsSection: versionList));
 
       if (state.quizId != -1) {
-        final details = await _apiRepo.get<QuizDetails>(
+        final details = await _apiRepo.get<QuizDetailsForTeacher>(
           endpoint: quizDtlsEndPoint(id: state.quizId),
         );
 

@@ -150,3 +150,5 @@ String quizEndPoint = "${version1}quiz";
 String quizDtlsEndPoint({required int id}) => "${version1}quiz/$id";
 String studentQuizListEndPoint({required String sId}) =>
     "${version1}quiz/for-student/$sId";
+String studentQuizDtlsEndPoint({required String sId, required int quizId}) =>
+    "${version1}quiz/for-student/$sId/$quizId";

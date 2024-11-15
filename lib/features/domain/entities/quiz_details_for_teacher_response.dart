@@ -1,11 +1,12 @@
-class QuizDetails {
+class QuizDetailsForTeacher {
   final Data? data;
 
-  const QuizDetails({
+  const QuizDetailsForTeacher({
     this.data,
   });
 
-  factory QuizDetails.fromJson(Map<String, dynamic> json) => QuizDetails(
+  factory QuizDetailsForTeacher.fromJson(Map<String, dynamic> json) =>
+      QuizDetailsForTeacher(
         data: json["data"] == null ? null : Data.fromJson(json["data"]),
       );
 

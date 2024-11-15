@@ -2,10 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:school_of_future/core/utils/colors.dart';
 import 'package:school_of_future/core/utils/text_styles.dart';
+import 'package:school_of_future/core/utils/utilities.dart';
 import 'package:school_of_future/core/widgets/text.dart';
+import 'package:school_of_future/features/domain/entities/quiz_details_for_student_response.dart';
 
 class QuizCard extends StatelessWidget {
-  const QuizCard({super.key});
+  const QuizCard(
+      {super.key,
+      required this.title,
+      required this.subject,
+      required this.startTime,
+      required this.endTime});
+  final String title, startTime, endTime;
+  final Subject subject;
 
   @override
   Widget build(BuildContext context) {
@@ -24,8 +33,8 @@ class QuizCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const TextB(
-              text: "Newton's Law & its application",
+            TextB(
+              text: title,
               textStyle: bHead5B,
               fontColor: bWhite,
               fontHeight: 1.2,
@@ -41,23 +50,25 @@ class QuizCard extends StatelessWidget {
               ),
             ),
             const Gap(20),
-            const TextB(
-              text: "Morning Class IX - Mars",
+            TextB(
+              text: "Class: ${subject.subjectClass!.name}",
               textStyle: bBase2,
               fontColor: bWhite,
             ),
-            const TextB(
-              text: "Subject: Physics",
+            TextB(
+              text: "Subject: ${subject.name}",
               textStyle: bBase2,
               fontColor: bWhite,
             ),
-            const TextB(
-              text: "Start Time: 11/08/2021 10:30am",
+            TextB(
+              text:
+                  "Start Time: ${getDate(value: startTime, formate: 'yyyy-MM-dd hh:mma')}",
               textStyle: bBase2,
               fontColor: bWhite,
             ),
-            const TextB(
-              text: "End Time: 11/08/2021 11:00am",
+            TextB(
+              text:
+                  "End Time: ${getDate(value: endTime, formate: 'yyyy-MM-dd hh:mma')}",
               textStyle: bBase2,
               fontColor: bWhite,
             ),

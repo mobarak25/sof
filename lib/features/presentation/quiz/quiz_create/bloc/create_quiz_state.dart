@@ -39,7 +39,7 @@ class CreateQuizState extends Equatable {
     //End dependable
     // this.tempBatchWiseStudent = const [], //may be no need
     this.listOfCheckUncheckStudent = const [],
-    this.quizDtls = const QuizDetails(),
+    this.quizDtls = const QuizDetailsForTeacher(),
     this.isFirstTime = true,
     this.assignmentAssignStudentForEdit = const [],
     this.selectedQstns = const [],
@@ -86,7 +86,7 @@ class CreateQuizState extends Equatable {
   final List<BatchWiseStudent> batchWiseStudent;
   // final List<BatchWiseStudent> tempBatchWiseStudent;
   final List<List<CheckUncheckStudents>> listOfCheckUncheckStudent;
-  final QuizDetails quizDtls;
+  final QuizDetailsForTeacher quizDtls;
   final bool isFirstTime;
   final List<AssignmentAssignStudent> assignmentAssignStudentForEdit;
   final List<TempQuestion> selectedQstns;
@@ -131,7 +131,7 @@ class CreateQuizState extends Equatable {
     List<BatchWiseStudent>? batchWiseStudent,
     List<BatchWiseStudent>? tempBatchWiseStudent,
     List<List<CheckUncheckStudents>>? listOfCheckUncheckStudent,
-    QuizDetails? quizDtls,
+    QuizDetailsForTeacher? quizDtls,
     bool? isFirstTime,
     List<AssignmentAssignStudent>? assignmentAssignStudentForEdit,
     List<TempQuestion>? selectedQstns,

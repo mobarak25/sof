@@ -705,6 +705,7 @@ class AppRouter {
           ),
         );
       case quizMainScreen:
+        final id = settings.arguments as int;
         return MaterialPageRoute(
           settings: settings,
           builder: (BuildContext context) => BlocProvider(
@@ -712,7 +713,7 @@ class AppRouter {
               getIt<ApiRepo>(),
               getIt<IFlutterNavigator>(),
               getIt<LocalStorageRepo>(),
-            ),
+            )..add(GetQuizIdForStart(quizId: id)),
             child: const QuizMainScreen(),
           ),
         );

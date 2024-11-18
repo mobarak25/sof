@@ -89,13 +89,12 @@ class CreateQuizBloc extends Bloc<CreateQuizEvent, CreateQuizState> {
   }
 
   FutureOr<void> _startDate(StartDate event, Emitter<CreateQuizState> emit) {
-    final date =
-        getDate(value: event.startDate, formate: "yyyy-MM-dd HH:mm:ss");
+    final date = getDate(value: event.startDate, formate: "yyyy-MM-dd hh:mm a");
     emit(state.copyWith(startDate: date));
   }
 
   FutureOr<void> _endDate(EndDate event, Emitter<CreateQuizState> emit) {
-    final date = getDate(value: event.endDate, formate: "yyyy-MM-dd HH:mm:ss");
+    final date = getDate(value: event.endDate, formate: "yyyy-MM-dd hh:mm a");
     emit(state.copyWith(endDate: date));
   }
 
@@ -195,7 +194,7 @@ class CreateQuizBloc extends Bloc<CreateQuizEvent, CreateQuizState> {
               title: data.title!,
               startDate: data.startDateTime!,
               endDate: data.endDateTime!,
-              duration: data.duration!,
+              duration: data.duration!.toString(),
               passPercentage: data.pass!,
               graceTime: data.greaseTime!,
               isCommon: data.isCommon!,

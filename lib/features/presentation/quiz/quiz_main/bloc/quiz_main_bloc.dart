@@ -1,10 +1,17 @@
 import 'dart:async';
 
 import 'package:equatable/equatable.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:school_of_future/core/navigator/iflutter_navigator.dart';
+import 'package:school_of_future/core/navigator/navigator_key.dart';
+import 'package:school_of_future/core/router/route_constents.dart';
+import 'package:school_of_future/core/snackbar/show_snackbar.dart';
+import 'package:school_of_future/core/utils/utilities.dart';
 import 'package:school_of_future/features/data/data_sources/local_db_keys.dart';
 import 'package:school_of_future/features/data/data_sources/remote_constants.dart';
+import 'package:school_of_future/features/data/model/answer_quiz.dart';
+import 'package:school_of_future/features/domain/entities/default_response.dart';
 import 'package:school_of_future/features/domain/entities/quiz_details_for_student_response.dart';
 import 'package:school_of_future/features/domain/repositories/api_repo.dart';
 import 'package:school_of_future/features/domain/repositories/local_storage_repo.dart';
@@ -23,6 +30,9 @@ class QuizMainBloc extends Bloc<QuizMainEvent, QuizMainState> {
     on<StopTimer>(_stopTimer);
     on<PressToNext>(_pressToNext);
     on<PressToPrev>(_pressToPrev);
+    on<PressToOptions>(_pressToOptions);
+    on<ChangeExplanation>(_changeExplanation);
+    on<PressToFinish>(_pressToFinish);
   }
 
   final ApiRepo _apiRepo;
@@ -38,8 +48,20 @@ class QuizMainBloc extends Bloc<QuizMainEvent, QuizMainState> {
     ));
 
     if (details != null) {
+      List<QuizAns> answer = [];
+      for (int i = 0; i < details.data!.questions!.length; i++) {
+        answer.add(QuizAns(
+            questionId: details.data!.questions![i].id!,
+            type: details.data!.questions![i].type!,
+            answer: '',
+            focusnode: FocusNode(),
+            textEditingController: TextEditingController()));
+      }
       emit(state.copyWith(
-          details: details, totalTimeInSec: (details.data!.duration! * 60)));
+        details: details,
+        totalTimeInSec: (details.data!.duration! * 60),
+        quizAns: answer,
+      ));
 
       add(StartQuiz());
     }
@@ -86,6 +108,62 @@ class QuizMainBloc extends Bloc<QuizMainEvent, QuizMainState> {
   FutureOr<void> _pressToPrev(PressToPrev event, Emitter<QuizMainState> emit) {
     if (state.qstIndex > 0) {
       emit(state.copyWith(qstIndex: state.qstIndex - 1));
+    }
+  }
+
+  FutureOr<void> _pressToOptions(
+      PressToOptions event, Emitter<QuizMainState> emit) {
+    List<QuizAns> updateAns = List.from(state.quizAns);
+    updateAns[event.questionIndex] = QuizAns(
+      questionId: state.quizAns[event.questionIndex].questionId,
+      type: state.quizAns[event.questionIndex].type,
+      answer: event.ans,
+      focusnode: FocusNode(),
+      textEditingController: TextEditingController(),
+    );
+
+    emit(state.copyWith(quizAns: updateAns));
+  }
+
+  FutureOr<void> _changeExplanation(
+      ChangeExplanation event, Emitter<QuizMainState> emit) {}
+
+  FutureOr<void> _pressToFinish(
+      PressToFinish event, Emitter<QuizMainState> emit) async {
+    List<AnswerElement> answers = [];
+    for (int i = 0; i < state.quizAns.length; i++) {
+      if (state.quizAns[i].type != 3) {
+        answers.add(AnswerElement(
+          questionId: state.quizAns[i].questionId,
+          type: state.quizAns[i].type,
+          answer: state.quizAns[i].answer,
+        ));
+      } else {
+        answers.add(AnswerElement(
+          questionId: state.quizAns[i].questionId,
+          type: state.quizAns[i].type,
+          answer: state.quizAns[i].textEditingController.text,
+        ));
+      }
+    }
+
+    final submitAns = await _apiRepo.post<DefaultResponse>(
+      endpoint: quizAnsEndPoint,
+      body: AnswerQuiz(
+        quizId: state.details.data!.id!,
+        isFinalSubmit: 1,
+        answers: answers,
+      ),
+    );
+
+    if (submitAns != null) {
+      Navigator.of(_iFlutterNavigator.context)
+          .popUntil((route) => route.isFirst);
+
+      Navigator.of(navigatorKey.currentState!.context, rootNavigator: true)
+          .pushNamed(quizFinishScreen, arguments: state.details.data!.id);
+
+      ShowSnackBar(message: submitAns.message!, navigator: _iFlutterNavigator);
     }
   }
 }

@@ -4,16 +4,26 @@ import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
 
 Future<String?> showDateTimePickerDialog(BuildContext context,
     {required String initialdate}) async {
+  DateTime now = DateTime.now();
+  DateTime date = now;
+
+  if (initialdate.isNotEmpty) {
+    try {
+      DateFormat inputFormat = DateFormat("yyyy-MM-dd hh:mm a");
+      date = inputFormat.parse(initialdate);
+    } catch (e) {
+      debugPrint("Error parsing initial date: $e");
+    }
+  }
+
   String? selectedDateTime;
-  String now = DateTime.now().toString();
-  DateTime date = DateTime.parse(initialdate.isEmpty ? now : initialdate);
   await DatePicker.showDateTimePicker(
     context,
     showTitleActions: true,
-    onConfirm: (date) {
-      selectedDateTime = DateFormat('yyyy-MM-dd hh:mm:ss').format(date);
+    onConfirm: (pickedDate) {
+      selectedDateTime = DateFormat('yyyy-MM-dd HH:mm').format(pickedDate);
     },
-    minTime: DateTime.now(),
+    minTime: now,
     currentTime: date,
     locale: LocaleType.en,
   );

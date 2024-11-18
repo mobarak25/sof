@@ -6,3 +6,8 @@ sealed class QuizFinishEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+
+class GetIdForQuizDtls extends QuizFinishEvent {
+  const GetIdForQuizDtls({required this.quizId});
+  final int quizId;
+}

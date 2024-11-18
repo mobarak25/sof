@@ -23,7 +23,7 @@ class Data {
   final int? markEditable;
   final String? startDateTime;
   final String? endDateTime;
-  final String? duration;
+  final int? duration;
   final int? pass;
   final int? subjectId;
   final int? questionLevelId;

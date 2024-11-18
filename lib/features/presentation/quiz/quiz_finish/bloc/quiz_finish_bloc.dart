@@ -12,12 +12,15 @@ part 'quiz_finish_state.dart';
 class QuizFinishBloc extends Bloc<QuizFinishEvent, QuizFinishState> {
   QuizFinishBloc(this._apiRepo, this._iFlutterNavigator, this._localStorageRepo)
       : super(QuizFinishInitial()) {
-    on<QuizFinishEvent>(fsdf);
+    on<GetIdForQuizDtls>(_getIdForQuizDtls);
   }
 
   final ApiRepo _apiRepo;
   final IFlutterNavigator _iFlutterNavigator;
   final LocalStorageRepo _localStorageRepo;
 
-  FutureOr<void> fsdf(QuizFinishEvent event, Emitter<QuizFinishState> emit) {}
+  FutureOr<void> _getIdForQuizDtls(
+      GetIdForQuizDtls event, Emitter<QuizFinishState> emit) {
+    print(event.quizId);
+  }
 }

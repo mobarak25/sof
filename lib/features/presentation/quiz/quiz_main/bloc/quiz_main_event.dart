@@ -29,3 +29,16 @@ class UpdateTime extends QuizMainEvent {
 class PressToNext extends QuizMainEvent {}
 
 class PressToPrev extends QuizMainEvent {}
+
+class PressToOptions extends QuizMainEvent {
+  const PressToOptions({required this.questionIndex, required this.ans});
+  final int questionIndex;
+  final String ans;
+}
+
+class ChangeExplanation extends QuizMainEvent {
+  const ChangeExplanation({required this.explanation});
+  final String explanation;
+}
+
+class PressToFinish extends QuizMainEvent {}

@@ -7,6 +7,7 @@ class QuizMainState extends Equatable {
     this.totalTimeInSec = 0,
     this.percentage = 1,
     this.qstIndex = 0,
+    this.quizAns = const [],
     this.details = const QuizDetailsForStudent(),
   });
 
@@ -15,6 +16,7 @@ class QuizMainState extends Equatable {
   final int totalTimeInSec;
   final double percentage;
   final int qstIndex;
+  final List<QuizAns> quizAns;
   final QuizDetailsForStudent details;
 
   QuizMainState copyWith({
@@ -23,6 +25,7 @@ class QuizMainState extends Equatable {
     int? totalTimeInSec,
     double? percentage,
     int? qstIndex,
+    List<QuizAns>? quizAns,
     QuizDetailsForStudent? details,
   }) {
     return QuizMainState(
@@ -31,12 +34,20 @@ class QuizMainState extends Equatable {
       totalTimeInSec: totalTimeInSec ?? this.totalTimeInSec,
       percentage: percentage ?? this.percentage,
       qstIndex: qstIndex ?? this.qstIndex,
+      quizAns: quizAns ?? this.quizAns,
       details: details ?? this.details,
     );
   }
 
   @override
-  List<Object> get props => [min, sec, totalTimeInSec, qstIndex, details];
+  List<Object> get props => [
+        min,
+        sec,
+        totalTimeInSec,
+        qstIndex,
+        quizAns,
+        details,
+      ];
 }
 
 final class QuizMainInitial extends QuizMainState {}

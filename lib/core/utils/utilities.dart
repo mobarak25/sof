@@ -197,3 +197,41 @@ class TempQuestion {
   final FocusNode focusnode;
   final TextEditingController textEditingController;
 }
+
+class QuizAns {
+  QuizAns({
+    required this.questionId,
+    required this.type,
+    required this.answer,
+    required this.focusnode,
+    required this.textEditingController,
+  });
+  final int questionId;
+  final int type;
+  final String answer;
+  final FocusNode focusnode;
+  final TextEditingController textEditingController;
+}
+
+
+
+
+// {
+//     "quiz_id":25,
+//     "is_final_submit":1,
+//     "answers":[
+//         {
+//             "question_id": 50,
+//             "type":1,
+//             "answer":94
+//         },{
+//             "question_id": 52,
+//             "type":2,
+//             "answer":97
+//         },{
+//             "question_id": 53,
+//             "type":3,
+//             "answer":"ans of short question"
+//         }
+//     ]
+// }

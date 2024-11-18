@@ -9,8 +9,11 @@ import 'package:school_of_future/core/utils/text_styles.dart';
 import 'package:school_of_future/core/widgets/app_bar.dart';
 import 'package:school_of_future/core/widgets/body.dart';
 import 'package:school_of_future/core/widgets/button.dart';
+import 'package:school_of_future/core/widgets/confirm_cancel_dialog.dart';
 import 'package:school_of_future/core/widgets/text.dart';
+import 'package:school_of_future/core/widgets/text_field.dart';
 import 'package:school_of_future/features/presentation/quiz/quiz_main/bloc/quiz_main_bloc.dart';
+import 'package:school_of_future/features/presentation/quiz/quiz_main/widgets/options.dart';
 import 'package:school_of_future/features/presentation/quiz/quiz_main/widgets/timer_radius.dart';
 
 class QuizMainScreen extends StatelessWidget {
@@ -20,12 +23,17 @@ class QuizMainScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        context.read<QuizMainBloc>().add(StopTimer());
+        showCancelDialog(context, pressToYes: () {
+          context.read<QuizMainBloc>().add(StopTimer());
+          Navigator.pop(context);
+          Navigator.pop(context);
+        });
         return true;
       },
       child: BlocBuilder<QuizMainBloc, QuizMainState>(
         builder: (context, state) {
           final bloc = context.read<QuizMainBloc>();
+          final data = state.details.data;
 
           return Body(
             isFullScreen: true,
@@ -33,7 +41,7 @@ class QuizMainScreen extends StatelessWidget {
               actions: const [SizedBox()],
               title: LocaleKeys.onlineQuiz.tr(),
             ),
-            child: state.details.data != null
+            child: data != null
                 ? Stack(
                     clipBehavior: Clip.none,
                     alignment: Alignment.topCenter,
@@ -92,10 +100,65 @@ class QuizMainScreen extends StatelessWidget {
                                       ],
                                     ),
                                   ),
+                                  const Gap(25),
+                                  if (data.questions![state.qstIndex].type != 3)
+                                    QuestionOptions(
+                                      questionOptions: data
+                                          .questions![state.qstIndex]
+                                          .questionOptions!,
+                                      givenAns:
+                                          state.quizAns[state.qstIndex].answer,
+                                      press: (String optionId) {
+                                        bloc.add(PressToOptions(
+                                            questionIndex: state.qstIndex,
+                                            ans: optionId));
+                                      },
+                                    ),
+                                  if (data.questions![state.qstIndex].type == 3)
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 15),
+                                      child: RichText(
+                                        text: TextSpan(
+                                          children: [
+                                            TextSpan(
+                                              text: "Explanation: ",
+                                              style:
+                                                  bBaseB.copyWith(color: bGray),
+                                            ),
+                                            TextSpan(
+                                              text: data
+                                                  .questions![state.qstIndex]
+                                                  .questionExplanation,
+                                              style: bBase.copyWith(
+                                                  color: kPrimaryColor),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
                                 ],
                               ),
                             ),
                           ),
+                          if (data.questions![state.qstIndex].type == 3)
+                            Container(
+                              padding: const EdgeInsets.all(10),
+                              child: TextFieldB(
+                                maxLines: 4,
+                                hintText: LocaleKeys.enterQuestionExp.tr(),
+                                borderColor: bGray12,
+                                focusNode:
+                                    state.quizAns[state.qstIndex].focusnode,
+                                controller: state.quizAns[state.qstIndex]
+                                    .textEditingController,
+                                onChanged: (String value) {
+                                  bloc.add(
+                                      ChangeExplanation(explanation: value));
+                                },
+                                errorText: '',
+                              ),
+                            ),
                           Container(
                             color: bWhite,
                             padding: const EdgeInsets.symmetric(
@@ -110,7 +173,8 @@ class QuizMainScreen extends StatelessWidget {
                                       bloc.add(PressToPrev());
                                     },
                                     bgColor: bGray4,
-                                    textColor: bGray32,
+                                    textColor:
+                                        state.qstIndex == 0 ? bGray32 : bGray52,
                                     svgIcon: prevArrowSvg,
                                     iconPosition: "left",
                                   ),
@@ -119,12 +183,26 @@ class QuizMainScreen extends StatelessWidget {
                                 Expanded(
                                   child: ButtonB(
                                     heigh: 48,
-                                    text: "Next",
+                                    text: data.questions!.length <=
+                                            (state.qstIndex + 1)
+                                        ? "Finish"
+                                        : "Next",
                                     press: () {
-                                      bloc.add(PressToNext());
+                                      if (data.questions!.length >
+                                          (state.qstIndex + 1)) {
+                                        bloc.add(PressToNext());
+                                      } else {
+                                        bloc.add(PressToFinish());
+                                      }
                                     },
-                                    bgColor: bGray4,
-                                    textColor: bGray52,
+                                    bgColor: data.questions!.length <=
+                                            (state.qstIndex + 1)
+                                        ? bRed
+                                        : bGray4,
+                                    textColor: data.questions!.length <=
+                                            (state.qstIndex + 1)
+                                        ? bWhite
+                                        : bGray52,
                                     svgIcon: nextArrowSvg,
                                   ),
                                 ),

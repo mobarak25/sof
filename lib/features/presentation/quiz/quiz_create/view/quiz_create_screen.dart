@@ -161,7 +161,7 @@ class QuizCreateScreen extends StatelessWidget {
                       onTouch: () async {
                         endDateController.text = await showDateTimePickerDialog(
                                 context,
-                                initialdate: state.startDate) ??
+                                initialdate: state.endDate) ??
                             '';
                         bloc.add(EndDate(endDate: endDateController.text));
                       },

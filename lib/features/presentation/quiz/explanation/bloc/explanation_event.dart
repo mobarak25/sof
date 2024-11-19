@@ -8,6 +8,10 @@ sealed class ExplanationEvent extends Equatable {
 }
 
 class GetQstIdForExplanation extends ExplanationEvent {
-  const GetQstIdForExplanation({required this.qstId});
-  final int qstId;
+  const GetQstIdForExplanation({
+    required this.qstIndex,
+    required this.question,
+  });
+  final int qstIndex;
+  final Question question;
 }

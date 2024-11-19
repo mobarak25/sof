@@ -130,6 +130,7 @@ class QuizMainBloc extends Bloc<QuizMainEvent, QuizMainState> {
 
   FutureOr<void> _pressToFinish(
       PressToFinish event, Emitter<QuizMainState> emit) async {
+    emit(state.copyWith(loading: true));
     List<AnswerElement> answers = [];
     for (int i = 0; i < state.quizAns.length; i++) {
       if (state.quizAns[i].type != 3) {
@@ -165,5 +166,18 @@ class QuizMainBloc extends Bloc<QuizMainEvent, QuizMainState> {
 
       ShowSnackBar(message: submitAns.message!, navigator: _iFlutterNavigator);
     }
+    emit(state.copyWith(loading: false));
   }
 }
+
+// if (submitAns != null) {
+//       final navigator = navigatorKey.currentState;
+//       if (navigator != null && navigator.context.mounted) {
+//         navigator.popUntil((route) => route.isFirst);
+//         navigator.pushNamed(quizFinishScreen,
+//             arguments: state.details.data!.id);
+
+//         ShowSnackBar(
+//             message: submitAns.message!, navigator: _iFlutterNavigator);
+//       }
+//     }

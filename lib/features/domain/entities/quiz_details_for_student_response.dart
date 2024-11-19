@@ -305,7 +305,7 @@ class StudentTime {
   final String? startTime;
   final String? endTime;
   final int? endStatus;
-  final String? takenTime;
+  final int? takenTime;
 
   const StudentTime({
     this.id,

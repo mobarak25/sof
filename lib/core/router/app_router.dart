@@ -680,7 +680,7 @@ class AppRouter {
           ),
         );
       case quizExplanationScreen:
-        final id = settings.arguments as int;
+        final arguments = settings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
           settings: settings,
           builder: (BuildContext context) => BlocProvider(
@@ -688,7 +688,9 @@ class AppRouter {
               getIt<ApiRepo>(),
               getIt<IFlutterNavigator>(),
               getIt<LocalStorageRepo>(),
-            )..add(GetQstIdForExplanation(qstId: id)),
+            )..add(GetQstIdForExplanation(
+                qstIndex: arguments['qIndex'],
+                question: arguments['question'])),
             child: const ExplanationScreen(),
           ),
         );

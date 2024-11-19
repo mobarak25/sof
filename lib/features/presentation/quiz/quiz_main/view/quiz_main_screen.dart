@@ -182,6 +182,7 @@ class QuizMainScreen extends StatelessWidget {
                                 const Gap(20),
                                 Expanded(
                                   child: ButtonB(
+                                    loading: state.loading,
                                     heigh: 48,
                                     text: data.questions!.length <=
                                             (state.qstIndex + 1)

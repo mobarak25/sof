@@ -1,8 +1,16 @@
 part of 'result_summery_bloc.dart';
 
-sealed class ResultSummeryState extends Equatable {
-  const ResultSummeryState();
-  
+class ResultSummeryState extends Equatable {
+  const ResultSummeryState({
+    this.details = const QuizDetailsForStudent(),
+  });
+
+  final QuizDetailsForStudent details;
+
+  ResultSummeryState copyWith({QuizDetailsForStudent? details}) {
+    return ResultSummeryState(details: details ?? this.details);
+  }
+
   @override
   List<Object> get props => [];
 }

@@ -22,6 +22,7 @@ class StudentQuizDtlsScreen extends StatelessWidget {
     return BlocBuilder<StudentQuizDetailsBloc, StudentQuizDetailsState>(
       builder: (context, state) {
         final bloc = context.read<StudentQuizDetailsBloc>();
+        final data = state.details.data;
 
         return Body(
           isFullScreen: true,
@@ -29,14 +30,14 @@ class StudentQuizDtlsScreen extends StatelessWidget {
             actions: const [SizedBox()],
             title: LocaleKeys.onlineQuiz.tr(),
           ),
-          child: state.details.data != null
+          child: data != null
               ? ListView(
                   children: [
                     QuizCard(
-                      title: state.details.data!.title!,
-                      subject: state.details.data!.subject!,
-                      startTime: state.details.data!.startDateTime!,
-                      endTime: state.details.data!.endDateTime!,
+                      title: data.title!,
+                      subject: data.subject!,
+                      startTime: data.startDateTime!,
+                      endTime: data.endDateTime!,
                     ),
                     Stack(
                       clipBehavior: Clip.none,
@@ -115,7 +116,11 @@ class StudentQuizDtlsScreen extends StatelessWidget {
                             children: [
                               const Gap(35),
                               const Gap(40),
-                              if (state.details.data!.studentTime == null)
+                              if (data.studentTime == null ||
+                                  (data.studentTime != null &&
+                                      data.studentTime!.obtainedMark! <
+                                          data.pass! &&
+                                      data.allowRetake == 1))
                                 InkWell(
                                   onTap: () {
                                     Navigator.of(context, rootNavigator: true)

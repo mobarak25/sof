@@ -9,7 +9,6 @@ import 'package:school_of_future/core/utils/text_styles.dart';
 import 'package:school_of_future/core/widgets/app_bar.dart';
 import 'package:school_of_future/core/widgets/body.dart';
 import 'package:school_of_future/core/widgets/custom_tab.dart';
-import 'package:school_of_future/core/widgets/floating_button.dart';
 import 'package:school_of_future/core/widgets/text.dart';
 import 'package:school_of_future/features/presentation/app_common/filter_sidebar/bloc/filter_sidebar_bloc.dart';
 import 'package:school_of_future/features/presentation/app_common/filter_sidebar/view/filter_sidebar.dart';
@@ -58,85 +57,72 @@ class StudentQuizListScreen extends StatelessWidget {
               ),
             ),
           ),
-          child: Stack(
-            children: [
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 13, horizontal: 15),
-                color: bInnerBg,
-                child: state.quizList.data != null
-                    ? CustomTab(
-                        loading: state.loading,
-                        tabList: const [],
-                        onTabChanged: (int tabIndex) {},
-                        search: (String value) {
-                          bloc.add(ChangeSearch(
-                              searchText: value, filterBloc: filterBloc));
-                        },
-                        child: Column(
-                          children: [
-                            Expanded(
-                              child: ListView(
-                                controller: scroll,
-                                children: [
-                                  ...List.generate(
-                                    state.quizList.data!.length,
-                                    (index) {
-                                      return StudentQuizCard(
-                                        data: state.quizList.data![index],
-                                        press: () {
-                                          Navigator.of(context,
-                                                  rootNavigator: true)
-                                              .pushNamed(
-                                            studentQuizDetailsScreen,
-                                            arguments:
-                                                state.quizList.data![index].id,
-                                          );
-                                        },
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 13, horizontal: 15),
+            color: bInnerBg,
+            child: state.quizList.data != null
+                ? CustomTab(
+                    loading: state.loading,
+                    tabList: const [],
+                    onTabChanged: (int tabIndex) {},
+                    search: (String value) {
+                      bloc.add(ChangeSearch(
+                          searchText: value, filterBloc: filterBloc));
+                    },
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: ListView(
+                            controller: scroll,
+                            children: [
+                              ...List.generate(
+                                state.quizList.data!.length,
+                                (index) {
+                                  return StudentQuizCard(
+                                    data: state.quizList.data![index],
+                                    press: () {
+                                      Navigator.of(context, rootNavigator: true)
+                                          .pushNamed(
+                                        studentQuizDetailsScreen,
+                                        arguments:
+                                            state.quizList.data![index].id,
                                       );
                                     },
-                                  ),
-                                  if (state.quizList.data!.isEmpty)
-                                    TextB(
-                                      text: LocaleKeys.noResultFound.tr(),
-                                      textStyle: bBody1B,
-                                      fontColor: bRed,
-                                      alignMent: TextAlign.center,
-                                    ),
-                                  if (!state.incrementLoader && state.isEndList)
-                                    const Padding(
-                                      padding:
-                                          EdgeInsets.only(top: 15, bottom: 30),
-                                      child: TextB(
-                                        text: "End of the list",
-                                        textStyle: bBase2M,
-                                        fontColor: bRed,
-                                      ),
-                                    ),
-                                ],
+                                  );
+                                },
                               ),
-                            ),
-                            if (state.incrementLoader)
-                              const Center(
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 20),
-                                  child: CircularProgressIndicator(),
+                              if (state.quizList.data!.isEmpty)
+                                TextB(
+                                  text: LocaleKeys.noResultFound.tr(),
+                                  textStyle: bBody1B,
+                                  fontColor: bRed,
+                                  alignMent: TextAlign.center,
                                 ),
-                              ),
-                            const Gap(65),
-                          ],
-                        ))
-                    : const Center(
-                        child: CircularProgressIndicator(),
-                      ),
-              ),
-              FloatingButton(
-                press: () {
-                  Navigator.of(context, rootNavigator: true)
-                      .pushNamed(quizCreateScreen, arguments: -1);
-                },
-              )
-            ],
+                              if (!state.incrementLoader && state.isEndList)
+                                const Padding(
+                                  padding: EdgeInsets.only(top: 15, bottom: 30),
+                                  child: TextB(
+                                    text: "End of the list",
+                                    textStyle: bBase2M,
+                                    fontColor: bRed,
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                        if (state.incrementLoader)
+                          const Center(
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(vertical: 20),
+                              child: CircularProgressIndicator(),
+                            ),
+                          ),
+                        const Gap(65),
+                      ],
+                    ))
+                : const Center(
+                    child: CircularProgressIndicator(),
+                  ),
           ),
         );
       },

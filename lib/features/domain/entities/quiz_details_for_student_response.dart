@@ -306,6 +306,7 @@ class StudentTime {
   final String? endTime;
   final int? endStatus;
   final int? takenTime;
+  final int? isReviewed;
 
   const StudentTime({
     this.id,
@@ -315,6 +316,7 @@ class StudentTime {
     this.endTime,
     this.endStatus,
     this.takenTime,
+    this.isReviewed,
   });
 
   factory StudentTime.fromJson(Map<String, dynamic> json) => StudentTime(
@@ -325,6 +327,7 @@ class StudentTime {
         endTime: json["end_time"],
         endStatus: json["end_status"],
         takenTime: json["taken_time"],
+        isReviewed: json["is_reviewed"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -335,6 +338,7 @@ class StudentTime {
         "end_time": endTime,
         "end_status": endStatus,
         "taken_time": takenTime,
+        "is_reviewed": isReviewed,
       };
 }
 

@@ -9,7 +9,7 @@ Future<String?> showDateTimePickerDialog(BuildContext context,
 
   if (initialdate.isNotEmpty) {
     try {
-      DateFormat inputFormat = DateFormat("yyyy-MM-dd hh:mm a");
+      DateFormat inputFormat = DateFormat("yyyy-MM-dd hh:mm:ss");
       date = inputFormat.parse(initialdate);
     } catch (e) {
       debugPrint("Error parsing initial date: $e");
@@ -21,7 +21,7 @@ Future<String?> showDateTimePickerDialog(BuildContext context,
     context,
     showTitleActions: true,
     onConfirm: (pickedDate) {
-      selectedDateTime = DateFormat('yyyy-MM-dd HH:mm').format(pickedDate);
+      selectedDateTime = DateFormat('yyyy-MM-dd hh:mm:ss').format(pickedDate);
     },
     minTime: now,
     currentTime: date,

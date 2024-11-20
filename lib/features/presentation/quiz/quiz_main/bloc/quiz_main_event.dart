@@ -42,3 +42,5 @@ class ChangeExplanation extends QuizMainEvent {
 }
 
 class PressToFinish extends QuizMainEvent {}
+
+class GetTrackTime extends QuizMainEvent {}

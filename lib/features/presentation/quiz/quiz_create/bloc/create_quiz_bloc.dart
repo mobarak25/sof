@@ -89,13 +89,12 @@ class CreateQuizBloc extends Bloc<CreateQuizEvent, CreateQuizState> {
   }
 
   FutureOr<void> _startDate(StartDate event, Emitter<CreateQuizState> emit) {
-    final date = getDate(value: event.startDate, formate: "yyyy-MM-dd hh:mm a");
-    emit(state.copyWith(startDate: date));
+    emit(state.copyWith(startDate: event.startDate));
+    print(event.startDate);
   }
 
   FutureOr<void> _endDate(EndDate event, Emitter<CreateQuizState> emit) {
-    final date = getDate(value: event.endDate, formate: "yyyy-MM-dd hh:mm a");
-    emit(state.copyWith(endDate: date));
+    emit(state.copyWith(endDate: event.endDate));
   }
 
   FutureOr<void> _changeDuration(

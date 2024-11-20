@@ -13,6 +13,7 @@ import 'package:school_of_future/features/data/data_sources/remote_constants.dar
 import 'package:school_of_future/features/data/model/answer_quiz.dart';
 import 'package:school_of_future/features/domain/entities/default_response.dart';
 import 'package:school_of_future/features/domain/entities/quiz_details_for_student_response.dart';
+import 'package:school_of_future/features/domain/entities/track_time_response.dart';
 import 'package:school_of_future/features/domain/repositories/api_repo.dart';
 import 'package:school_of_future/features/domain/repositories/local_storage_repo.dart';
 
@@ -25,6 +26,7 @@ class QuizMainBloc extends Bloc<QuizMainEvent, QuizMainState> {
   QuizMainBloc(this._apiRepo, this._iFlutterNavigator, this._localStorageRepo)
       : super(QuizMainInitial()) {
     on<GetQuizIdForStart>(_getQuizIdForStart);
+    on<GetTrackTime>(_getTrackTime);
     on<StartQuiz>(_startQuiz);
     on<UpdateTime>(_updateTime);
     on<StopTimer>(_stopTimer);
@@ -57,11 +59,21 @@ class QuizMainBloc extends Bloc<QuizMainEvent, QuizMainState> {
             focusnode: FocusNode(),
             textEditingController: TextEditingController()));
       }
-      emit(state.copyWith(
-        details: details,
-        totalTimeInSec: (details.data!.duration! * 60),
-        quizAns: answer,
-      ));
+
+      emit(state.copyWith(details: details, quizAns: answer));
+      add(GetTrackTime());
+    }
+  }
+
+  FutureOr<void> _getTrackTime(
+      GetTrackTime event, Emitter<QuizMainState> emit) async {
+    final getTime = await _apiRepo.post<TrackTime>(
+      endpoint: trackTimeEndPoint,
+      body: {"quiz_id": state.details.data!.id!, "_method": "PUT"},
+    );
+
+    if (getTime != null) {
+      emit(state.copyWith(trackTime: getTime, totalTimeInSec: getTime.data));
 
       add(StartQuiz());
     }
@@ -169,15 +181,3 @@ class QuizMainBloc extends Bloc<QuizMainEvent, QuizMainState> {
     emit(state.copyWith(loading: false));
   }
 }
-
-// if (submitAns != null) {
-//       final navigator = navigatorKey.currentState;
-//       if (navigator != null && navigator.context.mounted) {
-//         navigator.popUntil((route) => route.isFirst);
-//         navigator.pushNamed(quizFinishScreen,
-//             arguments: state.details.data!.id);
-
-//         ShowSnackBar(
-//             message: submitAns.message!, navigator: _iFlutterNavigator);
-//       }
-//     }

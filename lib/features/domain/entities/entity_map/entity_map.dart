@@ -55,6 +55,7 @@ import 'package:school_of_future/features/domain/entities/teacher_own_leave_list
 import 'package:school_of_future/features/domain/entities/teacher_profile_response.dart';
 import 'package:school_of_future/features/domain/entities/teacher_summited_assinent_response.dart';
 import 'package:school_of_future/features/domain/entities/today_attendance_response.dart';
+import 'package:school_of_future/features/domain/entities/track_time_response.dart';
 import 'package:school_of_future/features/domain/entities/transport_response.dart';
 
 class EntityMap {
@@ -176,6 +177,8 @@ class EntityMap {
         return QuizDetailsForTeacher.fromJson(json) as T;
       case const (QuizDetailsForStudent):
         return QuizDetailsForStudent.fromJson(json) as T;
+      case const (TrackTime):
+        return TrackTime.fromJson(json) as T;
 
       default:
         throw Exception('Unknown class');

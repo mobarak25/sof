@@ -115,7 +115,19 @@ class StudentQuizDtlsScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               const Gap(35),
-                              const Gap(40),
+                              const Gap(30),
+                              if (data.studentTime != null &&
+                                  data.studentTime!.isReviewed == 0)
+                                const Column(
+                                  children: [
+                                    TextB(
+                                      text: "Result not published yet.",
+                                      textStyle: bBody1B,
+                                      fontColor: bRed,
+                                    ),
+                                    Gap(20),
+                                  ],
+                                ),
                               if (data.studentTime == null ||
                                   (data.studentTime != null &&
                                       data.studentTime!.obtainedMark! <
@@ -123,11 +135,7 @@ class StudentQuizDtlsScreen extends StatelessWidget {
                                       data.allowRetake == 1))
                                 InkWell(
                                   onTap: () {
-                                    Navigator.of(context, rootNavigator: true)
-                                        .pushNamed(
-                                      quizMainScreen,
-                                      arguments: state.details.data!.id,
-                                    );
+                                    bloc.add(GoToMainScreen());
                                   },
                                   child: Container(
                                     width: 144,
@@ -158,8 +166,9 @@ class StudentQuizDtlsScreen extends StatelessWidget {
                                       fontColor: bWhite,
                                     ),
                                   ),
-                                )
-                              else
+                                ),
+                              if (data.studentTime != null &&
+                                  data.studentTime!.isReviewed == 1)
                                 Column(
                                   children: [
                                     TextB(

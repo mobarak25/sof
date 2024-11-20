@@ -11,3 +11,5 @@ class GetQuizIdForDtls extends StudentQuizDetailsEvent {
   const GetQuizIdForDtls({required this.quizId});
   final int quizId;
 }
+
+class GoToMainScreen extends StudentQuizDetailsEvent {}

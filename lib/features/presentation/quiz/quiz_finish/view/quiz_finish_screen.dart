@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:school_of_future/core/router/route_constents.dart';
 import 'package:school_of_future/core/translations/local_keys.dart';
+import 'package:school_of_future/core/utils/asset_image.dart';
 import 'package:school_of_future/core/utils/colors.dart';
 import 'package:school_of_future/core/utils/text_styles.dart';
 import 'package:school_of_future/core/widgets/app_bar.dart';
@@ -34,13 +35,18 @@ class QuizFinishScreen extends StatelessWidget {
                   child: Container(
                     width: double.infinity,
                     padding: const EdgeInsets.symmetric(horizontal: 15),
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                       gradient: LinearGradient(
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
-                        colors: [Color(0XFFFF4848), Color(0XFFFF8787)],
+                        colors: data.pass! > data.studentTime!.obtainedMark!
+                            ? [const Color(0XFFFF4848), const Color(0XFFFF8787)]
+                            : [
+                                const Color(0XFF37BFD7),
+                                const Color(0XFF17799C)
+                              ],
                       ),
-                      image: DecorationImage(
+                      image: const DecorationImage(
                         image: AssetImage("assets/images/red_union.png"),
                         fit: BoxFit.fitWidth,
                         alignment: Alignment.topCenter,
@@ -66,50 +72,96 @@ class QuizFinishScreen extends StatelessWidget {
                           ),
                         ),
                         Gap(size.height * 0.07),
-                        const TextB(
-                          text: "Sorry Robin! Your Mark is",
-                          textStyle: bBody1,
-                          fontColor: bWhite,
-                        ),
-                        const TextB(
-                          text: "03",
-                          textStyle: bHead3B,
-                          fontColor: bWhite,
-                        ),
-                        const Spacer(),
-                        const TextB(
-                          text: "Quiz 1",
-                          textStyle: bBase,
-                          fontColor: bWhite,
-                        ),
-                        const TextB(
-                          text: "Mathematics",
-                          textStyle: bBase,
-                          fontColor: bWhite,
-                        ),
-                        Gap(size.height * 0.05),
-                        ButtonB(
-                          heigh: 48,
-                          bgColor: bWhite,
-                          textColor: bRed,
-                          text: "Retake",
-                          press: () {
-                            Navigator.of(context, rootNavigator: true)
-                                .pushNamed(
-                              studentQuizDetailsScreen,
-                              arguments: data.id,
-                            );
-                          },
-                        ),
-                        const Gap(15),
-                        ButtonB(
-                          heigh: 48,
-                          bgColor: bWhite,
-                          textColor: bGray100,
-                          text: LocaleKeys.viewDetails.tr(),
-                          press: () {},
-                        ),
-                        const Gap(15),
+                        if (state.haveAnyShortQst)
+                          Expanded(
+                            child: Column(
+                              children: [
+                                const TextB(
+                                  text: "Pending",
+                                  textStyle: bHead5B,
+                                  fontColor: bWhite,
+                                ),
+                                const Gap(10),
+                                const TextB(
+                                  text:
+                                      "After the review, the results will be published!",
+                                  fontColor: bWhite,
+                                ),
+                                const Spacer(),
+                                ButtonB(
+                                  heigh: 48,
+                                  bgColor: bWhite,
+                                  textColor: bGray,
+                                  text: "Back",
+                                  iconPosition: "left",
+                                  svgIcon: prevArrowSvg,
+                                  press: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                                const Gap(15),
+                              ],
+                            ),
+                          )
+                        else
+                          Expanded(
+                            child: Column(
+                              children: [
+                                TextB(
+                                  text:
+                                      "${data.pass! > data.studentTime!.obtainedMark! ? 'Sorry' : 'Congrats'} ${state.profile.data!.fullname}! Your Mark is",
+                                  textStyle: bBody1,
+                                  fontColor: bWhite,
+                                ),
+                                TextB(
+                                  text: data.studentTime!.obtainedMark!
+                                      .toString(),
+                                  textStyle: bHead3B,
+                                  fontColor: bWhite,
+                                ),
+                                const Spacer(),
+                                TextB(
+                                  text: data.title!,
+                                  textStyle: bBase,
+                                  fontColor: bWhite,
+                                ),
+                                TextB(
+                                  text: data.subject!.name!,
+                                  textStyle: bBase,
+                                  fontColor: bWhite,
+                                ),
+                                Gap(size.height * 0.05),
+                                if (data.pass! >
+                                    data.studentTime!.obtainedMark!)
+                                  ButtonB(
+                                    heigh: 48,
+                                    bgColor: bWhite,
+                                    textColor: bRed,
+                                    text: "Retake",
+                                    press: () {
+                                      Navigator.of(context, rootNavigator: true)
+                                          .pushNamed(
+                                        studentQuizDetailsScreen,
+                                        arguments: data.id,
+                                      );
+                                    },
+                                  ),
+                                const Gap(15),
+                                ButtonB(
+                                  heigh: 48,
+                                  bgColor: bWhite,
+                                  textColor: bGray100,
+                                  text: LocaleKeys.viewDetails.tr(),
+                                  press: () {
+                                    Navigator.of(context, rootNavigator: true)
+                                        .pushNamed(resultSummeryScreen,
+                                            arguments: data.id);
+                                  },
+                                ),
+                                const Gap(15),
+                              ],
+                            ),
+                          ),
                       ],
                     ),
                   ),

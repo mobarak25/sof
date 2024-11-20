@@ -6,6 +6,7 @@ import 'package:school_of_future/core/navigator/iflutter_navigator.dart';
 import 'package:school_of_future/features/data/data_sources/local_db_keys.dart';
 import 'package:school_of_future/features/data/data_sources/remote_constants.dart';
 import 'package:school_of_future/features/domain/entities/quiz_details_for_student_response.dart';
+import 'package:school_of_future/features/domain/entities/student_profile_response.dart';
 import 'package:school_of_future/features/domain/repositories/api_repo.dart';
 import 'package:school_of_future/features/domain/repositories/local_storage_repo.dart';
 
@@ -30,8 +31,18 @@ class QuizFinishBloc extends Bloc<QuizFinishEvent, QuizFinishState> {
       quizId: event.quizId,
     ));
 
+    final profileFromDB = await _localStorageRepo
+        .readModel<StudentProfileResponse>(key: profileDB);
+
     if (details != null) {
-      emit(state.copyWith(details: details));
+      bool isAny = details.data!.questions!
+          .any((tempQuestion) => tempQuestion.type == 3);
+
+      emit(state.copyWith(
+        details: details,
+        profile: profileFromDB,
+        haveAnyShortQst: isAny,
+      ));
     }
   }
 }

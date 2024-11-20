@@ -9,6 +9,7 @@ class QuizMainState extends Equatable {
     this.percentage = 1,
     this.qstIndex = 0,
     this.quizAns = const [],
+    this.trackTime = const TrackTime(),
     this.details = const QuizDetailsForStudent(),
   });
 
@@ -18,6 +19,7 @@ class QuizMainState extends Equatable {
   final int totalTimeInSec;
   final double percentage;
   final int qstIndex;
+  final TrackTime trackTime;
   final List<QuizAns> quizAns;
   final QuizDetailsForStudent details;
 
@@ -28,6 +30,7 @@ class QuizMainState extends Equatable {
     int? totalTimeInSec,
     double? percentage,
     int? qstIndex,
+    TrackTime? trackTime,
     List<QuizAns>? quizAns,
     QuizDetailsForStudent? details,
   }) {
@@ -39,6 +42,7 @@ class QuizMainState extends Equatable {
       percentage: percentage ?? this.percentage,
       qstIndex: qstIndex ?? this.qstIndex,
       quizAns: quizAns ?? this.quizAns,
+      trackTime: trackTime ?? this.trackTime,
       details: details ?? this.details,
     );
   }
@@ -52,6 +56,7 @@ class QuizMainState extends Equatable {
         qstIndex,
         quizAns,
         details,
+        trackTime,
       ];
 }
 

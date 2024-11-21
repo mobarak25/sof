@@ -85,7 +85,13 @@ class QuizListScreen extends StatelessWidget {
                                     (index) {
                                       return QuizCard(
                                         data: state.quizList.data![index],
-                                        press: () {},
+                                        press: () {
+                                          Navigator.of(context,
+                                                  rootNavigator: true)
+                                              .pushNamed(teacherQuizDtlsScreen,
+                                                  arguments: state.quizList
+                                                      .data![index].id);
+                                        },
                                         prssToEditDel:
                                             (String pressTo, int id) {
                                           bloc.add(PressToDelEdit(

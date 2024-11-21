@@ -1,12 +1,12 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:gap/gap.dart';
 import 'package:school_of_future/core/translations/local_keys.dart';
 import 'package:school_of_future/core/utils/colors.dart';
 import 'package:school_of_future/core/utils/text_styles.dart';
 import 'package:school_of_future/core/widgets/text.dart';
 import 'package:school_of_future/features/domain/entities/question_bank_response.dart';
-import 'package:school_of_future/features/presentation/notice/notice_list/widgets/green_box.dart';
 
 class QuestionItemView extends StatelessWidget {
   const QuestionItemView({
@@ -104,7 +104,8 @@ class QuestionItemView extends StatelessWidget {
                         ),
                       ],
                     ),
-                  )
+                  ),
+                  const Gap(35),
                 ],
               ),
             ),

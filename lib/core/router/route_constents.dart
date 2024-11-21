@@ -85,3 +85,6 @@ const eventScreen = "/event-screen";
 const eventDetailsScreen = "/event-details-screen";
 const quizListScreen = "/quiz-list-screen";
 const quizCreateScreen = "/quiz-create-screen";
+const teacherQuizDtlsScreen = "/teacher-quiz-details-screen";
+const teacherQuizStudentsScreen = "/teacher-quiz-students-screen";
+const teacherReviewScreen = "/teacher-review-screen";

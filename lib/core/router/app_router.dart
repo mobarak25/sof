@@ -84,6 +84,12 @@ import 'package:school_of_future/features/presentation/quiz/student_quiz_details
 import 'package:school_of_future/features/presentation/quiz/student_quiz_details/view/student_quiz_details_screen.dart';
 import 'package:school_of_future/features/presentation/quiz/student_quiz_list/bloc/student_quiz_list_bloc.dart';
 import 'package:school_of_future/features/presentation/quiz/student_quiz_list/view/student_quiz_list_screen.dart';
+import 'package:school_of_future/features/presentation/quiz/teacher_quiz_details/bloc/teacher_quiz_details_bloc.dart';
+import 'package:school_of_future/features/presentation/quiz/teacher_quiz_details/view/teacher_quiz_details_screen.dart';
+import 'package:school_of_future/features/presentation/quiz/teacher_quiz_students/bloc/teacher_quiz_students_bloc.dart';
+import 'package:school_of_future/features/presentation/quiz/teacher_quiz_students/view/teacher_quiz_students_screen.dart';
+import 'package:school_of_future/features/presentation/quiz/teacher_review_quiz/bloc/theacher_review_quiz_bloc.dart';
+import 'package:school_of_future/features/presentation/quiz/teacher_review_quiz/view/teacher_review_quiz_screen.dart';
 import 'package:school_of_future/features/presentation/repository/repository_details/bloc/repository_details_bloc.dart';
 import 'package:school_of_future/features/presentation/repository/repository_details/view/repository_details_screen.dart';
 import 'package:school_of_future/features/presentation/resources/resources_details/bloc/resources_details_bloc.dart';
@@ -718,6 +724,47 @@ class AppRouter {
               getIt<LocalStorageRepo>(),
             )..add(GetQuizIdForStart(quizId: id)),
             child: const QuizMainScreen(),
+          ),
+        );
+
+      case teacherQuizDtlsScreen:
+        final id = settings.arguments as int;
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (BuildContext context) => BlocProvider(
+            create: (context) => TeacherQuizDetailsBloc(
+              getIt<ApiRepo>(),
+              getIt<IFlutterNavigator>(),
+              getIt<LocalStorageRepo>(),
+            )..add(TeacherGetQuizIdForDtls(quizId: id)),
+            child: const TeacherQuizDtlsScreen(),
+          ),
+        );
+      case teacherQuizStudentsScreen:
+        final id = settings.arguments as int;
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (BuildContext context) => BlocProvider(
+            create: (context) => TeacherQuizStudentsBloc(
+              getIt<ApiRepo>(),
+              getIt<IFlutterNavigator>(),
+              getIt<LocalStorageRepo>(),
+            )..add(GetQuizIdForStudents(quizId: id)),
+            child: const TeacherQuizStudentsScreen(),
+          ),
+        );
+      case teacherReviewScreen:
+        final arguments = settings.arguments as Map<String, dynamic>;
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (BuildContext context) => BlocProvider(
+            create: (context) => TheacherReviewQuizBloc(
+              getIt<ApiRepo>(),
+              getIt<IFlutterNavigator>(),
+              getIt<LocalStorageRepo>(),
+            )..add(GetDtlsForReview(
+                id: arguments['quiz_id'], studentInfo: arguments['student'])),
+            child: const TeacherReviewScreen(),
           ),
         );
 

@@ -16,6 +16,7 @@ import 'package:school_of_future/features/domain/entities/event_details_response
 import 'package:school_of_future/features/domain/entities/quiz_details_for_student_response.dart';
 import 'package:school_of_future/features/domain/entities/quiz_details_for_teacher_response.dart';
 import 'package:school_of_future/features/domain/entities/quiz_list_response.dart';
+import 'package:school_of_future/features/domain/entities/quiz_students_response.dart';
 import 'package:school_of_future/features/domain/entities/student_full_syllabus_response.dart';
 import 'package:school_of_future/features/domain/entities/student_leave_details_response.dart';
 import 'package:school_of_future/features/domain/entities/syllabus_details_response.dart';
@@ -179,6 +180,8 @@ class EntityMap {
         return QuizDetailsForStudent.fromJson(json) as T;
       case const (TrackTime):
         return TrackTime.fromJson(json) as T;
+      case const (QuizStudents):
+        return QuizStudents.fromJson(json) as T;
 
       default:
         throw Exception('Unknown class');

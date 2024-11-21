@@ -1,5 +1,5 @@
 #----------Local Rony API--------------
-API_URL=http://192.168.50.40/
+API_URL=http://192.168.50.40:8080/
 #clents info
 GRANT_TYPE=client_credentials
 CLIENT_ID=MASTER_CLIENT

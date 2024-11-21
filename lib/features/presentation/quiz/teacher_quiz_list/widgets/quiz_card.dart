@@ -149,7 +149,8 @@ class QuizCard extends StatelessWidget {
                           ),
                         ],
                       ),
-                    )
+                    ),
+                    const Gap(35),
                   ],
                 ),
               ),

@@ -146,7 +146,8 @@ class StudentQuizCard extends StatelessWidget {
                           ),
                         ],
                       ),
-                    )
+                    ),
+                    const Gap(15),
                   ],
                 ),
               ),

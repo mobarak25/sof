@@ -89,14 +89,14 @@ class ButtonB extends StatelessWidget {
                     width: svgIconSize,
                     colorFilter: ColorFilter.mode(textColor!, BlendMode.srcIn),
                   ),
-              const SizedBox(width: 20),
+              SizedBox(width: horizontalPadding ?? 20),
               TextB(
                 text: text!,
                 fontColor: textColor,
                 textStyle: bBody1M,
                 fontSize: fontSize,
               ),
-              const SizedBox(width: 20),
+              SizedBox(width: horizontalPadding ?? 20),
               if (iconPosition == 'right')
                 if (loading)
                   SizedBox(

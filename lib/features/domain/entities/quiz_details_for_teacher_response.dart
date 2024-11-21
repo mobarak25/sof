@@ -35,6 +35,9 @@ class Data {
   final int? allowRetake;
   final int? showResultEndOfQuiz;
   final int? showExplanationWithResult;
+  final int? totalAttended;
+  final int? highestMarks;
+  final int? totalPassedAttended;
   final Subject? subject;
   final List<Question>? questions;
   final List<Ion>? sections;
@@ -61,6 +64,9 @@ class Data {
     this.allowRetake,
     this.showResultEndOfQuiz,
     this.showExplanationWithResult,
+    this.totalAttended,
+    this.highestMarks,
+    this.totalPassedAttended,
     this.subject,
     this.questions,
     this.sections,
@@ -88,6 +94,9 @@ class Data {
         allowRetake: json["allow_retake"],
         showResultEndOfQuiz: json["show_result_end_of_quiz"],
         showExplanationWithResult: json["show_explanation_with_result"],
+        totalAttended: json["total_attended"],
+        highestMarks: json["highest_marks"],
+        totalPassedAttended: json["total_passed_attended"],
         subject:
             json["subject"] == null ? null : Subject.fromJson(json["subject"]),
         questions: json["questions"] == null
@@ -125,6 +134,9 @@ class Data {
         "allow_retake": allowRetake,
         "show_result_end_of_quiz": showResultEndOfQuiz,
         "show_explanation_with_result": showExplanationWithResult,
+        "total_attended": totalAttended,
+        "highest_marks": highestMarks,
+        "total_passed_attended": totalPassedAttended,
         "subject": subject?.toJson(),
         "questions": questions == null
             ? []

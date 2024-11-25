@@ -41,7 +41,7 @@ class TeacherMeetingListScreen extends StatelessWidget {
           isFullScreen: true,
           appBar: FutureAppBar(
             actions: const [SizedBox()],
-            title: LocaleKeys.meeting.tr(),
+            title: context.tr(LocaleKeys.meeting),
           ),
           drawerChild: Padding(
             padding: EdgeInsets.only(
@@ -54,7 +54,7 @@ class TeacherMeetingListScreen extends StatelessWidget {
               child: FilterSidebar(
                 showStartDate: true,
                 showEndDate: true,
-                btnText: LocaleKeys.filter.tr(),
+                btnText: context.tr(LocaleKeys.filter),
                 pressFilterBtn: () {
                   bloc.add(PressFilter(filterBloc: filterBloc));
                 },
@@ -70,8 +70,8 @@ class TeacherMeetingListScreen extends StatelessWidget {
                 child: CustomTab(
                   loading: state.loading,
                   tabList: [
-                    LocaleKeys.guardian.tr(),
-                    LocaleKeys.admin.tr(),
+                    context.tr(LocaleKeys.guardian),
+                    context.tr(LocaleKeys.admin),
                   ],
                   onTabChanged: (int tabIndex) {
                     bloc.add(DataForTab(
@@ -120,7 +120,8 @@ class TeacherMeetingListScreen extends StatelessWidget {
                                   }),
                                   if (state.meetingList.data!.isEmpty)
                                     TextB(
-                                      text: LocaleKeys.noResultFound.tr(),
+                                      text:
+                                          context.tr(LocaleKeys.noResultFound),
                                       textStyle: bBody1B,
                                       fontColor: bRed,
                                       alignMent: TextAlign.center,

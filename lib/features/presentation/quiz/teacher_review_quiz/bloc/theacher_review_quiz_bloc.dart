@@ -4,8 +4,11 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:school_of_future/core/navigator/iflutter_navigator.dart';
+import 'package:school_of_future/core/snackbar/show_snackbar.dart';
 import 'package:school_of_future/core/utils/utilities.dart';
 import 'package:school_of_future/features/data/data_sources/remote_constants.dart';
+import 'package:school_of_future/features/data/model/update_short_question_mark.dart';
+import 'package:school_of_future/features/domain/entities/default_response.dart';
 import 'package:school_of_future/features/domain/entities/quiz_details_for_student_response.dart';
 import 'package:school_of_future/features/domain/entities/quiz_students_response.dart';
 import 'package:school_of_future/features/domain/repositories/api_repo.dart';
@@ -21,6 +24,8 @@ class TheacherReviewQuizBloc
       : super(TheacherReviewQuizInitial()) {
     on<GetDtlsForReview>(_getDtlsForReview);
     on<ChangeMark>(_changeMark);
+    on<PressToSave>(_pressToSave);
+    on<PressToReset>(_pressToReset);
   }
 
   final ApiRepo _apiRepo;
@@ -35,6 +40,7 @@ class TheacherReviewQuizBloc
 
     if (details != null) {
       List<MCQOptions> controllters = [];
+      List<Mark> marks = [];
       for (int i = 0; i < details.data!.questions!.length; i++) {
         if (details.data!.questions![i].type != 3) {
           controllters.add(MCQOptions(
@@ -45,18 +51,81 @@ class TheacherReviewQuizBloc
           controllters.add(MCQOptions(
               textEditingController: TextEditingController(),
               focusnode: FocusNode()));
+          marks.add(
+            Mark(
+              questionId: details.data!.questions![i].id!,
+              mark: null,
+              markingExplaination: '',
+            ),
+          );
         }
       }
       emit(state.copyWith(
-          details: details,
-          totalMarks: details.data!.studentTime!.obtainedMark,
-          studentInfo: event.studentInfo,
-          markController: controllters));
+        details: details,
+        totalMarks: details.data!.studentTime!.obtainedMark,
+        studentInfo: event.studentInfo,
+        markController: controllters,
+        marks: marks,
+      ));
     }
   }
 
   FutureOr<void> _changeMark(
       ChangeMark event, Emitter<TheacherReviewQuizState> emit) {
-    emit(state.copyWith(totalMarks: state.totalMarks + num.parse(event.mark)));
+    num tempMark = 0;
+    num changedMark = event.mark.isNotEmpty ? num.tryParse(event.mark) ?? 0 : 0;
+    List<Mark> updateMark = List.from(state.marks);
+
+    for (int i = 0; i < state.marks.length; i++) {
+      if (updateMark[i].questionId == event.questionId) {
+        updateMark[i] = Mark(
+          questionId: state.marks[i].questionId,
+          mark: changedMark,
+          markingExplaination: '',
+        );
+      }
+    }
+    emit(state.copyWith(marks: updateMark));
+
+    for (int i = 0; i < state.marks.length; i++) {
+      tempMark += state.marks[i].mark ?? 0;
+    }
+
+    emit(state.copyWith(
+        totalMarks: state.details.data!.studentTime!.obtainedMark! + tempMark));
+  }
+
+  FutureOr<void> _pressToSave(
+      PressToSave event, Emitter<TheacherReviewQuizState> emit) async {
+    final response = await _apiRepo.post<DefaultResponse>(
+      endpoint: updateQuizShortQstMarkEndPoint,
+      body: UpdateShortQuestionMark(
+        quizId: state.details.data!.id!,
+        studentId: state.studentInfo.studentId!,
+        marks: state.marks,
+      ),
+    );
+
+    if (response != null) {
+      ShowSnackBar(message: response.message!, navigator: _iFlutterNavigator);
+      _iFlutterNavigator.pop(state.details.data!.id!);
+    }
+  }
+
+  FutureOr<void> _pressToReset(
+      PressToReset event, Emitter<TheacherReviewQuizState> emit) async {
+    final response = await _apiRepo.post<DefaultResponse>(
+      endpoint: resetMarkEndPoint,
+      body: {
+        "quiz_id": state.details.data!.id!,
+        "student_id": [state.studentInfo.studentId!],
+        "_method": "PUT",
+      },
+    );
+
+    if (response != null) {
+      ShowSnackBar(message: response.message!, navigator: _iFlutterNavigator);
+      _iFlutterNavigator.pop(state.details.data!.id!);
+    }
   }
 }

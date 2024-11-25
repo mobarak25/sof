@@ -26,7 +26,7 @@ class TeacherSyllabusListScreen extends StatelessWidget {
           isFullScreen: true,
           appBar: FutureAppBar(
             actions: const [SizedBox()],
-            title: LocaleKeys.syllabus.tr(),
+            title: context.tr(LocaleKeys.syllabus),
           ),
           child: Container(
             padding: const EdgeInsets.symmetric(vertical: 13, horizontal: 15),
@@ -35,9 +35,9 @@ class TeacherSyllabusListScreen extends StatelessWidget {
               loading: state.loading,
               showSearch: false,
               tabList: [
-                LocaleKeys.full.tr(),
-                LocaleKeys.classTest.tr(),
-                LocaleKeys.quiz.tr(),
+                context.tr(LocaleKeys.full),
+                context.tr(LocaleKeys.classTest),
+                context.tr(LocaleKeys.quiz),
               ],
               onTabChanged: (int tabIndex) {
                 bloc.add(DataForTab(tabIndex: tabIndex.toString()));

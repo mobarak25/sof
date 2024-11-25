@@ -17,6 +17,11 @@ class GetDtlsForReview extends TheacherReviewQuizEvent {
 }
 
 class ChangeMark extends TheacherReviewQuizEvent {
-  const ChangeMark({required this.mark});
+  const ChangeMark({required this.mark, required this.questionId});
   final String mark;
+  final int questionId;
 }
+
+class PressToSave extends TheacherReviewQuizEvent {}
+
+class PressToReset extends TheacherReviewQuizEvent {}

@@ -56,14 +56,14 @@ class StduntItem extends StatelessWidget {
                 ),
                 const Gap(5),
                 SizedBox(
-                  width: 90,
+                  width: 100,
                   child: ButtonB(
                     heigh: 48,
                     horizontalPadding: 0,
                     text: data[index].quizTime != null &&
                             data[index].quizTime!.isReviewed == 1
                         ? data[index].quizTime!.obtainedMark!.toString()
-                        : LocaleKeys.review.tr(),
+                        : context.tr(LocaleKeys.review),
                     bgColor:
                         data[index].quizTime == null ? bGray4 : kPrimaryColor,
                     textColor: data[index].quizTime == null ? bGray : bWhite,

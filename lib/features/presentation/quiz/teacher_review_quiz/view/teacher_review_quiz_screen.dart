@@ -96,8 +96,9 @@ class TeacherReviewScreen extends StatelessWidget {
                           QuestionItemCard(
                             questions: details.questions!,
                             controllers: state.markController,
-                            changeMark: (String mark) {
-                              bloc.add(ChangeMark(mark: mark));
+                            changeMark: (String mark, int questionId) {
+                              bloc.add(ChangeMark(
+                                  mark: mark, questionId: questionId));
                             },
                           ),
                         ],
@@ -116,7 +117,9 @@ class TeacherReviewScreen extends StatelessWidget {
                       child: ButtonB(
                         heigh: 45,
                         text: LocaleKeys.save.tr(),
-                        press: () {},
+                        press: () {
+                          bloc.add(PressToSave());
+                        },
                       ),
                     ),
                     const Gap(10),
@@ -126,7 +129,9 @@ class TeacherReviewScreen extends StatelessWidget {
                         bgColor: bGray12,
                         textColor: bGray100,
                         text: LocaleKeys.reset.tr(),
-                        press: () {},
+                        press: () {
+                          bloc.add(PressToReset());
+                        },
                       ),
                     ),
                   ],

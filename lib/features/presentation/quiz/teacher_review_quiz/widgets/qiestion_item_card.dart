@@ -21,7 +21,7 @@ class QuestionItemCard extends StatelessWidget {
 
   final List<Question> questions;
   final List<MCQOptions> controllers;
-  final Function(String) changeMark;
+  final Function changeMark;
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +57,7 @@ class QuestionItemCard extends StatelessWidget {
                         borderColor: bGray12,
                         textInputType: TextInputType.number,
                         onChanged: (String value) {
-                          changeMark(value);
+                          changeMark(value, questions[index].id);
                         },
                         textAlign: TextAlign.center,
                         focusNode: controllers[index].focusnode,
@@ -94,7 +94,7 @@ class QuestionItemCard extends StatelessWidget {
                           if (questions[index].type == 3)
                             TextB(
                               text:
-                                  "${LocaleKeys.marks.tr()}: ${questions[index].pivot!.mark}",
+                                  "${context.tr(LocaleKeys.marks)}: ${questions[index].pivot!.mark}",
                             ),
                         ],
                       ),

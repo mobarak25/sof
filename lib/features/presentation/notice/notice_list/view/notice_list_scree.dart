@@ -36,7 +36,7 @@ class NoticeList extends StatelessWidget {
         return Body(
           isFullScreen: true,
           appBar: FutureAppBar(
-            title: LocaleKeys.notice.tr(),
+            title: context.tr(LocaleKeys.notice),
             isLoading: state.loading,
           ),
           child: Padding(
@@ -47,7 +47,7 @@ class NoticeList extends StatelessWidget {
                       const Gap(10),
                       TextFieldB(
                         paddingHeight: 20,
-                        hintText: LocaleKeys.search.tr(),
+                        hintText: context.tr(LocaleKeys.search),
                         borderColor: bGray12,
                         focusNode: searchFocusnode,
                         controller: searchController,
@@ -69,8 +69,9 @@ class NoticeList extends StatelessWidget {
                             return Column(
                               children: [
                                 ItemNotice(
-                                  secondLineLabel: LocaleKeys.forNotice.tr(),
-                                  thirdLineLabel: LocaleKeys.by.tr(),
+                                  secondLineLabel:
+                                      context.tr(LocaleKeys.forNotice),
+                                  thirdLineLabel: context.tr(LocaleKeys.by),
                                   day: getDate(
                                       value: state.notice.noticeList![position]
                                           .createdAt!,
@@ -84,7 +85,7 @@ class NoticeList extends StatelessWidget {
                                   secondLineValue: state.notice
                                               .noticeList![position].isCommon ==
                                           1
-                                      ? LocaleKeys.all.tr()
+                                      ? context.tr(LocaleKeys.all)
                                       : 'You',
                                   thirdLineValue: state.notice
                                       .noticeList![position].user!.fullname!,

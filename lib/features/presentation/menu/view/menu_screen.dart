@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:school_of_future/core/navigator/navigator_key.dart';
 import 'package:school_of_future/core/router/route_constents.dart';
+import 'package:school_of_future/core/translations/local_keys.dart';
 import 'package:school_of_future/core/utils/asset_image.dart';
 import 'package:school_of_future/core/utils/colors.dart';
 import 'package:school_of_future/core/utils/text_styles.dart';
@@ -38,10 +39,10 @@ class MenuScreen extends StatelessWidget {
                 ],
               ),
               const Gap(10),
-              TextB(text: "Menu".tr(), textStyle: bHead4B),
+              TextB(text: context.tr(LocaleKeys.menu), textStyle: bHead4B),
               const Gap(20),
               MenuItem(
-                name: "Home".tr(),
+                name: context.tr(LocaleKeys.home),
                 icon: Icons.home,
                 press: () {
                   Navigator.pop(context);
@@ -49,7 +50,7 @@ class MenuScreen extends StatelessWidget {
                 },
               ),
               MenuItem(
-                name: "Profile".tr(),
+                name: context.tr(LocaleKeys.profile),
                 icon: Icons.person,
                 press: () {
                   Navigator.pop(context);
@@ -63,26 +64,26 @@ class MenuScreen extends StatelessWidget {
                 },
               ),
               MenuItem(
-                name: "Settings".tr(),
+                name: context.tr(LocaleKeys.settings),
                 icon: Icons.settings,
                 press: () {},
               ),
               MenuItem(
-                name: "Change Language".tr(),
+                name: context.tr(LocaleKeys.changeLan),
                 icon: Icons.public,
                 press: () {
                   bloc.add(ChangeLanguage(context: context));
                 },
               ),
               MenuItem(
-                name: "Change Password".tr(),
+                name: context.tr(LocaleKeys.changePas),
                 icon: Icons.lock,
                 press: () {
                   Navigator.pushNamed(context, changePassword);
                 },
               ),
               MenuItem(
-                name: "Logout".tr(),
+                name: context.tr(LocaleKeys.logout),
                 icon: Icons.logout,
                 press: () {
                   bloc.add(LogOut());

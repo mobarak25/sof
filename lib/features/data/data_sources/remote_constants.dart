@@ -156,3 +156,6 @@ String quizAnsEndPoint = "${version1}quiz/for-student/answers";
 String trackTimeEndPoint = "${version1}quiz/for-student/track-quiz-time";
 String quizStudentEndPoint({required int quizId}) =>
     "${version1}quiz/students/$quizId";
+String updateQuizShortQstMarkEndPoint =
+    "${version1}quiz/update-short-question-mark";
+String resetMarkEndPoint = "${version1}quiz/reset-student";

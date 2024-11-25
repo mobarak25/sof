@@ -13,19 +13,19 @@ import 'package:school_of_future/core/widgets/floating_button.dart';
 import 'package:school_of_future/core/widgets/text.dart';
 import 'package:school_of_future/features/presentation/app_common/filter_sidebar/bloc/filter_sidebar_bloc.dart';
 import 'package:school_of_future/features/presentation/app_common/filter_sidebar/view/filter_sidebar.dart';
-import 'package:school_of_future/features/presentation/quiz/teacher_quiz_list/bloc/quiz_list_screen_bloc.dart';
-import 'package:school_of_future/features/presentation/quiz/teacher_quiz_list/widgets/quiz_card.dart';
+import 'package:school_of_future/features/presentation/exam/teacher_exam_list/bloc/teacher_exam_list_bloc.dart';
+import 'package:school_of_future/features/presentation/exam/teacher_exam_list/widgets/exam_card.dart';
 
-class QuizListScreen extends StatelessWidget {
-  const QuizListScreen({super.key});
+class TeacherExamListScreen extends StatelessWidget {
+  const TeacherExamListScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     final scroll = ScrollController();
 
-    return BlocBuilder<QuizListScreenBloc, QuizListScreenState>(
+    return BlocBuilder<TeacherExamListBloc, TeacherExamListState>(
       builder: (context, state) {
-        final bloc = context.read<QuizListScreenBloc>();
+        final bloc = context.read<TeacherExamListBloc>();
         final filterBloc = context.read<FilterSidebarBloc>();
 
         scroll.addListener(() {
@@ -37,7 +37,7 @@ class QuizListScreen extends StatelessWidget {
           isFullScreen: true,
           appBar: FutureAppBar(
             actions: const [SizedBox()],
-            title: LocaleKeys.onlineQuiz.tr(),
+            title: context.tr(LocaleKeys.exams),
           ),
           drawerChild: Padding(
             padding: EdgeInsets.only(
@@ -51,7 +51,7 @@ class QuizListScreen extends StatelessWidget {
                 showVersion: true,
                 showClass: true,
                 showSubject: true,
-                btnText: LocaleKeys.filter.tr(),
+                btnText: context.tr(LocaleKeys.filter),
                 pressFilterBtn: () {
                   bloc.add(PressFilter(filterBloc: filterBloc));
                 },
@@ -64,7 +64,7 @@ class QuizListScreen extends StatelessWidget {
                 padding:
                     const EdgeInsets.symmetric(vertical: 13, horizontal: 15),
                 color: bInnerBg,
-                child: state.quizList.data != null
+                child: state.examList.data != null
                     ? CustomTab(
                         loading: state.loading,
                         tabList: const [],
@@ -80,15 +80,15 @@ class QuizListScreen extends StatelessWidget {
                                 controller: scroll,
                                 children: [
                                   ...List.generate(
-                                    state.quizList.data!.length,
+                                    state.examList.data!.length,
                                     (index) {
-                                      return QuizCard(
-                                        data: state.quizList.data![index],
+                                      return ExamCardCard(
+                                        data: state.examList.data![index],
                                         press: () {
                                           Navigator.of(context,
                                                   rootNavigator: true)
                                               .pushNamed(teacherQuizDtlsScreen,
-                                                  arguments: state.quizList
+                                                  arguments: state.examList
                                                       .data![index].id);
                                         },
                                         prssToEditDel:
@@ -99,9 +99,10 @@ class QuizListScreen extends StatelessWidget {
                                       );
                                     },
                                   ),
-                                  if (state.quizList.data!.isEmpty)
+                                  if (state.examList.data!.isEmpty)
                                     TextB(
-                                      text: LocaleKeys.noResultFound.tr(),
+                                      text:
+                                          context.tr(LocaleKeys.noResultFound),
                                       textStyle: bBody1B,
                                       fontColor: bRed,
                                       alignMent: TextAlign.center,
@@ -136,7 +137,7 @@ class QuizListScreen extends StatelessWidget {
               FloatingButton(
                 press: () {
                   Navigator.of(context, rootNavigator: true)
-                      .pushNamed(quizCreateScreen, arguments: -1);
+                      .pushNamed(teacherExamCreateScreen, arguments: -1);
                 },
               )
             ],

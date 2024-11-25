@@ -159,3 +159,8 @@ String quizStudentEndPoint({required int quizId}) =>
 String updateQuizShortQstMarkEndPoint =
     "${version1}quiz/update-short-question-mark";
 String resetMarkEndPoint = "${version1}quiz/reset-student";
+
+String teacherExamListEndPoint = "${version1}exam/exam";
+
+String teacherExamDtlsEndPoint({required int examId}) =>
+    "${version1}exam/exam/$examId";

@@ -88,3 +88,5 @@ const quizCreateScreen = "/quiz-create-screen";
 const teacherQuizDtlsScreen = "/teacher-quiz-details-screen";
 const teacherQuizStudentsScreen = "/teacher-quiz-students-screen";
 const teacherReviewScreen = "/teacher-review-screen";
+const teacherExamListScreen = "/teacher-exam-list-screen";
+const teacherExamCreateScreen = "/teacher-exam-create-screen";

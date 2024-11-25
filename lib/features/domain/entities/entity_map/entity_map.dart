@@ -13,6 +13,8 @@ import 'package:school_of_future/features/domain/entities/classwork_list_respons
 import 'package:school_of_future/features/domain/entities/default_response.dart';
 import 'package:school_of_future/features/domain/entities/due_task_response.dart';
 import 'package:school_of_future/features/domain/entities/event_details_response.dart';
+import 'package:school_of_future/features/domain/entities/exam_details_response.dart';
+import 'package:school_of_future/features/domain/entities/exam_list_response.dart';
 import 'package:school_of_future/features/domain/entities/quiz_details_for_student_response.dart';
 import 'package:school_of_future/features/domain/entities/quiz_details_for_teacher_response.dart';
 import 'package:school_of_future/features/domain/entities/quiz_list_response.dart';
@@ -182,6 +184,10 @@ class EntityMap {
         return TrackTime.fromJson(json) as T;
       case const (QuizStudents):
         return QuizStudents.fromJson(json) as T;
+      case const (ExamList):
+        return ExamList.fromJson(json) as T;
+      case const (ExamDetails):
+        return ExamDetails.fromJson(json) as T;
 
       default:
         throw Exception('Unknown class');

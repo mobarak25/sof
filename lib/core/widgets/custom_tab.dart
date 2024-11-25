@@ -1,8 +1,11 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:school_of_future/core/translations/local_keys.dart';
 import 'package:school_of_future/core/utils/colors.dart';
 import 'package:school_of_future/core/widgets/text.dart';
 import 'package:school_of_future/core/widgets/text_field.dart';
+import 'package:school_of_future/features/presentation/app_common/filter_sidebar/view/filter_sidebar.dart';
 
 class CustomTab extends StatefulWidget {
   const CustomTab({
@@ -77,7 +80,7 @@ class _CustomTabState extends State<CustomTab> {
               TextFieldB(
                 focusNode: searchFocusnode,
                 controller: searchController,
-                hintText: "Search",
+                hintText: context.tr(LocaleKeys.search),
                 prefixIcon: const Icon(
                   Icons.search,
                   size: 25,

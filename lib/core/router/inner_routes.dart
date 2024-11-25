@@ -22,6 +22,8 @@ import 'package:school_of_future/features/presentation/class_work/teacher_classw
 import 'package:school_of_future/features/presentation/class_work/teacher_classwork_list/view/teacher_classwork_list_screen.dart';
 import 'package:school_of_future/features/presentation/event/event_list/bloc/event_bloc.dart';
 import 'package:school_of_future/features/presentation/event/event_list/view/event_screen.dart';
+import 'package:school_of_future/features/presentation/exam/teacher_exam_list/bloc/teacher_exam_list_bloc.dart';
+import 'package:school_of_future/features/presentation/exam/teacher_exam_list/view/teacher_exam_list_screen.dart';
 import 'package:school_of_future/features/presentation/leave/student_leave_list/bloc/student_leave_list_bloc.dart';
 import 'package:school_of_future/features/presentation/leave/student_leave_list/view/student_leave_list_screen.dart';
 import 'package:school_of_future/features/presentation/leave/teacher_own_leave_list/bloc/teacher_own_leave_bloc.dart';
@@ -400,6 +402,24 @@ Route<dynamic>? studentsRoutes(RouteSettings settings) {
             ),
           ],
           child: const StudentQuizListScreen(),
+        ),
+      );
+
+    case teacherExamListScreen:
+      return MaterialPageRoute(
+        settings: settings,
+        builder: (BuildContext context) => MultiBlocProvider(
+          providers: [
+            BlocProvider<TeacherExamListBloc>(
+              create: (context) => TeacherExamListBloc(getIt<ApiRepo>(),
+                  getIt<IFlutterNavigator>(), getIt<LocalStorageRepo>()),
+            ),
+            BlocProvider<FilterSidebarBloc>(
+              create: (context) => FilterSidebarBloc(
+                  getIt<ApiRepo>(), getIt<LocalStorageRepo>()),
+            ),
+          ],
+          child: const TeacherExamListScreen(),
         ),
       );
 

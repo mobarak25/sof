@@ -41,7 +41,7 @@ class TeacherAssinmentListScreen extends StatelessWidget {
           isFullScreen: true,
           appBar: FutureAppBar(
             actions: const [SizedBox()],
-            title: LocaleKeys.homeWork.tr(),
+            title: context.tr(LocaleKeys.homeWork),
           ),
           drawerChild: Padding(
             padding: EdgeInsets.only(
@@ -187,8 +187,8 @@ class TeacherAssinmentListScreen extends StatelessWidget {
                 child: CustomTab(
                   loading: state.loading,
                   tabList: [
-                    LocaleKeys.published.tr(),
-                    LocaleKeys.draft.tr(),
+                    context.tr(LocaleKeys.published),
+                    context.tr(LocaleKeys.draft),
                   ],
                   onTabChanged: (int tabIndex) {
                     bloc.add(DataForTab(tabIndex: tabIndex.toString()));
@@ -234,7 +234,8 @@ class TeacherAssinmentListScreen extends StatelessWidget {
                                   }),
                                   if (state.assignmentList.data!.isEmpty)
                                     TextB(
-                                      text: LocaleKeys.noResultFound.tr(),
+                                      text:
+                                          context.tr(LocaleKeys.noResultFound),
                                       textStyle: bBody1B,
                                       fontColor: bRed,
                                       alignMent: TextAlign.center,

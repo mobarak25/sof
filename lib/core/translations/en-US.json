@@ -441,5 +441,12 @@
   "Leave type": "Leave type",
   "Select leave type": "Select leave type",
   "EntrReason": "Please enter reason",
-  "End of the list": "End of the list"
+  "End of the list": "End of the list",
+  "Max mark": "Max mark",
+  "Convert mark": "Convert mark",
+  "Pass mark": "Pass mark",
+  "Exam group": "Exam group",
+  "Enter exam group": "Enter exam group",
+  "Exam term": "Exam term",
+  "Enter exam term": "Enter exam term"
 }

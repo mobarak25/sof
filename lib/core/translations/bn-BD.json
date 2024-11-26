@@ -441,5 +441,12 @@
   "Leave type": "ছুটির ধরণ",
   "Select leave type": "ছুটির ধরণ নির্বাচন করুন ",
   "EntrReason": "দয়া করে কারণ লিখুন",
-  "End of the list": "তালিকার শেষ"
+  "End of the list": "তালিকার শেষ",
+  "Max mark": "সর্বোচ্চ নম্বর",
+  "Convert mark": "রূপান্তর নম্বর",
+  "Pass mark": "পাস নম্বর",
+  "Exam group": "পরীক্ষার গ্রুপ",
+  "Exam term": "পরীক্ষার মেয়াদ",
+  "Enter exam group": "পরীক্ষার গ্রুপে প্রবেশ করুন",
+  "Enter exam term": "পরীক্ষার মেয়াদ লিখুন"
 }

@@ -418,4 +418,11 @@ abstract class LocaleKeys {
   static const selectLeaveType = 'Select leave type';
   static const entrReason = 'EntrReason';
   static const endOfTheList = 'End of the list';
+  static const maxMark = 'Max mark';
+  static const convertMark = 'Convert mark';
+  static const passMark = 'Pass mark';
+  static const examGroup = 'Exam group';
+  static const enterExamGroup = 'Enter exam group';
+  static const examTerm = 'Exam term';
+  static const enterExamTerm = 'Enter exam term';
 }

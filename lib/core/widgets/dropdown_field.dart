@@ -106,7 +106,7 @@ class _DropdownFieldBState extends State<DropdownFieldB> {
                   child: TextB(
                     text: items.name,
                     textStyle: bBody2,
-                    fontColor: bGray100,
+                    fontColor: items.value == -1 ? bGray52 : bGray100,
                   ),
                 );
               }).toList(),

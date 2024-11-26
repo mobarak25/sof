@@ -164,3 +164,6 @@ String teacherExamListEndPoint = "${version1}exam/exam";
 
 String teacherExamDtlsEndPoint({required int examId}) =>
     "${version1}exam/exam/$examId";
+
+String examGroupEndPoint = "${version1}exam/exam-group/list";
+String examTermEndPoint = "${version1}exam/exam-terms/list";

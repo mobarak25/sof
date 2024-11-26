@@ -563,13 +563,4 @@ class MeetingCreateScreen extends StatelessWidget {
       },
     );
   }
-
-  DateTime convertToDateTime(String time) {
-    if (time.isNotEmpty) {
-      DateTime dateTime = DateFormat.jm().parse(time);
-      return dateTime;
-    } else {
-      return DateTime.now();
-    }
-  }
 }

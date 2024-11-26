@@ -5,6 +5,7 @@ import 'package:gap/gap.dart';
 import 'package:school_of_future/core/translations/local_keys.dart';
 import 'package:school_of_future/core/utils/colors.dart';
 import 'package:school_of_future/core/utils/enums.dart';
+import 'package:school_of_future/core/utils/utilities.dart';
 import 'package:school_of_future/core/widgets/app_bar.dart';
 import 'package:school_of_future/core/widgets/body.dart';
 import 'package:school_of_future/core/widgets/button.dart';
@@ -12,6 +13,7 @@ import 'package:school_of_future/core/widgets/date_time_picker.dart';
 import 'package:school_of_future/core/widgets/dropdown_field.dart';
 import 'package:school_of_future/core/widgets/text.dart';
 import 'package:school_of_future/core/widgets/text_field.dart';
+import 'package:school_of_future/core/widgets/time_picker.dart';
 import 'package:school_of_future/features/presentation/exam/teacher_exam_create/bloc/teacher_exam_create_bloc.dart';
 
 class TeacherExamCreateScreen extends StatelessWidget {
@@ -20,22 +22,29 @@ class TeacherExamCreateScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bloc = context.read<TeacherExamCreateBloc>();
-    final titleFocusnode = FocusNode();
-    final examDateFocusnode = FocusNode();
-    final typeFocusnode = FocusNode();
-    final durationFocusnode = FocusNode();
 
-    final titleController = TextEditingController();
+    final examDateFocusnode = FocusNode();
+    final startTimeFocusnode = FocusNode();
+    final endTimeFocusnode = FocusNode();
+    final maxMarkFocusnode = FocusNode();
+    final convertMarkFocusnode = FocusNode();
+    final passMarkFocusnode = FocusNode();
+
     final examDateController = TextEditingController();
-    final typeController = TextEditingController();
-    final durationController = TextEditingController();
+    final startTimeController = TextEditingController();
+    final endTimeController = TextEditingController();
+    final maxMarkController = TextEditingController();
+    final convertMarkController = TextEditingController();
+    final passMarkController = TextEditingController();
 
     return BlocBuilder<TeacherExamCreateBloc, TeacherExamCreateState>(
       builder: (context, state) {
-        // titleController.text = state.title;
         examDateController.text = state.examDate;
-        // typeController.text = state.paperType;
-        // durationController.text = state.duration;
+        startTimeController.text = state.startTime;
+        endTimeController.text = state.endTime;
+        maxMarkController.text = state.maxMark;
+        convertMarkController.text = state.convertMark;
+        passMarkController.text = state.passMark;
 
         return Body(
           isFullScreen: true,
@@ -53,22 +62,6 @@ class TeacherExamCreateScreen extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // TextFieldB(
-                          //   isMandatory: true,
-                          //   fieldTitle: LocaleKeys.title.tr(),
-                          //   hintText: LocaleKeys.enterTitle.tr(),
-                          //   borderColor: bGray12,
-                          //   focusNode: titleFocusnode,
-                          //   controller: titleController,
-                          //   onChanged: (String value) {
-                          //     bloc.add(ChangeTitle(title: value));
-                          //   },
-                          //   errorText: state.forms == Forms.invalid &&
-                          //           state.title.isEmpty
-                          //       ? LocaleKeys.enterTitle.tr()
-                          //       : '',
-                          // ),
-                          const Gap(10),
                           TextFieldB(
                             isMandatory: true,
                             fieldTitle: LocaleKeys.date.tr(),
@@ -97,37 +90,74 @@ class TeacherExamCreateScreen extends StatelessWidget {
                                 ? LocaleKeys.examDate.tr()
                                 : '',
                           ),
+                          const Gap(15),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: TextFieldB(
+                                  isMandatory: true,
+                                  fieldTitle: LocaleKeys.startTime.tr(),
+                                  hintText: LocaleKeys.selectTime.tr(),
+                                  borderColor: bGray12,
+                                  focusNode: startTimeFocusnode,
+                                  controller: startTimeController,
+                                  isReadOnly: true,
+                                  suffixIcon: const Icon(
+                                    Icons.schedule,
+                                    size: 30,
+                                    color: bGray32,
+                                  ),
+                                  onChanged: (String value) {},
+                                  onTouch: () async {
+                                    startTimeController.text =
+                                        await showTimePickerDialog(context,
+                                                initialTime: convertToDateTime(
+                                                    state.startTime)) ??
+                                            '';
+
+                                    bloc.add(StartTime(
+                                        startTime: startTimeController.text));
+                                  },
+                                  errorText: state.forms == Forms.invalid &&
+                                          state.startTime.isEmpty
+                                      ? LocaleKeys.noStartTime.tr()
+                                      : '',
+                                ),
+                              ),
+                              const Gap(20),
+                              Expanded(
+                                child: TextFieldB(
+                                  isMandatory: true,
+                                  fieldTitle: LocaleKeys.endTime.tr(),
+                                  hintText: LocaleKeys.selectTime.tr(),
+                                  borderColor: bGray12,
+                                  focusNode: endTimeFocusnode,
+                                  controller: endTimeController,
+                                  isReadOnly: true,
+                                  suffixIcon: const Icon(
+                                    Icons.schedule,
+                                    size: 30,
+                                    color: bGray32,
+                                  ),
+                                  onChanged: (String value) {},
+                                  onTouch: () async {
+                                    endTimeController.text =
+                                        await showTimePickerDialog(context,
+                                                initialTime: convertToDateTime(
+                                                    state.endTime)) ??
+                                            '';
+                                    bloc.add(EndTime(
+                                        endTime: endTimeController.text));
+                                  },
+                                  errorText: state.forms == Forms.invalid &&
+                                          state.endTime.isEmpty
+                                      ? LocaleKeys.noEndTime.tr()
+                                      : '',
+                                ),
+                              ),
+                            ],
+                          ),
                           const Gap(10),
-                          // TextFieldB(
-                          //   fieldTitle: LocaleKeys.type.tr(),
-                          //   hintText: LocaleKeys.enterType.tr(),
-                          //   borderColor: bGray12,
-                          //   focusNode: typeFocusnode,
-                          //   controller: typeController,
-                          //   onChanged: (String value) {
-                          //     bloc.add(ChangeType(type: value));
-                          //   },
-                          //   errorText: state.forms == Forms.invalid &&
-                          //           state.paperType.isEmpty
-                          //       ? LocaleKeys.enterTitle.tr()
-                          //       : '',
-                          // ),
-                          // const Gap(10),
-                          // TextFieldB(
-                          //   fieldTitle: LocaleKeys.duration.tr(),
-                          //   hintText: LocaleKeys.enterDuration.tr(),
-                          //   borderColor: bGray12,
-                          //   focusNode: durationFocusnode,
-                          //   controller: durationController,
-                          //   onChanged: (String value) {
-                          //     bloc.add(ChangeDuration(duration: value));
-                          //   },
-                          //   errorText: state.forms == Forms.invalid &&
-                          //           state.duration.isEmpty
-                          //       ? LocaleKeys.enterDuration.tr()
-                          //       : '',
-                          // ),
-                          // const Gap(20),
                           DropdownFieldB(
                             dropdownHeight: 50,
                             label: LocaleKeys.version.tr(),
@@ -194,50 +224,136 @@ class TeacherExamCreateScreen extends StatelessWidget {
                             TextB(
                                 text: LocaleKeys.selectSection.tr(),
                                 fontColor: bRed),
-                          const Gap(20),
-                          // ButtonB(
-                          //   heigh: 60,
-                          //   bgColor: kSecondaryColor,
-                          //   text: state.selectedQstns.isEmpty
-                          //       ? LocaleKeys.addQuestions.tr()
-                          //       : "${LocaleKeys.question.tr()}: ${state.selectedQstns.length}, ${LocaleKeys.marks.tr()}: ${state.fullMarks}",
-                          //   press: () {
-                          //     if (state.selectedSubjectId == -1) {
-                          //       bloc.add(CheckSubjectId(
-                          //           id: state.selectedSubjectId));
-                          //     } else {
-                          //       Navigator.of(context, rootNavigator: true)
-                          //           .pushNamed(addQuestionPScreen, arguments: {
-                          //         "selectedQstns": state.selectedQstns,
-                          //         "subject_id": state.selectedSubjectId
-                          //       }).then((value) {
-                          //         if (value != null) {
-                          //           final selectedQuestions =
-                          //               value as List<TempQuestion>;
-
-                          //           bloc.add(SelectedQuestions(
-                          //               qst: selectedQuestions));
-                          //         }
-                          //       });
-                          //     }
-                          //   },
-                          // ),
-                          const Gap(20),
-                          ButtonB(
-                            heigh: 60,
-                            text: state.examId == -1
-                                ? LocaleKeys.create.tr()
-                                : LocaleKeys.save.tr(),
-                            press: () {
-                              bloc.add(
-                                PressToCreate(
-                                  isDraft: false,
-                                  examDateFocusnode: examDateFocusnode,
-                                  typeFocusnode: typeFocusnode,
-                                  durationFocusnode: durationFocusnode,
-                                ),
-                              );
+                          const Gap(10),
+                          DropdownFieldB(
+                            dropdownHeight: 50,
+                            label: LocaleKeys.examGroup.tr(),
+                            labelColor: bBlack,
+                            setState: state.setGroup,
+                            dropDownValue: state.selectedExamGorupId,
+                            selected: (dynamic type) {
+                              bloc.add(SelectGroupId(id: type));
                             },
+                            items: !state.loading ? state.groupList : [],
+                          ),
+                          if (state.forms == Forms.invalid &&
+                              state.selectedExamGorupId == -1)
+                            TextB(
+                                text: LocaleKeys.enterExamGroup.tr(),
+                                fontColor: bRed),
+                          const Gap(10),
+                          DropdownFieldB(
+                            dropdownHeight: 50,
+                            label: LocaleKeys.examTerm.tr(),
+                            labelColor: bBlack,
+                            setState: state.setTerm,
+                            dropDownValue: state.selectTermId,
+                            selected: (dynamic type) {
+                              bloc.add(SelectTermId(id: type));
+                            },
+                            items: !state.loading ? state.termList : [],
+                          ),
+                          if (state.forms == Forms.invalid &&
+                              state.selectTermId == -1)
+                            TextB(
+                                text: LocaleKeys.enterExamTerm.tr(),
+                                fontColor: bRed),
+                          const Gap(10),
+                          TextFieldB(
+                            textInputType: TextInputType.number,
+                            fieldTitle: LocaleKeys.maxMark.tr(),
+                            hintText: LocaleKeys.enterMark.tr(),
+                            borderColor: bGray12,
+                            focusNode: maxMarkFocusnode,
+                            controller: maxMarkController,
+                            onChanged: (String value) {
+                              bloc.add(ChangeMaxMark(maxMark: value));
+                            },
+                            errorText: state.forms == Forms.invalid &&
+                                    state.maxMark.isEmpty
+                                ? LocaleKeys.enterMark.tr()
+                                : '',
+                          ),
+                          const Gap(10),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: TextFieldB(
+                                  textInputType: TextInputType.number,
+                                  fieldTitle: LocaleKeys.convertMark.tr(),
+                                  hintText: LocaleKeys.enterMark.tr(),
+                                  borderColor: bGray12,
+                                  focusNode: convertMarkFocusnode,
+                                  controller: convertMarkController,
+                                  onChanged: (String value) {
+                                    bloc.add(
+                                        ChangeConvertMark(convertMark: value));
+                                  },
+                                  errorText: state.forms == Forms.invalid &&
+                                          state.convertMark.isEmpty
+                                      ? LocaleKeys.enterMark.tr()
+                                      : '',
+                                ),
+                              ),
+                              const Gap(15),
+                              Expanded(
+                                child: TextFieldB(
+                                  textInputType: TextInputType.number,
+                                  fieldTitle: LocaleKeys.passMark.tr(),
+                                  hintText: LocaleKeys.enterMark.tr(),
+                                  borderColor: bGray12,
+                                  focusNode: passMarkFocusnode,
+                                  controller: passMarkController,
+                                  onChanged: (String value) {
+                                    bloc.add(ChangePassMark(passMark: value));
+                                  },
+                                  errorText: state.forms == Forms.invalid &&
+                                          state.passMark.isEmpty
+                                      ? LocaleKeys.enterMark.tr()
+                                      : '',
+                                ),
+                              ),
+                            ],
+                          ),
+                          const Gap(20),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: ButtonB(
+                                  heigh: 60,
+                                  text: state.examId == -1
+                                      ? LocaleKeys.create.tr()
+                                      : LocaleKeys.save.tr(),
+                                  press: () {
+                                    bloc.add(
+                                      PressToCreate(
+                                        examDateFocusnode: examDateFocusnode,
+                                        startTimeFocusnode: startTimeFocusnode,
+                                        endTimeFocusnode: endTimeFocusnode,
+                                        maxMarkFocusnode: maxMarkFocusnode,
+                                        convertMarkFocusnode:
+                                            convertMarkFocusnode,
+                                        passMarkFocusnode: passMarkFocusnode,
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                              const Gap(15),
+                              Expanded(
+                                child: ButtonB(
+                                  heigh: 60,
+                                  bgColor: bGray12,
+                                  textColor: bGray52,
+                                  text: LocaleKeys.cancel.tr(),
+                                  press: () {
+                                    bloc.add(
+                                      PressToCancel(),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
                           ),
                           const Gap(20),
                         ],

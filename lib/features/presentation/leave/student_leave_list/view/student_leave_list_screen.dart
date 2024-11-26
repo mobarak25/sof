@@ -43,7 +43,7 @@ class StudentLeaveListScreen extends StatelessWidget {
           isFullScreen: true,
           appBar: FutureAppBar(
             actions: const [SizedBox()],
-            title: LocaleKeys.leaveList.tr(),
+            title: context.tr(LocaleKeys.leaveList),
           ),
           drawerChild: Padding(
             padding: EdgeInsets.only(
@@ -143,9 +143,9 @@ class StudentLeaveListScreen extends StatelessWidget {
                 child: CustomTab(
                   loading: state.loading,
                   tabList: [
-                    LocaleKeys.pending.tr(),
-                    LocaleKeys.accepted.tr(),
-                    LocaleKeys.rejected.tr(),
+                    context.tr(LocaleKeys.pending),
+                    context.tr(LocaleKeys.accepted),
+                    context.tr(LocaleKeys.rejected),
                   ],
                   onTabChanged: (int tabIndex) {
                     bloc.add(DataForTab(tabIndex: tabIndex.toString()));
@@ -211,7 +211,8 @@ class StudentLeaveListScreen extends StatelessWidget {
                                   ),
                                   if (state.leaveList.data!.isEmpty)
                                     TextB(
-                                      text: LocaleKeys.noResultFound.tr(),
+                                      text:
+                                          context.tr(LocaleKeys.noResultFound),
                                       textStyle: bBody1B,
                                       fontColor: bRed,
                                       alignMent: TextAlign.center,

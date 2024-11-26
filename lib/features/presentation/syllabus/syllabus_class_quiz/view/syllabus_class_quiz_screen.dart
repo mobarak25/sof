@@ -67,8 +67,8 @@ class SyllabusClassQuizScreen extends StatelessWidget {
                             Container(
                               padding:
                                   const EdgeInsets.only(bottom: 20, top: 10),
-                              child: const TextB(
-                                text: "End of the list",
+                              child: TextB(
+                                text: context.tr(LocaleKeys.endOfTheList),
                                 fontColor: bRed,
                                 alignMent: TextAlign.center,
                               ),

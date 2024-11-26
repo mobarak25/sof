@@ -28,7 +28,7 @@ class EventScreen extends StatelessWidget {
           isFullScreen: true,
           appBar: FutureAppBar(
             actions: const [SizedBox()],
-            title: LocaleKeys.academicCalendar.tr(),
+            title: context.tr(LocaleKeys.academicCalendar),
             isLoading: state.loading,
           ),
           child: Container(
@@ -38,8 +38,8 @@ class EventScreen extends StatelessWidget {
               loading: false,
               showSearch: false,
               tabList: [
-                LocaleKeys.listView.tr(),
-                LocaleKeys.calendarView.tr(),
+                context.tr(LocaleKeys.listView),
+                context.tr(LocaleKeys.calendarView),
               ],
               onTabChanged: (int tabIndex) {
                 bloc.add(DataForTab(tabIndex: tabIndex.toString()));
@@ -111,16 +111,17 @@ class EventScreen extends StatelessWidget {
                               }),
                               if (state.eventList.data!.isEmpty)
                                 TextB(
-                                  text: LocaleKeys.noResultFound.tr(),
+                                  text: context.tr(LocaleKeys.noResultFound),
                                   textStyle: bBody1B,
                                   fontColor: bRed,
                                   alignMent: TextAlign.center,
                                 ),
                               if (!state.incrementLoader && state.isEndList)
-                                const Padding(
-                                  padding: EdgeInsets.only(top: 15, bottom: 30),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 15, bottom: 30),
                                   child: TextB(
-                                    text: "End of the list",
+                                    text: context.tr(LocaleKeys.endOfTheList),
                                     textStyle: bBase2M,
                                     fontColor: bRed,
                                   ),

@@ -214,8 +214,8 @@ class StudentAssinmentListScreen extends StatelessWidget {
                         if (!state.incrementLoader && state.isEndList)
                           Container(
                             padding: const EdgeInsets.only(bottom: 90, top: 10),
-                            child: const TextB(
-                              text: "End of the list",
+                            child: TextB(
+                              text: context.tr(LocaleKeys.endOfTheList),
                               fontColor: bRed,
                               alignMent: TextAlign.center,
                             ),

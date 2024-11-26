@@ -101,10 +101,11 @@ class TeacherQuizStudentsScreen extends StatelessWidget {
                               },
                             ),
                             if (!state.incrementLoader && state.isEndList)
-                              const Padding(
-                                padding: EdgeInsets.only(top: 5, bottom: 5),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 5, bottom: 5),
                                 child: TextB(
-                                  text: "End of the list",
+                                  text: context.tr(LocaleKeys.endOfTheList),
                                   textStyle: bBase2M,
                                   fontColor: bRed,
                                 ),

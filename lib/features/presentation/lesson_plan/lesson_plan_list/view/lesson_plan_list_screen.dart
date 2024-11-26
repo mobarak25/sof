@@ -41,7 +41,7 @@ class LessonPlanListScreen extends StatelessWidget {
           isFullScreen: true,
           appBar: FutureAppBar(
             actions: const [SizedBox()],
-            title: LocaleKeys.lessonPlan.tr(),
+            title: context.tr(LocaleKeys.lessonPlan),
           ),
           drawerChild: Padding(
             padding: EdgeInsets.only(
@@ -57,7 +57,7 @@ class LessonPlanListScreen extends StatelessWidget {
                 showSubject: state.isTeacher,
                 showSubjectForStudent: !state.isTeacher ? true : false,
                 showSection: state.isTeacher,
-                btnText: LocaleKeys.filter.tr(),
+                btnText: context.tr(LocaleKeys.filter),
                 pressFilterBtn: () {
                   bloc.add(PressFilter(filterBloc: filterBloc));
                 },
@@ -73,8 +73,8 @@ class LessonPlanListScreen extends StatelessWidget {
                 child: CustomTab(
                   loading: state.loading,
                   tabList: [
-                    LocaleKeys.published.tr(),
-                    LocaleKeys.draft.tr(),
+                    context.tr(LocaleKeys.published),
+                    context.tr(LocaleKeys.draft),
                   ],
                   onTabChanged: (int tabIndex) {
                     bloc.add(DataForTab(
@@ -123,17 +123,19 @@ class LessonPlanListScreen extends StatelessWidget {
                                   }),
                                   if (state.lessonPlanList.data!.isEmpty)
                                     TextB(
-                                      text: LocaleKeys.noResultFound.tr(),
+                                      text:
+                                          context.tr(LocaleKeys.noResultFound),
                                       textStyle: bBody1B,
                                       fontColor: bRed,
                                       alignMent: TextAlign.center,
                                     ),
                                   if (!state.incrementLoader && state.isEndList)
-                                    const Padding(
-                                      padding:
-                                          EdgeInsets.only(top: 15, bottom: 30),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          top: 15, bottom: 30),
                                       child: TextB(
-                                        text: "End of the list",
+                                        text:
+                                            context.tr(LocaleKeys.endOfTheList),
                                         textStyle: bBase2M,
                                         fontColor: bRed,
                                       ),

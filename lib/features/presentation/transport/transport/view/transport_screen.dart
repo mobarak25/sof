@@ -23,7 +23,7 @@ class TransportScreen extends StatelessWidget {
           isFullScreen: true,
           appBar: FutureAppBar(
             actions: const [SizedBox()],
-            title: LocaleKeys.transport.tr(),
+            title: context.tr(LocaleKeys.transport),
           ),
           child: Container(
             color: bInnerBg,
@@ -90,7 +90,8 @@ class TransportScreen extends StatelessWidget {
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
                                               TextB(
-                                                text: LocaleKeys.pFrmHome.tr(),
+                                                text: context
+                                                    .tr(LocaleKeys.pFrmHome),
                                                 textStyle: bBase2,
                                                 fontColor: bGray52,
                                               ),
@@ -108,8 +109,8 @@ class TransportScreen extends StatelessWidget {
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
                                               TextB(
-                                                text:
-                                                    LocaleKeys.pFrmSchool.tr(),
+                                                text: context
+                                                    .tr(LocaleKeys.pFrmSchool),
                                                 textStyle: bBase2,
                                                 fontColor: bGray52,
                                               ),

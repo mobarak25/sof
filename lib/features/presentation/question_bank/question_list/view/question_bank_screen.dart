@@ -37,7 +37,7 @@ class QuestionBankScreen extends StatelessWidget {
           isFullScreen: true,
           appBar: FutureAppBar(
             actions: const [SizedBox()],
-            title: LocaleKeys.questionBank.tr(),
+            title: context.tr(LocaleKeys.questionBank),
           ),
           drawerChild: Padding(
             padding: EdgeInsets.only(
@@ -51,7 +51,7 @@ class QuestionBankScreen extends StatelessWidget {
                 showVersion: true,
                 showClass: true,
                 showSubject: true,
-                btnText: LocaleKeys.filter.tr(),
+                btnText: context.tr(LocaleKeys.filter),
                 pressFilterBtn: () {
                   bloc.add(PressFilter(filterBloc: filterBloc));
                 },
@@ -95,17 +95,19 @@ class QuestionBankScreen extends StatelessWidget {
                                   ),
                                   if (state.questionList.data!.isEmpty)
                                     TextB(
-                                      text: LocaleKeys.noResultFound.tr(),
+                                      text:
+                                          context.tr(LocaleKeys.noResultFound),
                                       textStyle: bBody1B,
                                       fontColor: bRed,
                                       alignMent: TextAlign.center,
                                     ),
                                   if (!state.incrementLoader && state.isEndList)
-                                    const Padding(
-                                      padding:
-                                          EdgeInsets.only(top: 15, bottom: 30),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          top: 15, bottom: 30),
                                       child: TextB(
-                                        text: "End of the list",
+                                        text:
+                                            context.tr(LocaleKeys.endOfTheList),
                                         textStyle: bBase2M,
                                         fontColor: bRed,
                                       ),

@@ -104,11 +104,12 @@ class AddQuestionScreen extends StatelessWidget {
                                       alignMent: TextAlign.center,
                                     ),
                                   if (!state.incrementLoader && state.isEndList)
-                                    const Padding(
-                                      padding:
-                                          EdgeInsets.only(top: 15, bottom: 30),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          top: 15, bottom: 30),
                                       child: TextB(
-                                        text: "End of the list",
+                                        text:
+                                            context.tr(LocaleKeys.endOfTheList),
                                         textStyle: bBase2M,
                                         fontColor: bRed,
                                       ),

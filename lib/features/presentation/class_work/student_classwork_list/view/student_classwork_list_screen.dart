@@ -38,7 +38,7 @@ class StudentClassworkListScreen extends StatelessWidget {
           isFullScreen: true,
           appBar: FutureAppBar(
             actions: const [SizedBox()],
-            title: LocaleKeys.classwork.tr(),
+            title: context.tr(LocaleKeys.classwork),
           ),
           drawerChild: Padding(
             padding: EdgeInsets.only(
@@ -52,8 +52,8 @@ class StudentClassworkListScreen extends StatelessWidget {
                 children: [
                   const Gap(30),
                   TextFieldB(
-                    fieldTitle: LocaleKeys.startDate.tr(),
-                    hintText: LocaleKeys.selectStartDate.tr(),
+                    fieldTitle: context.tr(LocaleKeys.startDate),
+                    hintText: context.tr(LocaleKeys.selectStartDate),
                     focusNode: publishedFocusNode,
                     controller: publishedController,
                     borderColor: bGray12,
@@ -96,8 +96,8 @@ class StudentClassworkListScreen extends StatelessWidget {
                 child: CustomTab(
                   loading: state.loading,
                   tabList: [
-                    LocaleKeys.published.tr(),
-                    LocaleKeys.draft.tr(),
+                    context.tr(LocaleKeys.published),
+                    context.tr(LocaleKeys.draft),
                   ],
                   onTabChanged: (int tabIndex) {
                     bloc.add(DataForTab(tabIndex: tabIndex.toString()));
@@ -139,17 +139,19 @@ class StudentClassworkListScreen extends StatelessWidget {
                                   }),
                                   if (state.classworkList.data!.isEmpty)
                                     TextB(
-                                      text: LocaleKeys.noResultFound.tr(),
+                                      text:
+                                          context.tr(LocaleKeys.noResultFound),
                                       textStyle: bBody1B,
                                       fontColor: bRed,
                                       alignMent: TextAlign.center,
                                     ),
                                   if (!state.incrementLoader && state.isEndList)
-                                    const Padding(
-                                      padding:
-                                          EdgeInsets.only(top: 15, bottom: 30),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          top: 15, bottom: 30),
                                       child: TextB(
-                                        text: "End of the list",
+                                        text:
+                                            context.tr(LocaleKeys.endOfTheList),
                                         textStyle: bBase2M,
                                         fontColor: bRed,
                                       ),

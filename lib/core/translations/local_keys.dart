@@ -417,4 +417,5 @@ abstract class LocaleKeys {
   static const leaveType = 'Leave type';
   static const selectLeaveType = 'Select leave type';
   static const entrReason = 'EntrReason';
+  static const endOfTheList = 'End of the list';
 }

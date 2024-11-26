@@ -32,7 +32,7 @@ class RoutineScreen extends StatelessWidget {
           isFullScreen: true,
           appBar: FutureAppBar(
             actions: const [SizedBox()],
-            title: LocaleKeys.routine.tr(),
+            title: context.tr(LocaleKeys.routine),
             isLoading: state.loading,
           ),
           child: Container(
@@ -53,7 +53,7 @@ class RoutineScreen extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.all(15),
                     child: TextB(
-                      text: LocaleKeys.noResultFound.tr(),
+                      text: context.tr(LocaleKeys.noResultFound),
                       textStyle: bBody1B,
                       fontColor: bRed,
                     ),
@@ -81,10 +81,11 @@ class RoutineScreen extends StatelessWidget {
                                 ),
                               ),
                             if (!state.incrementLoader && state.isEndList)
-                              const Padding(
-                                padding: EdgeInsets.only(top: 15, bottom: 30),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 15, bottom: 30),
                                 child: TextB(
-                                  text: "End of the list",
+                                  text: context.tr(LocaleKeys.endOfTheList),
                                   textStyle: bBase2M,
                                   fontColor: bRed,
                                   alignMent: TextAlign.center,

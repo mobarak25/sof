@@ -31,7 +31,7 @@ class TeacherAttendanceScreen extends StatelessWidget {
             isFullScreen: true,
             appBar: FutureAppBar(
               actions: const [SizedBox()],
-              title: LocaleKeys.attendance.tr(),
+              title: context.tr(LocaleKeys.attendance),
               isLoading: state.loading,
             ),
             child: Container(
@@ -47,8 +47,8 @@ class TeacherAttendanceScreen extends StatelessWidget {
                       showSearch: false,
                       loading: state.loading,
                       tabList: [
-                        LocaleKeys.classWise.tr(),
-                        LocaleKeys.subjectWise.tr(),
+                        context.tr(LocaleKeys.classWise),
+                        context.tr(LocaleKeys.subjectWise),
                       ],
                       onTabChanged: (int tabIndex) {
                         bloc.add(DataForTab(tabIndex: tabIndex.toString()));
@@ -102,7 +102,7 @@ class TeacherAttendanceScreen extends StatelessWidget {
           isFullScreen: true,
           appBar: FutureAppBar(
             actions: const [SizedBox()],
-            title: LocaleKeys.attendance.tr(),
+            title: context.tr(LocaleKeys.attendance),
             isLoading: state.loading,
           ),
           child: Container(
@@ -122,7 +122,7 @@ class TeacherAttendanceScreen extends StatelessWidget {
                         child: ButtonB(
                           heigh: 70,
                           bgColor: bJungleGreen,
-                          text: LocaleKeys.takeAttendance.tr(),
+                          text: context.tr(LocaleKeys.takeAttendance),
                           press: () {
                             Navigator.of(context, rootNavigator: true)
                                 .pushNamed(
@@ -195,7 +195,7 @@ class TeacherAttendanceScreen extends StatelessWidget {
                             ButtonB(
                               heigh: 60,
                               svgIcon: rightArrowSvg,
-                              text: LocaleKeys.viewDetails.tr(),
+                              text: context.tr(LocaleKeys.viewDetails),
                               borderColor: bGray12,
                               textColor: const Color(0XFF9B9BA5),
                               bgColor: bGray100.withOpacity(0.04),
@@ -221,7 +221,7 @@ class TeacherAttendanceScreen extends StatelessWidget {
                         child: ButtonB(
                           heigh: 70,
                           svgIcon: rightArrowSvg,
-                          text: " 3+ ${LocaleKeys.daysAbsentList.tr()}",
+                          text: " 3+ ${context.tr(LocaleKeys.daysAbsentList)}",
                           borderColor: bGray4,
                           textColor: const Color(0XFF9B9BA5),
                           bgColor: bWhite,

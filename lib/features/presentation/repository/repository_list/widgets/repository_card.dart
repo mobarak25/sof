@@ -1,6 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
+import 'package:school_of_future/core/translations/local_keys.dart';
 import 'package:school_of_future/core/utils/colors.dart';
 import 'package:school_of_future/core/utils/text_styles.dart';
 import 'package:school_of_future/core/utils/utilities.dart';
@@ -53,7 +55,8 @@ class RepositoryCard extends StatelessWidget {
           const Divider(height: 1, thickness: 1, color: bGray4),
           const Gap(10),
           TextB(
-            text: "${item.totalAttachments!.plural('Attachment')} ",
+            text:
+                "${item.totalAttachments!.plural(context.tr(LocaleKeys.attachment))} ",
             textStyle: bBody2M,
             fontColor: kPrimaryColor,
           ),

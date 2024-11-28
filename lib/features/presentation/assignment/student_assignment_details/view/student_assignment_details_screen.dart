@@ -205,8 +205,8 @@ class StudentAssignmentDetailsScreen extends StatelessWidget {
                         ),
                       ),
                       const Gap(10),
-                      if (data.assignStudent != null &&
-                          data.assignStudent!.submissionStatus == 0)
+                      if (data.submissionDetails != null &&
+                          data.submissionDetails!.submissionStatus == 0)
                         Column(
                           children: [
                             ButtonB(
@@ -216,8 +216,8 @@ class StudentAssignmentDetailsScreen extends StatelessWidget {
                                 Navigator.of(context, rootNavigator: true)
                                     .pushNamed(
                                   studentAssignmentSubmissionDetailsScreen,
-                                  arguments: data
-                                      .assignStudent!.assignmentSubmission!.id,
+                                  arguments: data.submissionDetails!
+                                      .assignmentSubmission!.id,
                                 );
                               },
                             ),
@@ -228,20 +228,21 @@ class StudentAssignmentDetailsScreen extends StatelessWidget {
                               borderColor: bPrimaryColor,
                               textColor: bPrimaryColor,
                               text:
-                                  "${LocaleKeys.viewFeedBack.tr()} (${data.assignStudent!.assignmentSubmission!.totalFeedbacks!})",
+                                  "${LocaleKeys.viewFeedBack.tr()} (${data.submissionDetails!.assignmentSubmission!.totalFeedbacks!})",
                               press: () {
                                 Navigator.of(context, rootNavigator: true)
                                     .pushNamed(
                                   studentAssignmentFeedbackScreen,
-                                  arguments: data
-                                      .assignStudent!.assignmentSubmission!.id,
+                                  arguments: data.submissionDetails!
+                                      .assignmentSubmission!.id,
                                 );
                               },
                             ),
                           ],
                         ),
-                      if (data.assignStudent != null &&
-                          data.assignStudent!.submissionStatus == null)
+                      if (data.isSubmitable == 1 &&
+                          data.submissionDetails != null &&
+                          data.submissionDetails!.submissionStatus == null)
                         ButtonB(
                           heigh: 55,
                           text: LocaleKeys.submitHomeWork.tr(),

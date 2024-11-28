@@ -82,18 +82,18 @@ class AbsentStudentsScreen extends StatelessWidget {
                                             CrossAxisAlignment.start,
                                         children: [
                                           TextB(
-                                            text: date[index].fullName!,
+                                            text: date[index].fullName ?? '',
                                             textStyle: bSub2M,
                                           ),
                                           TextB(
                                             text:
-                                                "Version: ${date[index].versionName!}",
+                                                "Version: ${date[index].versionName}",
                                             textStyle: bBase2,
                                             fontColor: bGray32,
                                           ),
                                           TextB(
                                             text:
-                                                "Class: ${date[index].className!} - ${date[index].sectionName!}",
+                                                "Class: ${date[index].className} - ${date[index].sectionName}",
                                             textStyle: bBase2,
                                             fontColor: bGray32,
                                           ),
@@ -107,7 +107,7 @@ class AbsentStudentsScreen extends StatelessWidget {
                                       decoration: BoxDecoration(
                                           border: Border.all(color: bGray32)),
                                       child: TextB(
-                                        text: "${date[index].absentInDays!}",
+                                        text: "${date[index].absentInDays}",
                                         textStyle: bBody1B,
                                       ),
                                     )

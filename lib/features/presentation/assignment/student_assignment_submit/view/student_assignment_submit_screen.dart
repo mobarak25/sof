@@ -42,6 +42,7 @@ class StudentAssignmentSubmitScreen extends StatelessWidget {
           appBar: FutureAppBar(
             actions: const [SizedBox()],
             title: LocaleKeys.submitHomeWork.tr(),
+            isLoading: state.loading,
           ),
           child: Container(
             padding: const EdgeInsets.symmetric(vertical: 13, horizontal: 15),
@@ -129,7 +130,6 @@ class StudentAssignmentSubmitScreen extends StatelessWidget {
                     ButtonB(
                       heigh: 60,
                       text: LocaleKeys.submit.tr(),
-                      loading: state.loading,
                       press: () {
                         List jsonContent =
                             qController.document.toDelta().toJson();
@@ -146,7 +146,6 @@ class StudentAssignmentSubmitScreen extends StatelessWidget {
                           child: ButtonB(
                             heigh: 60,
                             fontSize: 15,
-                            loading: state.loading,
                             bgColor: kSecondaryColor,
                             horizontalPadding: 5,
                             text: LocaleKeys.saveAsDraft.tr(),

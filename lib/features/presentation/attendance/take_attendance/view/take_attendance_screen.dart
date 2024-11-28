@@ -25,7 +25,9 @@ class TakeAttendanceScreen extends StatelessWidget {
           isFullScreen: true,
           appBar: FutureAppBar(
             actions: const [SizedBox()],
-            title: LocaleKeys.takeAttendance.tr(),
+            title: state.isDetails
+                ? LocaleKeys.viewDetails.tr()
+                : LocaleKeys.takeAttendance.tr(),
             //isLoading: state.loading,
           ),
           child: Container(

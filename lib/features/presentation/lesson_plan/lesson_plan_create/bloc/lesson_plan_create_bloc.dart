@@ -56,25 +56,6 @@ class LessonPlanCreateBloc
   FutureOr<void> _planIdForEdit(
       PlanIdForEdit event, Emitter<LessonPlanCreateState> emit) async {
     emit(state.copyWith(planId: event.planId));
-
-    if (event.planId != -1) {
-      final details = await _apiRepo.get<LessonPlanDetails>(
-        endpoint: teacherLessonPlanDetailsEndPoint(planId: event.planId),
-      );
-
-      if (details != null) {
-        List<int> idList = [];
-        for (int i = 0; i < details.data!.resources!.length; i++) {
-          idList.add(details.data!.resources![i].resourceId!);
-        }
-        emit(state.copyWith(planDtls: details, checkedIds: idList));
-
-        add(SelectVersionId(id: state.planDtls.data!.version!.id!));
-        add(SelectClassId(id: state.planDtls.data!.dataClass!.id!));
-        add(SelectSubjectId(id: state.planDtls.data!.subject!.id!));
-        add(SelectSectionId(id: state.planDtls.data!.section!.id!));
-      }
-    }
   }
 
   FutureOr<void> _changeTitle(
@@ -161,6 +142,27 @@ class LessonPlanCreateBloc
       }
 
       emit(state.copyWith(versionList: list, bacthAsSection: versionList));
+
+      if (state.planId != 1) {
+        final details = await _apiRepo.get<LessonPlanDetails>(
+          endpoint: teacherLessonPlanDetailsEndPoint(planId: state.planId),
+        );
+
+        if (details != null) {
+          final data = details.data!;
+          List<int> idList = [];
+          for (int i = 0; i < details.data!.resources!.length; i++) {
+            idList.add(details.data!.resources![i].resourceId!);
+          }
+
+          emit(state.copyWith(planDtls: details, checkedIds: idList));
+
+          add(SelectVersionId(id: data.version!.id!));
+          add(SelectClassId(id: data.dataClass!.id!));
+          add(SelectSubjectId(id: data.subject!.id!));
+          add(SelectSectionId(id: data.section!.id!));
+        }
+      }
     }
   }
 

@@ -46,9 +46,17 @@ class LoginScreen extends StatelessWidget {
                         mainAxisSize: MainAxisSize.max,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Image.asset(
-                            classTuneLogo,
+                          Container(
                             width: 200,
+                            height: 110,
+                            decoration: const BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage(
+                                    "assets/images/classtune_logo_third.png"),
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                            child: null,
                           ),
                           const SizedBox(height: 40),
                           const TextB(

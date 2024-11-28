@@ -2,6 +2,7 @@ part of 'student_home_bloc.dart';
 
 class StudentHomeState extends Equatable {
   const StudentHomeState({
+    this.loading = false,
     this.version = '',
     this.profile = const StudentProfileResponse(),
     this.nextClass = const NextClass(),
@@ -11,6 +12,7 @@ class StudentHomeState extends Equatable {
     this.dueTaskList = const DueTaskResponse(),
   });
 
+  final bool loading;
   final String version;
   final StudentProfileResponse profile;
   final NextClass nextClass;
@@ -20,6 +22,7 @@ class StudentHomeState extends Equatable {
   final DueTaskResponse dueTaskList;
 
   StudentHomeState copyWith({
+    bool? loading,
     String? version,
     StudentProfileResponse? profile,
     NextClass? nextClass,
@@ -29,6 +32,7 @@ class StudentHomeState extends Equatable {
     DueTaskResponse? dueTaskList,
   }) {
     return StudentHomeState(
+      loading: loading ?? this.loading,
       version: version ?? this.version,
       profile: profile ?? this.profile,
       nextClass: nextClass ?? this.nextClass,
@@ -41,6 +45,7 @@ class StudentHomeState extends Equatable {
 
   @override
   List<Object> get props => [
+        loading,
         version,
         profile,
         nextClass,

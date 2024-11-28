@@ -109,7 +109,7 @@ class QuestionPaperDetailScreen extends StatelessWidget {
                             padding: const EdgeInsets.symmetric(horizontal: 15),
                             child: QuestionCard(
                               questionPaperContents:
-                                  state.details.data!.questionPaperContents!,
+                                  state.details.data!.questionPaperContents,
                             ),
                           ),
                         ],

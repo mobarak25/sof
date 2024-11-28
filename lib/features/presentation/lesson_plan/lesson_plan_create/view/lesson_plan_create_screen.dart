@@ -35,40 +35,40 @@ class LessonPlanCreateScreen extends StatelessWidget {
 
     return BlocBuilder<LessonPlanCreateBloc, LessonPlanCreateState>(
       builder: (context, state) {
-        if (state.isFirstTime) {
-          if (state.planDtls.data != null) {
-            final data = state.planDtls.data!;
+        if (state.planDtls.data != null) {
+          final data = state.planDtls.data!;
 
-            var noteDelta = HtmlToDelta().convert(data.content!);
-            qcontroller.document = Document.fromDelta(noteDelta);
+          var noteDelta = HtmlToDelta().convert(data.content!);
+          qcontroller.document = Document.fromDelta(noteDelta);
 
-            var objDelta = HtmlToDelta().convert(data.objectives!);
-            objController.document = Document.fromDelta(objDelta);
+          var objDelta = HtmlToDelta().convert(data.objectives!);
+          objController.document = Document.fromDelta(objDelta);
 
-            //here data.resourceType == 1 is means video
+          //here data.resourceType == 1 is means video
 
-            bloc.add(
-              AddData(
-                title: data.title!,
-                selectedVersionId: data.version!.id!,
-                selectedClassId: data.dataClass!.id!,
-                selectedSubjectId: data.subject!.id!,
-                selectedSectionId: data.section!.id!,
-              ),
-            );
-          } else if (state.planDtls.data == null && state.planId != -1) {
-            return Body(
-              isFullScreen: true,
-              appBar: FutureAppBar(
-                actions: const [SizedBox()],
-                title: LocaleKeys.createLessonPlan.tr(),
-                isLoading: state.loading,
-              ),
-              child: const Center(
-                child: CircularProgressIndicator(),
-              ),
-            );
-          }
+          bloc.add(
+            AddData(
+              title: data.title!,
+              selectedVersionId: data.version!.id!,
+              selectedClassId: data.dataClass!.id!,
+              selectedSubjectId: data.subject!.id!,
+              selectedSectionId: data.section!.id!,
+            ),
+          );
+
+          //  else if (state.planDtls.data == null && state.planId != -1) {
+          //   return Body(
+          //     isFullScreen: true,
+          //     appBar: FutureAppBar(
+          //       actions: const [SizedBox()],
+          //       title: LocaleKeys.createLessonPlan.tr(),
+          //       isLoading: state.loading,
+          //     ),
+          //     child: const Center(
+          //       child: CircularProgressIndicator(),
+          //     ),
+          //   );
+          // }
         }
 
         titleController.text = state.title;
@@ -240,7 +240,7 @@ class LessonPlanCreateScreen extends StatelessWidget {
                       selected: (dynamic type) {
                         bloc.add(SelectClassId(id: type));
                       },
-                      items: state.classList,
+                      items: !state.loading ? state.classList : [],
                     ),
                     if (state.forms == Forms.invalid &&
                         state.selectedClassId == -1)
@@ -255,7 +255,7 @@ class LessonPlanCreateScreen extends StatelessWidget {
                       selected: (dynamic type) {
                         bloc.add(SelectSubjectId(id: type));
                       },
-                      items: state.subjectList,
+                      items: !state.loading ? state.subjectList : [],
                     ),
                     if (state.forms == Forms.invalid &&
                         state.selectedSubjectId == -1)
@@ -271,7 +271,7 @@ class LessonPlanCreateScreen extends StatelessWidget {
                       selected: (dynamic type) {
                         bloc.add(SelectSectionId(id: type));
                       },
-                      items: state.sectionList,
+                      items: !state.loading ? state.sectionList : [],
                     ),
                     if (state.forms == Forms.invalid &&
                         state.selectSectionId == -1)

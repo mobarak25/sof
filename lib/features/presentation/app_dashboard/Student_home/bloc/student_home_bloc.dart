@@ -29,6 +29,7 @@ class StudentHomeBloc extends Bloc<StudentHomeEvent, StudentHomeState> {
     on<GetSubjectList>(_getSubjectList);
     on<GetDashboardNotice>(_getDashboardNotice);
     on<GetDashboardDueTask>(_getDashboardDueTask);
+    on<RefreshScreen>(_refreshScreen);
 
     add(GetVersion());
     add(GetNextClass());
@@ -51,28 +52,48 @@ class StudentHomeBloc extends Bloc<StudentHomeEvent, StudentHomeState> {
 
   FutureOr<void> _getNextClass(
       GetNextClass event, Emitter<StudentHomeState> emit) async {
+    final nextClassFromDB =
+        await _localStorageRepo.readModel<NextClass>(key: nextClassDB);
+
+    if (nextClassFromDB != null) {
+      emit(state.copyWith(nextClass: nextClassFromDB));
+    }
+
     final nextClass = await _apiRepo.get<NextClass>(
         endpoint:
             nextClassEndPoint(sId: _localStorageRepo.read(key: loginIdDB)!));
 
     if (nextClass != null) {
       emit(state.copyWith(nextClass: nextClass));
+
+      await _localStorageRepo.writeModel(key: nextClassDB, value: nextClass);
     }
   }
 
   FutureOr<void> _getTodayActivity(
       GetTodayActivity event, Emitter<StudentHomeState> emit) async {
+    final todayActivityFromDB = await _localStorageRepo
+        .readModel<TodayActivities>(key: todayActivityDB);
+
+    if (todayActivityFromDB != null) {
+      emit(state.copyWith(todayActivity: todayActivityFromDB));
+    }
+
     final todayActivity = await _apiRepo.get<TodayActivities>(
         endpoint: todayActivityEndPoint(
             sId: _localStorageRepo.read(key: loginIdDB)!));
 
     if (todayActivity != null) {
       emit(state.copyWith(todayActivity: todayActivity));
+
+      await _localStorageRepo.writeModel(
+          key: todayActivityDB, value: todayActivity);
     }
   }
 
   FutureOr<void> _getUserProfile(
       GetUserProfile event, Emitter<StudentHomeState> emit) async {
+    emit(state.copyWith(loading: true));
     final profileFromDB = await _localStorageRepo
         .readModel<StudentProfileResponse>(key: profileDB);
 
@@ -91,6 +112,8 @@ class StudentHomeBloc extends Bloc<StudentHomeEvent, StudentHomeState> {
       await _localStorageRepo.writeModel(
           key: profileDB, value: profileResponse);
     }
+
+    emit(state.copyWith(loading: false));
   }
 
   FutureOr<void> _getSubjectList(
@@ -145,6 +168,17 @@ class StudentHomeBloc extends Bloc<StudentHomeEvent, StudentHomeState> {
       await _localStorageRepo.writeModel(
           key: dashboardDueTaskDB, value: duetask);
     }
+  }
+
+  FutureOr<void> _refreshScreen(
+      RefreshScreen event, Emitter<StudentHomeState> emit) {
+    add(GetVersion());
+    add(GetNextClass());
+    add(GetTodayActivity());
+    add(GetUserProfile());
+    add(GetSubjectList());
+    add(GetDashboardNotice());
+    add(GetDashboardDueTask());
   }
 }
 

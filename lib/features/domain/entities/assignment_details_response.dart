@@ -28,14 +28,16 @@ class Data {
   final String? publishedAt;
   final String? dueAt;
   final int? daysLeft;
-  final dynamic isMarkable;
-  final dynamic isSubmitable;
+  final int? isMarkable;
+  final int? isSubmitable;
   final Subject? subject;
   final List<Attachment>? attachments;
   final List<Section>? sections;
-  final AssignStudent? assignStudent;
+  final List<int>? assignBatches;
+  final List<int>? assignStudents;
+  final SubmissionDetails? submissionDetails;
 
-  Data({
+  const Data({
     this.id,
     this.title,
     this.description,
@@ -53,7 +55,9 @@ class Data {
     this.subject,
     this.attachments,
     this.sections,
-    this.assignStudent,
+    this.assignBatches,
+    this.assignStudents,
+    this.submissionDetails,
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
@@ -81,9 +85,15 @@ class Data {
             ? []
             : List<Section>.from(
                 json["sections"]!.map((x) => Section.fromJson(x))),
-        assignStudent: json["assign_student"] == null
+        assignBatches: json["assign_batches"] == null
+            ? []
+            : List<int>.from(json["assign_batches"]!.map((x) => x)),
+        assignStudents: json["assign_students"] == null
+            ? []
+            : List<int>.from(json["assign_students"]!.map((x) => x)),
+        submissionDetails: json["submission_details"] == null
             ? null
-            : AssignStudent.fromJson(json["assign_student"]),
+            : SubmissionDetails.fromJson(json["submission_details"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -108,11 +118,105 @@ class Data {
         "sections": sections == null
             ? []
             : List<dynamic>.from(sections!.map((x) => x.toJson())),
-        "assign_student": assignStudent?.toJson(),
+        "assign_batches": assignBatches == null
+            ? []
+            : List<dynamic>.from(assignBatches!.map((x) => x)),
+        "assign_students": assignStudents == null
+            ? []
+            : List<dynamic>.from(assignStudents!.map((x) => x)),
+        "submission_details": submissionDetails?.toJson(),
       };
 }
 
-class AssignStudent {
+class Attachment {
+  final int? id;
+  final int? assignmentId;
+  final String? url;
+  final String? type;
+
+  Attachment({
+    this.id,
+    this.assignmentId,
+    this.url,
+    this.type,
+  });
+
+  factory Attachment.fromJson(Map<String, dynamic> json) => Attachment(
+        id: json["id"],
+        assignmentId: json["assignment_id"],
+        url: json["url"],
+        type: json["type"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "assignment_id": assignmentId,
+        "url": url,
+        "type": type,
+      };
+}
+
+class Section {
+  final int? id;
+  final String? name;
+
+  Section({
+    this.id,
+    this.name,
+  });
+
+  factory Section.fromJson(Map<String, dynamic> json) => Section(
+        id: json["id"],
+        name: json["name"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "name": name,
+      };
+}
+
+class Subject {
+  final int? id;
+  final String? name;
+  final String? code;
+  final String? imageUrl;
+  final int? subjectGroupId;
+  final int? classId;
+  final int? versionId;
+
+  Subject({
+    this.id,
+    this.name,
+    this.code,
+    this.imageUrl,
+    this.subjectGroupId,
+    this.classId,
+    this.versionId,
+  });
+
+  factory Subject.fromJson(Map<String, dynamic> json) => Subject(
+        id: json["id"],
+        name: json["name"],
+        code: json["code"],
+        imageUrl: json["image_url"],
+        subjectGroupId: json["subject_group_id"],
+        classId: json["class_id"],
+        versionId: json["version_id"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "name": name,
+        "code": code,
+        "image_url": imageUrl,
+        "subject_group_id": subjectGroupId,
+        "class_id": classId,
+        "version_id": versionId,
+      };
+}
+
+class SubmissionDetails {
   final int? id;
   final int? studentId;
   final int? assignmentId;
@@ -120,7 +224,7 @@ class AssignStudent {
   final dynamic lateSubmissionDate;
   final AssignmentSubmission? assignmentSubmission;
 
-  const AssignStudent({
+  SubmissionDetails({
     this.id,
     this.studentId,
     this.assignmentId,
@@ -129,7 +233,8 @@ class AssignStudent {
     this.assignmentSubmission,
   });
 
-  factory AssignStudent.fromJson(Map<String, dynamic> json) => AssignStudent(
+  factory SubmissionDetails.fromJson(Map<String, dynamic> json) =>
+      SubmissionDetails(
         id: json["id"],
         studentId: json["student_id"],
         assignmentId: json["assignment_id"],
@@ -188,99 +293,5 @@ class AssignmentSubmission {
         "is_draft": isDraft,
         "content": content,
         "total_feedbacks": totalFeedbacks,
-      };
-}
-
-class Attachment {
-  final int? id;
-  final int? assignmentId;
-  final String? url;
-  final String? type;
-
-  const Attachment({
-    this.id,
-    this.assignmentId,
-    this.url,
-    this.type,
-  });
-
-  factory Attachment.fromJson(Map<String, dynamic> json) => Attachment(
-        id: json["id"],
-        assignmentId: json["assignment_id"],
-        url: json["url"],
-        type: json["type"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "assignment_id": assignmentId,
-        "url": url,
-        "type": type,
-      };
-}
-
-class Section {
-  final int? id;
-  final String? name;
-
-  const Section({
-    this.id,
-    this.name,
-  });
-
-  factory Section.fromJson(Map<String, dynamic> json) => Section(
-        id: json["id"],
-        name: json["name"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "name": name,
-      };
-}
-
-class Subject {
-  final int? id;
-  final String? name;
-  final String? code;
-  final String? imageUrl;
-  final int? subjectGroupId;
-  final Section? subjectGroup;
-  final int? classId;
-  final int? versionId;
-
-  Subject({
-    this.id,
-    this.name,
-    this.code,
-    this.imageUrl,
-    this.subjectGroupId,
-    this.subjectGroup,
-    this.classId,
-    this.versionId,
-  });
-
-  factory Subject.fromJson(Map<String, dynamic> json) => Subject(
-        id: json["id"],
-        name: json["name"],
-        code: json["code"],
-        imageUrl: json["image_url"],
-        subjectGroupId: json["subject_group_id"],
-        classId: json["class_id"],
-        versionId: json["version_id"],
-        subjectGroup: json["subject_group"] == null
-            ? null
-            : Section.fromJson(json["subject_group"]),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "name": name,
-        "code": code,
-        "image_url": imageUrl,
-        "subject_group_id": subjectGroupId,
-        "class_id": classId,
-        "version_id": versionId,
-        "subject_group": subjectGroup?.toJson(),
       };
 }

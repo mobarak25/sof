@@ -1,7 +1,7 @@
 class SubjectResponse {
   final List<SubjectItem>? data;
 
-  SubjectResponse({
+  const SubjectResponse({
     this.data,
   });
 

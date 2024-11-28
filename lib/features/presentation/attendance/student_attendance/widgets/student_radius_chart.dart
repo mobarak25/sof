@@ -1,5 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:school_of_future/core/translations/local_keys.dart';
 import 'package:school_of_future/core/utils/colors.dart';
 import 'package:school_of_future/features/domain/entities/attendance_overvview_response.dart';
 
@@ -26,7 +28,12 @@ class StudentRadiusChart extends StatelessWidget {
               "${overView.data!.percentage}%",
               style: const TextStyle(fontSize: 30, fontWeight: FontWeight.w600),
             ),
-            const Text("Overall\nPresent"),
+            Text(
+              context.tr(LocaleKeys.overAll),
+            ),
+            Text(
+              context.tr(LocaleKeys.present),
+            ),
           ],
         ),
         progressColor: kSecondaryColor,

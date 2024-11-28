@@ -90,7 +90,6 @@ class CreateQuizBloc extends Bloc<CreateQuizEvent, CreateQuizState> {
 
   FutureOr<void> _startDate(StartDate event, Emitter<CreateQuizState> emit) {
     emit(state.copyWith(startDate: event.startDate));
-    print(event.startDate);
   }
 
   FutureOr<void> _endDate(EndDate event, Emitter<CreateQuizState> emit) {
@@ -162,6 +161,8 @@ class CreateQuizBloc extends Bloc<CreateQuizEvent, CreateQuizState> {
       emit(state.copyWith(versionList: list, bacthAsSection: versionList));
 
       if (state.quizId != -1) {
+        add(GetQuestionLevel());
+
         final details = await _apiRepo.get<QuizDetailsForTeacher>(
           endpoint: quizDtlsEndPoint(id: state.quizId),
         );
@@ -409,8 +410,6 @@ class CreateQuizBloc extends Bloc<CreateQuizEvent, CreateQuizState> {
     updateStudents[event.index] = event.students;
     emit(state.copyWith(
         listOfCheckUncheckStudent: updateStudents, batchLoading: false));
-
-    print(event.index);
   }
 
   FutureOr<void> _pressToCancel(

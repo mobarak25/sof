@@ -53,7 +53,7 @@ class NextClassBody extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       TextB(
-                        text: LocaleKeys.nextClass.tr(),
+                        text: context.tr(LocaleKeys.nextClass),
                         fontColor: kTextThirdColor,
                         textStyle: bCaption2,
                       ),
@@ -71,7 +71,7 @@ class NextClassBody extends StatelessWidget {
                         text: TextSpan(
                           children: [
                             TextSpan(
-                                text: LocaleKeys.startingAt.tr(),
+                                text: context.tr(LocaleKeys.startingAt),
                                 style: TextStyle(
                                     color: kTextDefaultColor.withOpacity(0.52),
                                     fontSize: 12)),
@@ -80,7 +80,7 @@ class NextClassBody extends StatelessWidget {
                                 style: const TextStyle(
                                     color: kSecondaryColor, fontSize: 12)),
                             TextSpan(
-                              text: ' - ${LocaleKeys.room.tr()} $roomNo',
+                              text: ' - ${context.tr(LocaleKeys.room)} $roomNo',
                               style: TextStyle(
                                 color: kTextDefaultColor.withOpacity(0.52),
                                 fontSize: 12,

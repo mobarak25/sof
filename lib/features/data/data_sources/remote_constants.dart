@@ -1,13 +1,20 @@
 import 'package:school_of_future/features/data/data_sources/config.dart';
 
-String version1 = "${baseUrl}main-fsms-v2/public/api/v1/";
+String version1 = "${baseUrl}api/v1/";
 String loginEndPoint = "${version1}login";
 String meEndPoint = "${version1}me";
 String forgetPasswordStep1EndPoint = "${version1}forget-password-step1";
 String forgetPasswordStep2EndPoint = "${version1}forget-password-step2";
 String resetPasswordEndPoint = "${version1}reset-password";
+String nextClassEndPoint({required String sId}) =>
+    "${version1}dashboard/student/next-class/$sId";
+
+String todayActivityEndPoint({required String sId}) =>
+    "${version1}dashboard/student/today-activity/$sId";
+
 String studentProfileEndPoint({required String sId}) =>
     "${version1}profile/student-profile/$sId";
+
 String profileAttendanceEndPoint({required String sId}) =>
     "${version1}profile/student-attendance/$sId";
 
@@ -167,3 +174,9 @@ String teacherExamDtlsEndPoint({required int examId}) =>
 
 String examGroupEndPoint = "${version1}exam/exam-group/list";
 String examTermEndPoint = "${version1}exam/exam-terms/list";
+
+String teacherExamMarkEntryEndPoint({required int examId}) =>
+    "${version1}exam/exam-score/$examId";
+
+String studentExamListEndPoint({required String sId}) =>
+    "${version1}exam/student/$sId";

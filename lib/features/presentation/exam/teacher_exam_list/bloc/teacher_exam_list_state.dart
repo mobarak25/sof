@@ -5,6 +5,7 @@ class TeacherExamListState extends Equatable {
     this.page = 1,
     this.loading = false,
     this.isEndList = false,
+    this.isTeacher = false,
     this.incrementLoader = false,
     this.searchText = '',
     this.subjectId = -1,
@@ -14,6 +15,7 @@ class TeacherExamListState extends Equatable {
   final int page;
   final bool loading;
   final bool isEndList;
+  final bool isTeacher;
   final bool incrementLoader;
   final String searchText;
   final int subjectId;
@@ -23,6 +25,7 @@ class TeacherExamListState extends Equatable {
     int? page,
     bool? loading,
     bool? isEndList,
+    bool? isTeacher,
     bool? incrementLoader,
     String? searchText,
     int? subjectId,
@@ -32,6 +35,7 @@ class TeacherExamListState extends Equatable {
       page: page ?? this.page,
       loading: loading ?? this.loading,
       isEndList: isEndList ?? this.isEndList,
+      isTeacher: isTeacher ?? this.isTeacher,
       incrementLoader: incrementLoader ?? this.incrementLoader,
       searchText: searchText ?? this.searchText,
       subjectId: subjectId ?? this.subjectId,
@@ -44,6 +48,7 @@ class TeacherExamListState extends Equatable {
         page,
         loading,
         isEndList,
+        isTeacher,
         incrementLoader,
         searchText,
         subjectId,

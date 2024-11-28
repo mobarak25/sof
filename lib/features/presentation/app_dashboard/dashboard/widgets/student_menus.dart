@@ -149,6 +149,15 @@ class StudentMenus extends StatelessWidget {
                 studentQuizListScreen, ModalRoute.withName('/'));
           },
         ),
+        FeatureItem(
+          iconName: "assets/images/feature_icons_svg/ic_exams.svg",
+          title: context.tr(LocaleKeys.exams),
+          press: () {
+            panelController.close();
+            navigatorKey.currentState!.pushNamedAndRemoveUntil(
+                teacherExamListScreen, ModalRoute.withName('/'));
+          },
+        ),
       ],
     );
   }

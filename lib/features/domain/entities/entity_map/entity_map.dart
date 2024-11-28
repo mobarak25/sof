@@ -16,6 +16,8 @@ import 'package:school_of_future/features/domain/entities/event_details_response
 import 'package:school_of_future/features/domain/entities/exam_details_response.dart';
 import 'package:school_of_future/features/domain/entities/exam_group_response.dart';
 import 'package:school_of_future/features/domain/entities/exam_list_response.dart';
+import 'package:school_of_future/features/domain/entities/exam_mark_entry_response.dart';
+import 'package:school_of_future/features/domain/entities/next_class_response.dart';
 import 'package:school_of_future/features/domain/entities/quiz_details_for_student_response.dart';
 import 'package:school_of_future/features/domain/entities/quiz_details_for_teacher_response.dart';
 import 'package:school_of_future/features/domain/entities/quiz_list_response.dart';
@@ -58,6 +60,7 @@ import 'package:school_of_future/features/domain/entities/teacher_leave_details_
 import 'package:school_of_future/features/domain/entities/teacher_own_leave_list_response.dart';
 import 'package:school_of_future/features/domain/entities/teacher_profile_response.dart';
 import 'package:school_of_future/features/domain/entities/teacher_summited_assinent_response.dart';
+import 'package:school_of_future/features/domain/entities/today_activity_response.dart';
 import 'package:school_of_future/features/domain/entities/today_attendance_response.dart';
 import 'package:school_of_future/features/domain/entities/track_time_response.dart';
 import 'package:school_of_future/features/domain/entities/transport_response.dart';
@@ -79,6 +82,10 @@ class EntityMap {
         return ChildListResponse.fromJson(json) as T;
       case const (TeacherProfileResponse):
         return TeacherProfileResponse.fromJson(json) as T;
+      case const (NextClass):
+        return NextClass.fromJson(json) as T;
+      case const (TodayActivities):
+        return TodayActivities.fromJson(json) as T;
       case const (SubjectResponse):
         return SubjectResponse.fromJson(json) as T;
       case const (NoticeResponse):
@@ -191,6 +198,8 @@ class EntityMap {
         return ExamDetails.fromJson(json) as T;
       case const (ExamGroupAntTermList):
         return ExamGroupAntTermList.fromJson(json) as T;
+      case const (ExamMarkEntry):
+        return ExamMarkEntry.fromJson(json) as T;
 
       default:
         throw Exception('Unknown class');

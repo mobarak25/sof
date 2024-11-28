@@ -7,9 +7,11 @@ import 'package:school_of_future/core/navigator/iflutter_navigator.dart';
 import 'package:school_of_future/features/data/data_sources/local_db_keys.dart';
 import 'package:school_of_future/features/data/data_sources/remote_constants.dart';
 import 'package:school_of_future/features/domain/entities/due_task_response.dart';
+import 'package:school_of_future/features/domain/entities/next_class_response.dart';
 import 'package:school_of_future/features/domain/entities/notice_response.dart';
 import 'package:school_of_future/features/domain/entities/student_profile_response.dart';
 import 'package:school_of_future/features/domain/entities/subject_item_response.dart';
+import 'package:school_of_future/features/domain/entities/today_activity_response.dart';
 import 'package:school_of_future/features/domain/repositories/api_repo.dart';
 import 'package:school_of_future/features/domain/repositories/local_storage_repo.dart';
 
@@ -22,11 +24,15 @@ class StudentHomeBloc extends Bloc<StudentHomeEvent, StudentHomeState> {
       : super(StudentHomeInitial()) {
     on<GetVersion>(_getVersion);
     on<GetUserProfile>(_getUserProfile);
+    on<GetNextClass>(_getNextClass);
+    on<GetTodayActivity>(_getTodayActivity);
     on<GetSubjectList>(_getSubjectList);
     on<GetDashboardNotice>(_getDashboardNotice);
     on<GetDashboardDueTask>(_getDashboardDueTask);
 
     add(GetVersion());
+    add(GetNextClass());
+    add(GetTodayActivity());
     add(GetUserProfile());
     add(GetSubjectList());
     add(GetDashboardNotice());
@@ -41,6 +47,28 @@ class StudentHomeBloc extends Bloc<StudentHomeEvent, StudentHomeState> {
       GetVersion event, Emitter<StudentHomeState> emit) async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     emit(state.copyWith(version: packageInfo.version));
+  }
+
+  FutureOr<void> _getNextClass(
+      GetNextClass event, Emitter<StudentHomeState> emit) async {
+    final nextClass = await _apiRepo.get<NextClass>(
+        endpoint:
+            nextClassEndPoint(sId: _localStorageRepo.read(key: loginIdDB)!));
+
+    if (nextClass != null) {
+      emit(state.copyWith(nextClass: nextClass));
+    }
+  }
+
+  FutureOr<void> _getTodayActivity(
+      GetTodayActivity event, Emitter<StudentHomeState> emit) async {
+    final todayActivity = await _apiRepo.get<TodayActivities>(
+        endpoint: todayActivityEndPoint(
+            sId: _localStorageRepo.read(key: loginIdDB)!));
+
+    if (todayActivity != null) {
+      emit(state.copyWith(todayActivity: todayActivity));
+    }
   }
 
   FutureOr<void> _getUserProfile(
@@ -67,8 +95,8 @@ class StudentHomeBloc extends Bloc<StudentHomeEvent, StudentHomeState> {
 
   FutureOr<void> _getSubjectList(
       GetSubjectList event, Emitter<StudentHomeState> emit) async {
-    final subjectFromDB = await _localStorageRepo
-        .readModelForList<List<SubjectItem>, SubjectItem>(key: subjectListDB);
+    final subjectFromDB =
+        await _localStorageRepo.readModel<SubjectResponse>(key: subjectListDB);
 
     if (subjectFromDB != null) {
       emit(state.copyWith(subjectList: subjectFromDB));
@@ -78,7 +106,7 @@ class StudentHomeBloc extends Bloc<StudentHomeEvent, StudentHomeState> {
         endpoint: getAllSubjectEndPoint(
             sId: _localStorageRepo.read(key: loginIdDB)!));
     if (subjects != null) {
-      emit(state.copyWith(subjectList: subjects.data));
+      emit(state.copyWith(subjectList: subjects));
       await _localStorageRepo.writeModel(key: subjectListDB, value: subjects);
     }
   }

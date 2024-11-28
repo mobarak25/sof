@@ -90,3 +90,5 @@ const teacherQuizStudentsScreen = "/teacher-quiz-students-screen";
 const teacherReviewScreen = "/teacher-review-screen";
 const teacherExamListScreen = "/teacher-exam-list-screen";
 const teacherExamCreateScreen = "/teacher-exam-create-screen";
+const teacherExamDetailsScreen = "/teacher-exam-details-screen";
+const teacherMarkEntryScreen = "/teacher-mark-entry-screen";

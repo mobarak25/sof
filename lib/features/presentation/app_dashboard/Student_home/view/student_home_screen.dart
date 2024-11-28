@@ -1,9 +1,12 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:school_of_future/core/navigator/navigator_key.dart';
 import 'package:school_of_future/core/router/route_constents.dart';
+import 'package:school_of_future/core/translations/local_keys.dart';
 import 'package:school_of_future/core/utils/colors.dart';
+import 'package:school_of_future/core/utils/utilities.dart';
 import 'package:school_of_future/core/widgets/app_bar.dart';
 import 'package:school_of_future/core/widgets/body.dart';
 import 'package:school_of_future/core/widgets/text.dart';
@@ -13,6 +16,7 @@ import 'package:school_of_future/features/presentation/app_dashboard/Student_hom
 import 'package:school_of_future/features/presentation/app_dashboard/Student_home/widgets/dashboard_notice.dart';
 import 'package:school_of_future/features/presentation/app_dashboard/Student_home/widgets/next_class.dart';
 import 'package:school_of_future/features/presentation/app_dashboard/Student_home/widgets/subject_list.dart';
+import 'package:school_of_future/features/presentation/app_dashboard/Student_home/widgets/upcoming_homework_quiz_count.dart';
 
 class StudentHomeScreen extends StatelessWidget {
   const StudentHomeScreen({super.key});
@@ -45,27 +49,36 @@ class StudentHomeScreen extends StatelessWidget {
                       BasicInfo(
                         imageUrl: state.profile.data!.imageUrl ?? '',
                         name: state.profile.data!.fullname!,
-                        roll: "Roll: ${state.profile.data!.classRollNo}",
                         classInfo:
                             '${state.profile.data!.className!} ${state.profile.data!.sectionName!}',
+                        roll:
+                            "${context.tr(LocaleKeys.roll)}: ${state.profile.data!.admissionNumber}",
                         schoolName: state.profile.data!.schoolName!,
                         isLoading: false,
                         isFailed: true,
                       )
                     else
                       const TextB(text: "loading"),
-                    const NextClassBody(
-                      isLoading: false,
-                      subjectName: 'sdf',
-                      subjectGroupID: 2,
-                      roomNo: '',
-                      startTime: '',
-                      isError: false,
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    //UpcomingHomeworkQuizCount(isShowPresent: false),
+                    if (state.nextClass.data != null)
+                      NextClassBody(
+                        isLoading: false,
+                        subjectName: state.nextClass.data!.subjectName!,
+                        subjectGroupID: state.nextClass.data!.subjectGroupId!,
+                        roomNo: state.nextClass.data!.roomNo!,
+                        startTime: convertTo12HourFormat(
+                            state.nextClass.data!.startTime!),
+                        isError: false,
+                      )
+                    else
+                      const TextB(text: "loading"),
+                    const Gap(20),
+                    if (state.todayActivity.data != null)
+                      UpcomingHomeWorkQuizCount(
+                        homeWortCount: state.todayActivity.data!.totalHomework!,
+                        quizCount: state.todayActivity.data!.totalQuiz!,
+                      )
+                    else
+                      const TextB(text: "loading"),
                     Container(
                       width: double.infinity,
                       height: 1,
@@ -73,7 +86,10 @@ class StudentHomeScreen extends StatelessWidget {
                           vertical: 24, horizontal: 16),
                       color: kScaffoldBGColor,
                     ),
-                    SubjectList(subjects: state.subjectList),
+                    if (state.subjectList.data != null)
+                      SubjectList(subjects: state.subjectList.data!)
+                    else
+                      const TextB(text: "loading"),
                   ],
                 ),
               ),

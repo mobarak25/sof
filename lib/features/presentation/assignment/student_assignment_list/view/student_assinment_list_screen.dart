@@ -40,7 +40,7 @@ class StudentAssinmentListScreen extends StatelessWidget {
           isFullScreen: true,
           appBar: FutureAppBar(
             actions: const [SizedBox()],
-            title: LocaleKeys.homeWork.tr(),
+            title: context.tr(LocaleKeys.homeWork),
           ),
           drawerChild: Padding(
             padding: EdgeInsets.only(
@@ -146,9 +146,9 @@ class StudentAssinmentListScreen extends StatelessWidget {
             child: CustomTab(
               loading: state.loading,
               tabList: [
-                LocaleKeys.due.tr(),
-                LocaleKeys.submitted.tr(),
-                LocaleKeys.completed.tr()
+                context.tr(LocaleKeys.due),
+                context.tr(LocaleKeys.submitted),
+                context.tr(LocaleKeys.completed),
               ],
               onTabChanged: (int tabIndex) {
                 bloc.add(DataForTab(tabIndex: tabIndex.toString()));

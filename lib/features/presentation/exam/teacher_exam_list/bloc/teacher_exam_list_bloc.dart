@@ -10,11 +10,13 @@ import 'package:school_of_future/core/snackbar/show_snackbar.dart';
 import 'package:school_of_future/core/utils/debounce.dart';
 import 'package:school_of_future/core/utils/utilities.dart';
 import 'package:school_of_future/core/widgets/confirm_delete_dialog.dart';
+import 'package:school_of_future/features/data/data_sources/local_db_keys.dart';
 import 'package:school_of_future/features/data/data_sources/remote_constants.dart';
 import 'package:school_of_future/features/domain/entities/default_response.dart';
 import 'package:school_of_future/features/domain/entities/exam_list_response.dart';
 import 'package:school_of_future/features/domain/repositories/api_repo.dart';
 import 'package:school_of_future/features/domain/repositories/local_storage_repo.dart';
+import 'package:school_of_future/features/domain/usecases/local_data.dart';
 import 'package:school_of_future/features/presentation/app_common/filter_sidebar/bloc/filter_sidebar_bloc.dart';
 
 part 'teacher_exam_list_event.dart';
@@ -25,6 +27,7 @@ class TeacherExamListBloc
   TeacherExamListBloc(
       this._apiRepo, this._iFlutterNavigator, this._localStorageRepo)
       : super(TeacherExamListInitial()) {
+    on<IsTeacher>(_isTeacher);
     on<GetExamList>(_getExamList);
     on<ChangeSearch>(_changeSearch);
     on<PressFilter>(_pressFilter);
@@ -33,6 +36,7 @@ class TeacherExamListBloc
 
     on<PageIncrement>(_pageIncrement);
 
+    add(IsTeacher());
     add(GetExamList());
   }
 
@@ -40,8 +44,16 @@ class TeacherExamListBloc
   final IFlutterNavigator _iFlutterNavigator;
   final LocalStorageRepo _localStorageRepo;
 
+  FutureOr<void> _isTeacher(
+      IsTeacher event, Emitter<TeacherExamListState> emit) async {
+    emit(state.copyWith(
+        isTeacher:
+            await LocalData.isTeacher(localStorageRepo: _localStorageRepo)));
+  }
+
   FutureOr<void> _getExamList(
       GetExamList event, Emitter<TeacherExamListState> emit) async {
+    String sId = _localStorageRepo.read(key: loginIdDB)!;
     emit(state.copyWith(page: 1, loading: true, isEndList: false));
     final queryParams = {
       "page": state.page,
@@ -50,7 +62,11 @@ class TeacherExamListBloc
     };
 
     final examList = await _apiRepo.get<ExamList>(
-        endpoint: buildUrl(teacherExamListEndPoint, queryParams));
+        endpoint: buildUrl(
+            state.isTeacher
+                ? teacherExamListEndPoint
+                : studentExamListEndPoint(sId: sId),
+            queryParams));
 
     if (examList != null) {
       emit(state.copyWith(examList: examList));
@@ -107,6 +123,7 @@ class TeacherExamListBloc
 
   FutureOr<void> _pageIncrement(
       PageIncrement event, Emitter<TeacherExamListState> emit) async {
+    String sId = _localStorageRepo.read(key: loginIdDB)!;
     int totalPage = state.page + 1;
 
     if (totalPage <= state.examList.lastPage!) {
@@ -120,7 +137,11 @@ class TeacherExamListBloc
         };
 
         final pagiExam = await _apiRepo.get<ExamList>(
-          endpoint: buildUrl(teacherExamListEndPoint, queryParams),
+          endpoint: buildUrl(
+              state.isTeacher
+                  ? teacherExamListEndPoint
+                  : studentExamListEndPoint(sId: sId),
+              queryParams),
         );
 
         emit(state.copyWith(page: totalPage, incrementLoader: false));

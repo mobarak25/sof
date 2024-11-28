@@ -33,7 +33,7 @@ class StudentAttendanceScreen extends StatelessWidget {
           isFullScreen: true,
           appBar: FutureAppBar(
             actions: const [SizedBox()],
-            title: LocaleKeys.attendance.tr(),
+            title: context.tr(LocaleKeys.attendance),
             isLoading: state.loading,
           ),
           drawerChild: Padding(
@@ -78,7 +78,8 @@ class StudentAttendanceScreen extends StatelessWidget {
                                 children: [
                                   const Gap(20),
                                   StudentRadiusChart(
-                                      overView: state.studentOverview),
+                                    overView: state.studentOverview,
+                                  ),
                                   const Gap(40),
                                   Expanded(
                                     child: Wrap(
@@ -88,29 +89,33 @@ class StudentAttendanceScreen extends StatelessWidget {
                                         OverviewInfo(
                                             title: state
                                                 .studentOverview.data!.classes!,
-                                            subTitle: "Class Day"),
+                                            subTitle: context
+                                                .tr(LocaleKeys.classDay)),
                                         OverviewInfo(
                                           title: state
                                               .studentOverview.data!.present!,
-                                          subTitle: "Present",
+                                          subTitle:
+                                              context.tr(LocaleKeys.present),
                                           color: kPrimaryColor,
                                         ),
                                         OverviewInfo(
                                           title: state
                                               .studentOverview.data!.absent!,
-                                          subTitle: "Absent",
+                                          subTitle:
+                                              context.tr(LocaleKeys.absent),
                                           color: bRed,
                                         ),
                                         OverviewInfo(
                                           title: state
                                               .studentOverview.data!.leave!,
-                                          subTitle: "Leave",
+                                          subTitle:
+                                              context.tr(LocaleKeys.leave),
                                           color: bJungleGreen,
                                         ),
                                         OverviewInfo(
                                           title:
                                               state.studentOverview.data!.late!,
-                                          subTitle: "Late",
+                                          subTitle: context.tr(LocaleKeys.late),
                                           color: kSecondaryColor,
                                         ),
                                       ],

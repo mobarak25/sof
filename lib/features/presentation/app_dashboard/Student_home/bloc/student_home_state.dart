@@ -4,27 +4,35 @@ class StudentHomeState extends Equatable {
   const StudentHomeState({
     this.version = '',
     this.profile = const StudentProfileResponse(),
-    this.subjectList = const [],
+    this.nextClass = const NextClass(),
+    this.todayActivity = const TodayActivities(),
+    this.subjectList = const SubjectResponse(),
     this.notice = const NoticeResponse(),
     this.dueTaskList = const DueTaskResponse(),
   });
 
   final String version;
   final StudentProfileResponse profile;
-  final List<SubjectItem> subjectList;
+  final NextClass nextClass;
+  final TodayActivities todayActivity;
+  final SubjectResponse subjectList;
   final NoticeResponse notice;
   final DueTaskResponse dueTaskList;
 
   StudentHomeState copyWith({
     String? version,
     StudentProfileResponse? profile,
-    List<SubjectItem>? subjectList,
+    NextClass? nextClass,
+    TodayActivities? todayActivity,
+    SubjectResponse? subjectList,
     NoticeResponse? notice,
     DueTaskResponse? dueTaskList,
   }) {
     return StudentHomeState(
       version: version ?? this.version,
       profile: profile ?? this.profile,
+      nextClass: nextClass ?? this.nextClass,
+      todayActivity: todayActivity ?? this.todayActivity,
       subjectList: subjectList ?? this.subjectList,
       notice: notice ?? this.notice,
       dueTaskList: dueTaskList ?? this.dueTaskList,
@@ -35,6 +43,8 @@ class StudentHomeState extends Equatable {
   List<Object> get props => [
         version,
         profile,
+        nextClass,
+        todayActivity,
         subjectList,
         notice,
         dueTaskList,

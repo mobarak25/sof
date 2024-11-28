@@ -347,9 +347,7 @@ class TeacherExamCreateScreen extends StatelessWidget {
                                   textColor: bGray52,
                                   text: LocaleKeys.cancel.tr(),
                                   press: () {
-                                    bloc.add(
-                                      PressToCancel(),
-                                    );
+                                    bloc.add(PressToCancel());
                                   },
                                 ),
                               ),

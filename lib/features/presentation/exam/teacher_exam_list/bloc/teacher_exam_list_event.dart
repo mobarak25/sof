@@ -7,6 +7,8 @@ sealed class TeacherExamListEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class IsTeacher extends TeacherExamListEvent {}
+
 class GetExamList extends TeacherExamListEvent {}
 
 class ChangeSearch extends TeacherExamListEvent {

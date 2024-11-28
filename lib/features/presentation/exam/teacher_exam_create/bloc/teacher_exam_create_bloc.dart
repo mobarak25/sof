@@ -10,6 +10,7 @@ import 'package:school_of_future/core/router/route_constents.dart';
 import 'package:school_of_future/core/snackbar/show_snackbar.dart';
 import 'package:school_of_future/core/utils/enums.dart';
 import 'package:school_of_future/core/utils/utilities.dart';
+import 'package:school_of_future/core/widgets/confirm_cancel_dialog.dart';
 import 'package:school_of_future/features/data/data_sources/remote_constants.dart';
 import 'package:school_of_future/features/data/model/create_exam.dart';
 import 'package:school_of_future/features/domain/entities/default_response.dart';
@@ -42,6 +43,7 @@ class TeacherExamCreateBloc
     on<ChangePassMark>(_changePassMark);
     on<ChangeConvertMark>(_changeConvertMark);
     on<PressToCreate>(_pressToCreate);
+    on<PressToCancel>(_pressToCancel);
     on<AddData>(_addData);
 
     add(GetVersionList());
@@ -383,5 +385,15 @@ class TeacherExamCreateBloc
         isFirstTime: false,
       ));
     }
+  }
+
+  FutureOr<void> _pressToCancel(
+      PressToCancel event, Emitter<TeacherExamCreateState> emit) {
+    showCancelDialog(_iFlutterNavigator.context, pressToYes: () {
+      // _iFlutterNavigator.pop();
+      // navigatorKey.currentState!.pushNamedAndRemoveUntil(
+      //     classworkListScreen, ModalRoute.withName('/'));
+      Navigator.popUntil(_iFlutterNavigator.context, (route) => route.isFirst);
+    });
   }
 }

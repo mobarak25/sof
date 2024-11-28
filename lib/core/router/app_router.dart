@@ -38,6 +38,10 @@ import 'package:school_of_future/features/presentation/event/event_details/bloc/
 import 'package:school_of_future/features/presentation/event/event_details/view/event_details_screen.dart';
 import 'package:school_of_future/features/presentation/exam/teacher_exam_create/bloc/teacher_exam_create_bloc.dart';
 import 'package:school_of_future/features/presentation/exam/teacher_exam_create/view/teacher_exam_create_screen.dart';
+import 'package:school_of_future/features/presentation/exam/teacher_exam_details/bloc/teacher_exam_details_bloc.dart';
+import 'package:school_of_future/features/presentation/exam/teacher_exam_details/view/teacher_exam_details_screen.dart';
+import 'package:school_of_future/features/presentation/exam/teacher_mark_entry/bloc/theacher_mark_entry_bloc.dart';
+import 'package:school_of_future/features/presentation/exam/teacher_mark_entry/view/teacher_mark_entry_screen.dart';
 import 'package:school_of_future/features/presentation/forgot_password_1/bloc/forgot_password_bloc.dart';
 import 'package:school_of_future/features/presentation/forgot_password_2/bloc/forgot_password2_bloc.dart';
 import 'package:school_of_future/features/presentation/forgot_password_2/view/step-2.dart';
@@ -781,6 +785,32 @@ class AppRouter {
               getIt<LocalStorageRepo>(),
             )..add(ExamIdForEdit(examId: id)),
             child: const TeacherExamCreateScreen(),
+          ),
+        );
+      case teacherExamDetailsScreen:
+        final id = settings.arguments as int;
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (BuildContext context) => BlocProvider(
+            create: (context) => TeacherExamDetailsBloc(
+              getIt<ApiRepo>(),
+              getIt<IFlutterNavigator>(),
+              getIt<LocalStorageRepo>(),
+            )..add(ExamIdForDtls(examId: id)),
+            child: const TeacherExamDtlsScreen(),
+          ),
+        );
+      case teacherMarkEntryScreen:
+        final id = settings.arguments as int;
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (BuildContext context) => BlocProvider(
+            create: (context) => TheacherMarkEntryBloc(
+              getIt<ApiRepo>(),
+              getIt<IFlutterNavigator>(),
+              getIt<LocalStorageRepo>(),
+            )..add(ExamIdForMarkEntry(examId: id)),
+            child: const TeacherMarkEntryScreen(),
           ),
         );
 

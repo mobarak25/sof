@@ -48,9 +48,10 @@ class TeacherExamListScreen extends StatelessWidget {
             ),
             child: SingleChildScrollView(
               child: FilterSidebar(
-                showVersion: true,
-                showClass: true,
-                showSubject: true,
+                showVersion: state.isTeacher ? true : false,
+                showClass: state.isTeacher ? true : false,
+                showSubject: state.isTeacher ? true : false,
+                showSubjectForStudent: state.isTeacher ? false : true,
                 btnText: context.tr(LocaleKeys.filter),
                 pressFilterBtn: () {
                   bloc.add(PressFilter(filterBloc: filterBloc));
@@ -83,11 +84,13 @@ class TeacherExamListScreen extends StatelessWidget {
                                     state.examList.data!.length,
                                     (index) {
                                       return ExamCardCard(
+                                        isTeacher: state.isTeacher,
                                         data: state.examList.data![index],
                                         press: () {
                                           Navigator.of(context,
                                                   rootNavigator: true)
-                                              .pushNamed(teacherQuizDtlsScreen,
+                                              .pushNamed(
+                                                  teacherExamDetailsScreen,
                                                   arguments: state.examList
                                                       .data![index].id);
                                         },
@@ -135,12 +138,13 @@ class TeacherExamListScreen extends StatelessWidget {
                         child: CircularProgressIndicator(),
                       ),
               ),
-              FloatingButton(
-                press: () {
-                  Navigator.of(context, rootNavigator: true)
-                      .pushNamed(teacherExamCreateScreen, arguments: -1);
-                },
-              )
+              if (state.isTeacher)
+                FloatingButton(
+                  press: () {
+                    Navigator.of(context, rootNavigator: true)
+                        .pushNamed(teacherExamCreateScreen, arguments: -1);
+                  },
+                )
             ],
           ),
         );

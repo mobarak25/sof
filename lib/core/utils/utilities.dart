@@ -213,6 +213,18 @@ class QuizAns {
   final TextEditingController textEditingController;
 }
 
+class ExamMark {
+  const ExamMark({
+    required this.id,
+    required this.focusnode,
+    required this.textEditingController,
+  });
+
+  final int id;
+  final FocusNode focusnode;
+  final TextEditingController textEditingController;
+}
+
 DateTime convertToDateTime(String time) {
   if (time.isNotEmpty) {
     DateTime dateTime = DateFormat.jm().parse(time);
@@ -220,6 +232,12 @@ DateTime convertToDateTime(String time) {
   } else {
     return DateTime.now();
   }
+}
+
+String convertTo12HourFormat(String time24) {
+  final DateTime parsedTime = DateFormat('HH:mm:ss').parse(time24);
+  final String formattedTime = DateFormat('hh:mma').format(parsedTime);
+  return formattedTime;
 }
 
 

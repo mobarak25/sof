@@ -36,7 +36,7 @@ class StudentAttendanceBloc
 
   FutureOr<void> _getStudentOverView(
       GetStudentOverView event, Emitter<StudentAttendanceState> emit) async {
-    emit(state.copyWith(isFirstTime: false));
+    emit(state.copyWith(isFirstTime: false, loading: true));
     final filterBloc = event.filterBloc.state;
     final queryParams = {
       "start_date": filterBloc.startDate.isEmpty
@@ -58,6 +58,7 @@ class StudentAttendanceBloc
     if (report != null) {
       emit(state.copyWith(studentOverview: report));
     }
+    emit(state.copyWith(loading: false));
   }
 
   FutureOr<void> _todayAttendance(

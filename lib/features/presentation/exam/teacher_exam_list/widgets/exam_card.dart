@@ -14,11 +14,13 @@ class ExamCardCard extends StatelessWidget {
     super.key,
     required this.data,
     required this.press,
+    required this.isTeacher,
     required this.prssToEditDel,
   });
   final ExamItem data;
   final VoidCallback press;
   final Function prssToEditDel;
+  final bool isTeacher;
 
   @override
   Widget build(BuildContext context) {
@@ -158,23 +160,24 @@ class ExamCardCard extends StatelessWidget {
             ),
           ),
         ),
-        Positioned(
-          right: 0,
-          child: PopupMenuButton(
-            icon: SvgPicture.asset('assets/images/three_dots.svg'),
-            itemBuilder: (context) {
-              return ["Edit", "Delete"].map((action) {
-                return PopupMenuItem(
-                  value: action,
-                  child: Text(action),
-                );
-              }).toList();
-            },
-            onSelected: (String value) {
-              prssToEditDel(value, data.id);
-            },
-          ),
-        )
+        if (isTeacher)
+          Positioned(
+            right: 0,
+            child: PopupMenuButton(
+              icon: SvgPicture.asset('assets/images/three_dots.svg'),
+              itemBuilder: (context) {
+                return ["Edit", "Delete"].map((action) {
+                  return PopupMenuItem(
+                    value: action,
+                    child: Text(action),
+                  );
+                }).toList();
+              },
+              onSelected: (String value) {
+                prssToEditDel(value, data.id);
+              },
+            ),
+          )
       ],
     );
   }

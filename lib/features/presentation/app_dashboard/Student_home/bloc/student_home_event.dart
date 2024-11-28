@@ -11,6 +11,10 @@ class GetVersion extends StudentHomeEvent {}
 
 class GetUserProfile extends StudentHomeEvent {}
 
+class GetNextClass extends StudentHomeEvent {}
+
+class GetTodayActivity extends StudentHomeEvent {}
+
 class GetSubjectList extends StudentHomeEvent {}
 
 class GetDashboardNotice extends StudentHomeEvent {}

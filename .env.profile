@@ -1,5 +1,5 @@
 #----------Local Rony API--------------
-API_URL=http://192.168.50.40/
+API_URL=https://fad1-103-112-52-18.ngrok-free.app/
 #clents info
 GRANT_TYPE=client_credentials
 CLIENT_ID=MASTER_CLIENT

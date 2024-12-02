@@ -58,20 +58,6 @@ class ClassWorkCreateBloc
   FutureOr<void> _classworkIdForEdit(
       ClassworkIdForEdit event, Emitter<ClassWorkCreateState> emit) async {
     emit(state.copyWith(classWorkId: event.classworkId));
-
-    if (event.classworkId != -1) {
-      final details = await _apiRepo.get<ClassworkDetails>(
-        endpoint: classworkDetailsEndPoint(id: event.classworkId),
-      );
-
-      if (details != null) {
-        emit(state.copyWith(classworkDtls: details));
-
-        add(SelectVersionId(id: state.classworkDtls.data!.subject!.versionId!));
-        add(SelectClassId(id: state.classworkDtls.data!.subject!.classId!));
-        add(SelectSubjectId(id: state.classworkDtls.data!.subject!.id!));
-      }
-    }
   }
 
   FutureOr<void> _changeTitle(
@@ -135,6 +121,21 @@ class ClassWorkCreateBloc
       }
 
       emit(state.copyWith(versionList: list, bacthAsSection: versionList));
+
+      if (state.classWorkId != -1) {
+        final details = await _apiRepo.get<ClassworkDetails>(
+          endpoint: classworkDetailsEndPoint(id: state.classWorkId),
+        );
+
+        if (details != null) {
+          emit(state.copyWith(classworkDtls: details));
+
+          add(SelectVersionId(
+              id: state.classworkDtls.data!.subject!.versionId!));
+          add(SelectClassId(id: state.classworkDtls.data!.subject!.classId!));
+          add(SelectSubjectId(id: state.classworkDtls.data!.subject!.id!));
+        }
+      }
     }
   }
 

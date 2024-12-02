@@ -57,19 +57,6 @@ class MeetingCreateBloc extends Bloc<MeetingCreateEvent, MeetingCreateState> {
   FutureOr<void> _meetingIdForEdit(
       MeetingIdForEdit event, Emitter<MeetingCreateState> emit) async {
     emit(state.copyWith(meetingId: event.meetingId));
-    print("meeting id:=========== ${event.meetingId}");
-
-    if (event.meetingId != -1) {
-      final details = await _apiRepo.get<MeetingDetails>(
-        endpoint: teacherMeetingDetailsEndPoint(meetingId: event.meetingId),
-      );
-
-      if (details != null) {
-        emit(state.copyWith(meetingDetails: details));
-        add(SelectVersionId(id: state.meetingDetails.data!.batch!.versionId!));
-        add(SelectClassId(id: state.meetingDetails.data!.batch!.classId!));
-      }
-    }
   }
 
   FutureOr<void> _changeTitle(
@@ -114,6 +101,18 @@ class MeetingCreateBloc extends Bloc<MeetingCreateEvent, MeetingCreateState> {
       }
 
       emit(state.copyWith(versionList: list, bacthAsSection: versionList));
+    }
+
+    if (state.meetingId != -1) {
+      final details = await _apiRepo.get<MeetingDetails>(
+        endpoint: teacherMeetingDetailsEndPoint(meetingId: state.meetingId),
+      );
+
+      if (details != null) {
+        emit(state.copyWith(meetingDetails: details));
+        add(SelectVersionId(id: state.meetingDetails.data!.batch!.versionId!));
+        add(SelectClassId(id: state.meetingDetails.data!.batch!.classId!));
+      }
     }
   }
 

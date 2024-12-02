@@ -1,4 +1,4 @@
-package com.example.school_of_future
+package com.classtune.app
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -143,7 +143,7 @@ class LessonPlanCreateBloc
 
       emit(state.copyWith(versionList: list, bacthAsSection: versionList));
 
-      if (state.planId != 1) {
+      if (state.planId != -1) {
         final details = await _apiRepo.get<LessonPlanDetails>(
           endpoint: teacherLessonPlanDetailsEndPoint(planId: state.planId),
         );

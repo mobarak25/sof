@@ -69,7 +69,7 @@ class StudentHomeScreen extends StatelessWidget {
                           isLoading: false,
                           subjectName: state.nextClass.data!.subjectName!,
                           subjectGroupID: state.nextClass.data!.subjectGroupId!,
-                          roomNo: state.nextClass.data!.roomNo!,
+                          roomNo: state.nextClass.data!.roomNo ?? '',
                           startTime: convertTo12HourFormat(
                               state.nextClass.data!.startTime!),
                           isError: false,
@@ -102,7 +102,7 @@ class StudentHomeScreen extends StatelessWidget {
 
                 // dashboard notice=============
                 const Gap(20),
-                if (state.notice.noticeList != null)
+                if (state.notice.data != null)
                   DashboardNotice(
                     notice: state.notice,
                     pressToViewAll: () {

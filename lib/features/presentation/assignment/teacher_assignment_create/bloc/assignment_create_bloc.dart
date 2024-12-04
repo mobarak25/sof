@@ -446,14 +446,12 @@ class AssignmentCreateBloc
   bool isValid(PressToCreate event) {
     final validate = Validator.isValidated(items: [
       FormItem(text: state.title, focusNode: event.titleFocusnode),
-      FormItem(text: state.mark, focusNode: event.markFocusnode),
     ], navigator: _iFlutterNavigator);
 
     if (!validate) return false;
     if (state.title.isEmpty ||
         state.startDate.isEmpty ||
         state.endDate.isEmpty ||
-        state.isAssessment && state.mark.isEmpty ||
         state.selectedSubjectId == -1 ||
         state.assignToBatchId.isEmpty) {
       return false;

@@ -6,6 +6,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:school_of_future/core/navigator/iflutter_navigator.dart';
 import 'package:school_of_future/features/data/data_sources/local_db_keys.dart';
 import 'package:school_of_future/features/data/data_sources/remote_constants.dart';
+import 'package:school_of_future/features/domain/entities/dashborard_notice_response.dart';
 import 'package:school_of_future/features/domain/entities/due_task_response.dart';
 import 'package:school_of_future/features/domain/entities/next_class_response.dart';
 import 'package:school_of_future/features/domain/entities/notice_response.dart';
@@ -52,6 +53,7 @@ class StudentHomeBloc extends Bloc<StudentHomeEvent, StudentHomeState> {
 
   FutureOr<void> _getNextClass(
       GetNextClass event, Emitter<StudentHomeState> emit) async {
+    final type = _localStorageRepo.read(key: userTypeDB);
     final nextClassFromDB =
         await _localStorageRepo.readModel<NextClass>(key: nextClassDB);
 
@@ -60,8 +62,9 @@ class StudentHomeBloc extends Bloc<StudentHomeEvent, StudentHomeState> {
     }
 
     final nextClass = await _apiRepo.get<NextClass>(
-        endpoint:
-            nextClassEndPoint(sId: _localStorageRepo.read(key: loginIdDB)!));
+        endpoint: type == "2"
+            ? teacherNextClassEndPoint
+            : nextClassEndPoint(sId: _localStorageRepo.read(key: loginIdDB)!));
 
     if (nextClass != null) {
       emit(state.copyWith(nextClass: nextClass));
@@ -136,14 +139,19 @@ class StudentHomeBloc extends Bloc<StudentHomeEvent, StudentHomeState> {
 
   FutureOr<void> _getDashboardNotice(
       GetDashboardNotice event, Emitter<StudentHomeState> emit) async {
-    final noticeFromDb = await _localStorageRepo.readModel<NoticeResponse>(
+    final type = _localStorageRepo.read(key: userTypeDB);
+    final noticeFromDb = await _localStorageRepo.readModel<DashboardNoticeRes>(
         key: dashboardNoticeDb);
 
     if (noticeFromDb != null) {
       emit(state.copyWith(notice: noticeFromDb));
     }
 
-    final notice = await _apiRepo.get<NoticeResponse>(endpoint: noticeEndPoint);
+    final notice = await _apiRepo.get<DashboardNoticeRes>(
+        endpoint: type == '2'
+            ? teacherNoticeEndPoint
+            : studentNoticeEndPoint(
+                sId: _localStorageRepo.read(key: loginIdDB)!));
     if (notice != null) {
       emit(state.copyWith(notice: notice));
       await _localStorageRepo.writeModel(key: dashboardNoticeDb, value: notice);

@@ -9,6 +9,7 @@ String resetPasswordEndPoint = "${version1}reset-password";
 String nextClassEndPoint({required String sId}) =>
     "${version1}dashboard/student/next-class/$sId";
 
+String teacherNextClassEndPoint = "${version1}dashboard/teacher/next-class";
 String todayActivityEndPoint({required String sId}) =>
     "${version1}dashboard/student/today-activity/$sId";
 
@@ -22,7 +23,10 @@ String childListEndPoint = "${version1}common/get-students-for-guardian";
 String teacherProfileEndPoint = "${version1}profile/teacher-profile";
 String getAllSubjectEndPoint({required String sId}) =>
     "${version1}common/get-all-subject-for-student/$sId";
+String teacherNoticeEndPoint = "${version1}dashboard/teacher/notice";
 String noticeEndPoint = "${version1}notice";
+String studentNoticeEndPoint({required String sId}) =>
+    "${version1}dashboard/student/notice/$sId";
 String noticeDetailsEndPoint({required int id}) => "${version1}notice/$id";
 String dueTaskEndPoint({required String sId}) =>
     "${version1}dashboard/student/due-task/$sId";

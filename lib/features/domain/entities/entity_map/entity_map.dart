@@ -10,6 +10,7 @@ import 'package:school_of_future/features/domain/entities/chapter_response.dart'
 import 'package:school_of_future/features/domain/entities/child_list_response.dart';
 import 'package:school_of_future/features/domain/entities/classwork_details_response.dart';
 import 'package:school_of_future/features/domain/entities/classwork_list_response.dart';
+import 'package:school_of_future/features/domain/entities/dashborard_notice_response.dart';
 import 'package:school_of_future/features/domain/entities/default_response.dart';
 import 'package:school_of_future/features/domain/entities/due_task_response.dart';
 import 'package:school_of_future/features/domain/entities/event_details_response.dart';
@@ -90,6 +91,8 @@ class EntityMap {
         return SubjectResponse.fromJson(json) as T;
       case const (NoticeResponse):
         return NoticeResponse.fromJson(json) as T;
+      case const (DashboardNoticeRes):
+        return DashboardNoticeRes.fromJson(json) as T;
       case const (DueTaskResponse):
         return DueTaskResponse.fromJson(json) as T;
       case const (NoticeDetailsResponse):

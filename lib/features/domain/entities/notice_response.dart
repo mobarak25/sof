@@ -75,7 +75,7 @@ class NoticeItem {
   final int? id;
   final String? title;
   final int? isCommon;
-  final int? type;
+  final dynamic type;
   final int? status;
   final dynamic iconUrl;
   final int? isCommentable;

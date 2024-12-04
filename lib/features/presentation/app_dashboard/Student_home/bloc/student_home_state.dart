@@ -8,7 +8,7 @@ class StudentHomeState extends Equatable {
     this.nextClass = const NextClass(),
     this.todayActivity = const TodayActivities(),
     this.subjectList = const SubjectResponse(),
-    this.notice = const NoticeResponse(),
+    this.notice = const DashboardNoticeRes(),
     this.dueTaskList = const DueTaskResponse(),
   });
 
@@ -18,7 +18,7 @@ class StudentHomeState extends Equatable {
   final NextClass nextClass;
   final TodayActivities todayActivity;
   final SubjectResponse subjectList;
-  final NoticeResponse notice;
+  final DashboardNoticeRes notice;
   final DueTaskResponse dueTaskList;
 
   StudentHomeState copyWith({
@@ -28,7 +28,7 @@ class StudentHomeState extends Equatable {
     NextClass? nextClass,
     TodayActivities? todayActivity,
     SubjectResponse? subjectList,
-    NoticeResponse? notice,
+    DashboardNoticeRes? notice,
     DueTaskResponse? dueTaskList,
   }) {
     return StudentHomeState(

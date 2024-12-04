@@ -125,7 +125,7 @@ class TeacherViewSubmissionScreen extends StatelessWidget {
                                       ),
                                       const Gap(10),
                                       ButtonB(
-                                        horizontalPadding: 0,
+                                        horizontalPadding: 8,
                                         heigh: 43,
                                         text: LocaleKeys.view.tr(),
                                         press: () {

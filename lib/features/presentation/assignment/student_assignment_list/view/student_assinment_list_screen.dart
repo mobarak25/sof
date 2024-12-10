@@ -5,7 +5,6 @@ import 'package:gap/gap.dart';
 import 'package:school_of_future/core/router/route_constents.dart';
 import 'package:school_of_future/core/translations/local_keys.dart';
 import 'package:school_of_future/core/utils/colors.dart';
-import 'package:school_of_future/core/utils/utilities.dart';
 import 'package:school_of_future/core/widgets/app_bar.dart';
 import 'package:school_of_future/core/widgets/body.dart';
 import 'package:school_of_future/core/widgets/button.dart';
@@ -178,25 +177,7 @@ class StudentAssinmentListScreen extends StatelessWidget {
                                     );
                                   },
                                   child: StudentAssignmentItem(
-                                    subjectGroupId: datalist[position]
-                                        .subject!
-                                        .subjectGroup!
-                                        .id!,
-                                    subjectName:
-                                        datalist[position].subject!.name ?? '',
-                                    topicName: datalist[position].title ?? '',
-                                    dueDate: getDate(
-                                        value: datalist[position].dueAt!,
-                                        formate: "dd MMM yyyy"),
-                                    totalMark:
-                                        "${datalist[position].marks}".tr(),
-                                    daysLeft:
-                                        "${datalist[position].daysLeft}".tr(),
-                                    submissionStatus:
-                                        datalist[position].submissionStatus,
-                                    draftStatus: datalist[position].status == 0,
-                                    submissionRequired:
-                                        datalist[position].isSubmitable!,
+                                    item: datalist[position],
                                   ),
                                 ),
                                 const Gap(15),

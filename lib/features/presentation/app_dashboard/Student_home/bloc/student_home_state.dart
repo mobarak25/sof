@@ -4,42 +4,54 @@ class StudentHomeState extends Equatable {
   const StudentHomeState({
     this.loading = false,
     this.version = '',
+    this.isTeacher = false,
     this.profile = const StudentProfileResponse(),
     this.nextClass = const NextClass(),
     this.todayActivity = const TodayActivities(),
     this.subjectList = const SubjectResponse(),
     this.notice = const DashboardNoticeRes(),
     this.dueTaskList = const DueTaskResponse(),
+    this.homework = const TeacherAssignment(),
+    this.studentHomework = const AssignmentResponse(),
   });
 
   final bool loading;
   final String version;
+  final bool isTeacher;
   final StudentProfileResponse profile;
   final NextClass nextClass;
   final TodayActivities todayActivity;
   final SubjectResponse subjectList;
   final DashboardNoticeRes notice;
   final DueTaskResponse dueTaskList;
+  final TeacherAssignment homework;
+  final AssignmentResponse studentHomework;
 
   StudentHomeState copyWith({
     bool? loading,
     String? version,
+    bool? isTeacher,
     StudentProfileResponse? profile,
     NextClass? nextClass,
     TodayActivities? todayActivity,
     SubjectResponse? subjectList,
     DashboardNoticeRes? notice,
     DueTaskResponse? dueTaskList,
+    TeacherAssignment? homework,
+    AssignmentResponse? studentHomework,
   }) {
     return StudentHomeState(
       loading: loading ?? this.loading,
       version: version ?? this.version,
+      isTeacher: isTeacher ?? this.isTeacher,
       profile: profile ?? this.profile,
       nextClass: nextClass ?? this.nextClass,
       todayActivity: todayActivity ?? this.todayActivity,
       subjectList: subjectList ?? this.subjectList,
       notice: notice ?? this.notice,
       dueTaskList: dueTaskList ?? this.dueTaskList,
+      homework: homework ?? this.homework,
+      studentHomework: studentHomework ?? this.studentHomework,
     );
   }
 
@@ -47,12 +59,15 @@ class StudentHomeState extends Equatable {
   List<Object> get props => [
         loading,
         version,
+        isTeacher,
         profile,
         nextClass,
         todayActivity,
         subjectList,
         notice,
         dueTaskList,
+        homework,
+        studentHomework,
       ];
 }
 

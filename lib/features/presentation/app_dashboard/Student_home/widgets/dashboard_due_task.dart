@@ -38,7 +38,7 @@ class DashboardDueTask extends StatelessWidget {
           ),
           const Gap(30),
           ...List.generate(
-            dueTask.data!.length,
+            dueTask.data!.length <= 3 ? dueTask.data!.length : 3,
             (index) => Container(
               padding: const EdgeInsets.only(bottom: 20),
               child: Material(

@@ -13,10 +13,13 @@ import 'package:school_of_future/core/widgets/text.dart';
 import 'package:school_of_future/features/presentation/app_dashboard/Student_home/bloc/student_home_bloc.dart';
 import 'package:school_of_future/features/presentation/app_dashboard/Student_home/widgets/basic_info.dart';
 import 'package:school_of_future/features/presentation/app_dashboard/Student_home/widgets/dashboard_due_task.dart';
+import 'package:school_of_future/features/presentation/app_dashboard/Student_home/widgets/dashboard_home_work.dart';
 import 'package:school_of_future/features/presentation/app_dashboard/Student_home/widgets/dashboard_notice.dart';
+import 'package:school_of_future/features/presentation/app_dashboard/Student_home/widgets/dashboard_student_homework.dart';
 import 'package:school_of_future/features/presentation/app_dashboard/Student_home/widgets/next_class.dart';
 import 'package:school_of_future/features/presentation/app_dashboard/Student_home/widgets/subject_list.dart';
 import 'package:school_of_future/features/presentation/app_dashboard/Student_home/widgets/upcoming_homework_quiz_count.dart';
+import 'package:school_of_future/features/presentation/assignment/student_assignment_list/widgets/assignment_item.dart';
 
 class StudentHomeScreen extends StatelessWidget {
   const StudentHomeScreen({super.key});
@@ -128,6 +131,32 @@ class StudentHomeScreen extends StatelessWidget {
                   )
                 else
                   const TextB(text: "loading..."),
+                // dashboard home work=============
+                const Gap(20),
+
+                if (state.isTeacher)
+                  Column(
+                    children: [
+                      if (state.homework.data != null)
+                        DashboarHomework(
+                          homework: state.homework,
+                          pressToViewAll: () {},
+                          pressToDetails: () {},
+                        )
+                    ],
+                  )
+                else
+                  Column(
+                    children: [
+                      if (state.studentHomework.data != null)
+                        DashboarStudentHomework(
+                          homework: state.studentHomework,
+                          pressToViewAll: () {},
+                          pressToDetails: () {},
+                        )
+                    ],
+                  ),
+
                 const Gap(120),
               ],
             ),

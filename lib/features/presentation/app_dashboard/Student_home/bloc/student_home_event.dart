@@ -21,4 +21,6 @@ class GetDashboardNotice extends StudentHomeEvent {}
 
 class GetDashboardDueTask extends StudentHomeEvent {}
 
+class GetDashboardHomework extends StudentHomeEvent {}
+
 class RefreshScreen extends StudentHomeEvent {}

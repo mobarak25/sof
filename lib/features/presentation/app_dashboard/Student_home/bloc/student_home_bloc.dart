@@ -6,15 +6,18 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:school_of_future/core/navigator/iflutter_navigator.dart';
 import 'package:school_of_future/features/data/data_sources/local_db_keys.dart';
 import 'package:school_of_future/features/data/data_sources/remote_constants.dart';
+import 'package:school_of_future/features/domain/entities/assignment_list_response.dart';
 import 'package:school_of_future/features/domain/entities/dashborard_notice_response.dart';
 import 'package:school_of_future/features/domain/entities/due_task_response.dart';
 import 'package:school_of_future/features/domain/entities/next_class_response.dart';
 import 'package:school_of_future/features/domain/entities/notice_response.dart';
 import 'package:school_of_future/features/domain/entities/student_profile_response.dart';
 import 'package:school_of_future/features/domain/entities/subject_item_response.dart';
+import 'package:school_of_future/features/domain/entities/teacher_assignment_response.dart';
 import 'package:school_of_future/features/domain/entities/today_activity_response.dart';
 import 'package:school_of_future/features/domain/repositories/api_repo.dart';
 import 'package:school_of_future/features/domain/repositories/local_storage_repo.dart';
+import 'package:school_of_future/features/domain/usecases/local_data.dart';
 
 part 'student_home_event.dart';
 part 'student_home_state.dart';
@@ -30,6 +33,7 @@ class StudentHomeBloc extends Bloc<StudentHomeEvent, StudentHomeState> {
     on<GetSubjectList>(_getSubjectList);
     on<GetDashboardNotice>(_getDashboardNotice);
     on<GetDashboardDueTask>(_getDashboardDueTask);
+    on<GetDashboardHomework>(_getDashboardHomework);
     on<RefreshScreen>(_refreshScreen);
 
     add(GetVersion());
@@ -39,6 +43,7 @@ class StudentHomeBloc extends Bloc<StudentHomeEvent, StudentHomeState> {
     add(GetSubjectList());
     add(GetDashboardNotice());
     add(GetDashboardDueTask());
+    add(GetDashboardHomework());
   }
 
   final IFlutterNavigator _iFlutterNavigator;
@@ -48,7 +53,10 @@ class StudentHomeBloc extends Bloc<StudentHomeEvent, StudentHomeState> {
   FutureOr<void> _getVersion(
       GetVersion event, Emitter<StudentHomeState> emit) async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    emit(state.copyWith(version: packageInfo.version));
+    emit(state.copyWith(
+        version: packageInfo.version,
+        isTeacher:
+            await LocalData.isTeacher(localStorageRepo: _localStorageRepo)));
   }
 
   FutureOr<void> _getNextClass(
@@ -178,6 +186,29 @@ class StudentHomeBloc extends Bloc<StudentHomeEvent, StudentHomeState> {
     }
   }
 
+  FutureOr<void> _getDashboardHomework(
+      GetDashboardHomework event, Emitter<StudentHomeState> emit) async {
+    final type = _localStorageRepo.read(key: userTypeDB);
+
+    if (type == '2') {
+      final homework = await _apiRepo.get<TeacherAssignment>(
+          endpoint: teacherAssignmentEndPoint);
+
+      if (homework != null) {
+        emit(state.copyWith(homework: homework));
+      }
+    } else {
+      final studentHomework = await _apiRepo.get<AssignmentResponse>(
+        endpoint: studentAssignmentEndPoint(
+            sId: _localStorageRepo.read(key: loginIdDB)!),
+      );
+
+      if (studentHomework != null) {
+        emit(state.copyWith(studentHomework: studentHomework));
+      }
+    }
+  }
+
   FutureOr<void> _refreshScreen(
       RefreshScreen event, Emitter<StudentHomeState> emit) {
     add(GetVersion());
@@ -187,6 +218,7 @@ class StudentHomeBloc extends Bloc<StudentHomeEvent, StudentHomeState> {
     add(GetSubjectList());
     add(GetDashboardNotice());
     add(GetDashboardDueTask());
+    add(GetDashboardHomework());
   }
 }
 

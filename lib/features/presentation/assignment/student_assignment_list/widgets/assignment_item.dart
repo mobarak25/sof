@@ -5,30 +5,14 @@ import 'package:school_of_future/core/translations/local_keys.dart';
 import 'package:school_of_future/core/utils/colors.dart';
 import 'package:school_of_future/core/utils/subject_image_generator.dart';
 import 'package:school_of_future/core/utils/text_styles.dart';
+import 'package:school_of_future/core/utils/utilities.dart';
 import 'package:school_of_future/core/widgets/text.dart';
+import 'package:school_of_future/features/domain/entities/assignment_list_response.dart';
 
 class StudentAssignmentItem extends StatelessWidget {
-  final String topicName;
-  final String subjectName;
-  final String dueDate;
-  final String totalMark;
-  final String daysLeft;
-  final int? submissionStatus;
-  final bool draftStatus;
-  final int submissionRequired;
-  final int subjectGroupId;
-  const StudentAssignmentItem({
-    super.key,
-    required this.topicName,
-    required this.subjectName,
-    required this.dueDate,
-    required this.totalMark,
-    required this.daysLeft,
-    required this.submissionStatus,
-    required this.draftStatus,
-    required this.submissionRequired,
-    required this.subjectGroupId,
-  });
+  const StudentAssignmentItem({super.key, required this.item});
+
+  final AssignmentItem item;
 
   @override
   Widget build(BuildContext context) {
@@ -62,14 +46,14 @@ class StudentAssignmentItem extends StatelessWidget {
                           child: SizedBox(
                             height: 60,
                             width: 60,
-                            child:
-                                appGenerateSvgWidgetFromId(id: subjectGroupId),
+                            child: appGenerateSvgWidgetFromId(
+                                id: item.subject!.subjectGroup!.id!),
                           ),
                         ),
                         const SizedBox(
                           height: 10,
                         ),
-                        if (submissionStatus == null)
+                        if (item.submissionStatus == null)
                           Container(
                             width: 65,
                             color: bRed, //_createColorAccordingToDraftSub(),
@@ -81,7 +65,7 @@ class StudentAssignmentItem extends StatelessWidget {
                               alignMent: TextAlign.center,
                             ),
                           ),
-                        if (submissionStatus == 0)
+                        if (item.submissionStatus == 0)
                           Container(
                             width: 65,
                             color: bRed, //_createColorAccordingToDraftSub(),
@@ -101,14 +85,14 @@ class StudentAssignmentItem extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         TextB(
-                          text: topicName,
+                          text: item.title ?? '',
                           textStyle: bBody1,
                           fontColor: kTextAnotherColor,
                           maxLines: 1,
                         ),
                         const Gap(10),
                         TextB(
-                          text: subjectName,
+                          text: item.subject!.name ?? '',
                           textStyle: bBase,
                           fontColor: kPrimaryColor,
                         ),
@@ -122,7 +106,8 @@ class StudentAssignmentItem extends StatelessWidget {
                             ),
                             Flexible(
                               child: TextB(
-                                text: dueDate,
+                                text: getDate(
+                                    value: item.dueAt!, formate: "dd MMM yyyy"),
                                 textStyle: bBase,
                                 fontColor: kPrimaryColor,
                               ),
@@ -138,7 +123,7 @@ class StudentAssignmentItem extends StatelessWidget {
                               fontColor: kTextDefaultColor.withOpacity(0.5),
                             ),
                             TextB(
-                              text: totalMark,
+                              text: item.marks.toString().tr(),
                               textStyle: bBase,
                               fontColor: kPrimaryColor,
                             ),
@@ -164,7 +149,7 @@ class StudentAssignmentItem extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     TextB(
-                      text: daysLeft,
+                      text: item.daysLeft.toString().tr(),
                       textStyle: bHead6,
                       fontColor: kPrimaryColor,
                     ),
@@ -183,44 +168,4 @@ class StudentAssignmentItem extends StatelessWidget {
       ),
     );
   }
-
-  // Widget? _createTextAccordingToDraftSub() {
-  //   if (draftStatus) {
-  //     return Text(LocaleKeys.draft.tr(),
-  //         style: bSub1.copyWith(color: kWhiteColor, fontSize: 13));
-  //   } else {
-  //     if (submissionStatus != null) {
-  //       if ((submissionStatus == 0 || submissionStatus == 1)) {
-  //         return Text(LocaleKeys.submitted.tr(),
-  //             style: bSub1.copyWith(color: kWhiteColor, fontSize: 13));
-  //       } else if (submissionStatus == 2) {
-  //         return Text(LocaleKeys.resubmit.tr(),
-  //             style: bSub1.copyWith(color: kWhiteColor, fontSize: 13));
-  //       } else {
-  //         return Text(LocaleKeys.deny.tr(),
-  //             style: bSub1.copyWith(color: kWhiteColor, fontSize: 13));
-  //       }
-  //     } else {
-  //       return null;
-  //     }
-  //   }
-  // }
-
-  // Color? _createColorAccordingToDraftSub() {
-  //   if (draftStatus) {
-  //     return kSecondaryColor;
-  //   } else {
-  //     if (submissionStatus != null) {
-  //       if ((submissionStatus == 0 ||
-  //           submissionStatus == 1 ||
-  //           submissionStatus == 2)) {
-  //         return kPrimaryColor;
-  //       } else {
-  //         return kErrorColor;
-  //       }
-  //     } else {
-  //       return null;
-  //     }
-  //   }
-  // }
 }

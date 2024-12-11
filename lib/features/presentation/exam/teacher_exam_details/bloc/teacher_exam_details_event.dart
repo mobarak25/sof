@@ -7,6 +7,8 @@ sealed class TeacherExamDetailsEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class IsTeacher extends TeacherExamDetailsEvent {}
+
 class ExamIdForDtls extends TeacherExamDetailsEvent {
   const ExamIdForDtls({required this.examId});
   final int examId;

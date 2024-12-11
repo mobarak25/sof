@@ -1,5 +1,6 @@
 import 'package:gap/gap.dart';
 import 'package:flutter/material.dart';
+import 'package:school_of_future/core/router/route_constents.dart';
 import 'package:school_of_future/core/utils/colors.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:school_of_future/core/translations/local_keys.dart';
@@ -12,12 +13,12 @@ class DashboarHomework extends StatelessWidget {
     super.key,
     required this.homework,
     required this.pressToViewAll,
-    required this.pressToDetails,
+    required this.pressToDelEdit,
   });
 
   final TeacherAssignment homework;
   final VoidCallback pressToViewAll;
-  final VoidCallback pressToDetails;
+  final Function pressToDelEdit;
 
   @override
   Widget build(BuildContext context) {
@@ -53,11 +54,21 @@ class DashboarHomework extends StatelessWidget {
                     BoxShadow(
                         color: bGray12, offset: Offset(0, 0), blurRadius: 15),
                   ]),
-              child: AssignmentItemCard(
-                item: homework.data![index],
-                pressTo: (String pressTo, int id) {
-                  // bloc.add(PressToDelEdit(type: pressTo, id: id));
+              child: InkWell(
+                onTap: () {
+                  Navigator.of(context, rootNavigator: true).pushNamed(
+                    studentAssignmentDetailsScreen,
+                    arguments: homework.data![index].id,
+                  );
                 },
+                child: AssignmentItemCard(
+                  item: homework.data![index],
+                  pressTo: (String pressTo, int id) {
+                    // bloc.add(PressToDelEdit(type: pressTo, id: id));
+
+                    pressToDelEdit(pressTo, id);
+                  },
+                ),
               ),
             ),
           ),

@@ -35,17 +35,17 @@ class StudentProfileBloc
       emit(state.copyWith(profile: profileFromDB));
     }
 
-    // final profileResponse = await _apiRepo.get<StudentProfileResponse>(
-    //   endpoint:
-    //       studentProfileEndPoint(sId: _localStorageRepo.read(key: loginIdDB)!),
-    // );
+    final profileResponse = await _apiRepo.get<StudentProfileResponse>(
+      endpoint:
+          studentProfileEndPoint(sId: _localStorageRepo.read(key: loginIdDB)!),
+    );
 
-    // if (profileResponse != null) {
-    //   emit(state.copyWith(profile: profileResponse));
+    if (profileResponse != null) {
+      emit(state.copyWith(profile: profileResponse));
 
-    //   await _localStorageRepo.writeModel(
-    //       key: profileDB, value: profileResponse);
-    // }
+      await _localStorageRepo.writeModel(
+          key: profileDB, value: profileResponse);
+    }
   }
 
   FutureOr<void> _getProfileAttendance(

@@ -1,16 +1,21 @@
 import 'dart:async';
 
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:school_of_future/core/navigator/iflutter_navigator.dart';
+import 'package:school_of_future/core/router/route_constents.dart';
+import 'package:school_of_future/core/snackbar/show_snackbar.dart';
+import 'package:school_of_future/core/widgets/confirm_delete_dialog.dart';
 import 'package:school_of_future/features/data/data_sources/local_db_keys.dart';
 import 'package:school_of_future/features/data/data_sources/remote_constants.dart';
 import 'package:school_of_future/features/domain/entities/assignment_list_response.dart';
 import 'package:school_of_future/features/domain/entities/dashborard_notice_response.dart';
+import 'package:school_of_future/features/domain/entities/default_response.dart';
 import 'package:school_of_future/features/domain/entities/due_task_response.dart';
+import 'package:school_of_future/features/domain/entities/exam_list_response.dart';
 import 'package:school_of_future/features/domain/entities/next_class_response.dart';
-import 'package:school_of_future/features/domain/entities/notice_response.dart';
 import 'package:school_of_future/features/domain/entities/student_profile_response.dart';
 import 'package:school_of_future/features/domain/entities/subject_item_response.dart';
 import 'package:school_of_future/features/domain/entities/teacher_assignment_response.dart';
@@ -34,6 +39,10 @@ class StudentHomeBloc extends Bloc<StudentHomeEvent, StudentHomeState> {
     on<GetDashboardNotice>(_getDashboardNotice);
     on<GetDashboardDueTask>(_getDashboardDueTask);
     on<GetDashboardHomework>(_getDashboardHomework);
+    on<PressToDelEdit>(_pressToDelEdit);
+    on<DeleteAssignment>(_deleteAssignment);
+    on<GetDashboardExam>(_getDashboardExam);
+
     on<RefreshScreen>(_refreshScreen);
 
     add(GetVersion());
@@ -44,6 +53,7 @@ class StudentHomeBloc extends Bloc<StudentHomeEvent, StudentHomeState> {
     add(GetDashboardNotice());
     add(GetDashboardDueTask());
     add(GetDashboardHomework());
+    add(GetDashboardExam());
   }
 
   final IFlutterNavigator _iFlutterNavigator;
@@ -209,6 +219,50 @@ class StudentHomeBloc extends Bloc<StudentHomeEvent, StudentHomeState> {
     }
   }
 
+  FutureOr<void> _pressToDelEdit(
+      PressToDelEdit event, Emitter<StudentHomeState> emit) {
+    if (event.type == "Delete") {
+      showConfirmDeleteDialog(_iFlutterNavigator.context, pressToYes: () {
+        add(DeleteAssignment(assignmentId: event.id));
+      });
+    } else if (event.type == "Edit") {
+      Navigator.of(_iFlutterNavigator.context, rootNavigator: true)
+          .pushNamed(teacherAssignmentCreateScreen, arguments: event.id);
+    }
+  }
+
+  FutureOr<void> _deleteAssignment(
+      DeleteAssignment event, Emitter<StudentHomeState> emit) async {
+    final delete = await _apiRepo.post<DefaultResponse>(
+        endpoint: deleteAssignmentEndPoint(
+          id: event.assignmentId,
+        ),
+        body: {"_method": "delete"});
+
+    if (delete != null) {
+      _iFlutterNavigator.pop();
+      ShowSnackBar(message: delete.message!, navigator: _iFlutterNavigator);
+      add(RefreshScreen());
+    }
+  }
+
+  FutureOr<void> _getDashboardExam(
+      GetDashboardExam event, Emitter<StudentHomeState> emit) async {
+    final isTeacher =
+        await LocalData.isTeacher(localStorageRepo: _localStorageRepo)!;
+    String sId = _localStorageRepo.read(key: loginIdDB)!;
+
+    final examList = await _apiRepo.get<ExamList>(
+      endpoint: isTeacher
+          ? teacherExamListEndPoint
+          : studentExamListEndPoint(sId: sId),
+    );
+
+    if (examList != null) {
+      emit(state.copyWith(examList: examList));
+    }
+  }
+
   FutureOr<void> _refreshScreen(
       RefreshScreen event, Emitter<StudentHomeState> emit) {
     add(GetVersion());
@@ -219,6 +273,7 @@ class StudentHomeBloc extends Bloc<StudentHomeEvent, StudentHomeState> {
     add(GetDashboardNotice());
     add(GetDashboardDueTask());
     add(GetDashboardHomework());
+    add(GetDashboardExam());
   }
 }
 

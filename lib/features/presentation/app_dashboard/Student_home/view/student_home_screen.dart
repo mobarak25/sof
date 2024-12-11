@@ -12,6 +12,7 @@ import 'package:school_of_future/core/widgets/body.dart';
 import 'package:school_of_future/core/widgets/text.dart';
 import 'package:school_of_future/features/presentation/app_dashboard/Student_home/bloc/student_home_bloc.dart';
 import 'package:school_of_future/features/presentation/app_dashboard/Student_home/widgets/basic_info.dart';
+import 'package:school_of_future/features/presentation/app_dashboard/Student_home/widgets/dahsboard_exam.dart';
 import 'package:school_of_future/features/presentation/app_dashboard/Student_home/widgets/dashboard_due_task.dart';
 import 'package:school_of_future/features/presentation/app_dashboard/Student_home/widgets/dashboard_home_work.dart';
 import 'package:school_of_future/features/presentation/app_dashboard/Student_home/widgets/dashboard_notice.dart';
@@ -140,8 +141,14 @@ class StudentHomeScreen extends StatelessWidget {
                       if (state.homework.data != null)
                         DashboarHomework(
                           homework: state.homework,
-                          pressToViewAll: () {},
-                          pressToDetails: () {},
+                          pressToViewAll: () {
+                            navigatorKey.currentState!.pushNamedAndRemoveUntil(
+                                teacherAssignmentListScreen,
+                                ModalRoute.withName('/'));
+                          },
+                          pressToDelEdit: (String pressTo, int id) {
+                            bloc.add(PressToDelEdit(id: id, type: pressTo));
+                          },
                         )
                     ],
                   )
@@ -151,10 +158,22 @@ class StudentHomeScreen extends StatelessWidget {
                       if (state.studentHomework.data != null)
                         DashboarStudentHomework(
                           homework: state.studentHomework,
-                          pressToViewAll: () {},
+                          pressToViewAll: () {
+                            navigatorKey.currentState!.pushNamedAndRemoveUntil(
+                                studentAssignmentListScreen,
+                                ModalRoute.withName('/'));
+                          },
                           pressToDetails: () {},
                         )
                     ],
+                  ),
+
+                const Gap(20),
+                if (state.examList.data != null)
+                  DashboarExam(
+                    examList: state.examList,
+                    pressToViewAll: () {},
+                    pressToDetails: () {},
                   ),
 
                 const Gap(120),

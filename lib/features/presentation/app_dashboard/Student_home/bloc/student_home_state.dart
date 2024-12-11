@@ -13,6 +13,7 @@ class StudentHomeState extends Equatable {
     this.dueTaskList = const DueTaskResponse(),
     this.homework = const TeacherAssignment(),
     this.studentHomework = const AssignmentResponse(),
+    this.examList = const ExamList(),
   });
 
   final bool loading;
@@ -26,6 +27,7 @@ class StudentHomeState extends Equatable {
   final DueTaskResponse dueTaskList;
   final TeacherAssignment homework;
   final AssignmentResponse studentHomework;
+  final ExamList examList;
 
   StudentHomeState copyWith({
     bool? loading,
@@ -38,6 +40,7 @@ class StudentHomeState extends Equatable {
     DashboardNoticeRes? notice,
     DueTaskResponse? dueTaskList,
     TeacherAssignment? homework,
+    ExamList? examList,
     AssignmentResponse? studentHomework,
   }) {
     return StudentHomeState(
@@ -51,6 +54,7 @@ class StudentHomeState extends Equatable {
       notice: notice ?? this.notice,
       dueTaskList: dueTaskList ?? this.dueTaskList,
       homework: homework ?? this.homework,
+      examList: examList ?? this.examList,
       studentHomework: studentHomework ?? this.studentHomework,
     );
   }
@@ -67,6 +71,7 @@ class StudentHomeState extends Equatable {
         notice,
         dueTaskList,
         homework,
+        examList,
         studentHomework,
       ];
 }

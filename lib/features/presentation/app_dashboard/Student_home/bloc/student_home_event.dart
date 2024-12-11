@@ -23,4 +23,17 @@ class GetDashboardDueTask extends StudentHomeEvent {}
 
 class GetDashboardHomework extends StudentHomeEvent {}
 
+class PressToDelEdit extends StudentHomeEvent {
+  const PressToDelEdit({required this.id, required this.type});
+  final int id;
+  final String type;
+}
+
+class DeleteAssignment extends StudentHomeEvent {
+  const DeleteAssignment({required this.assignmentId});
+  final int assignmentId;
+}
+
+class GetDashboardExam extends StudentHomeEvent {}
+
 class RefreshScreen extends StudentHomeEvent {}

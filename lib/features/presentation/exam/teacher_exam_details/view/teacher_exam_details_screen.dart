@@ -97,26 +97,29 @@ class TeacherExamDtlsScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 15),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              const Gap(35),
-                              const Gap(50),
-                              ButtonB(
-                                heigh: 60,
-                                bgColor: kSecondaryColor,
-                                text: LocaleKeys.viewDetails.tr(),
-                                press: () {
-                                  Navigator.of(context, rootNavigator: true)
-                                      .pushNamed(teacherMarkEntryScreen,
-                                          arguments: data.id!);
-                                },
-                              )
-                            ],
-                          ),
-                        ),
+                        if (state.isTeacher)
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 15),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                const Gap(35),
+                                const Gap(50),
+                                ButtonB(
+                                  heigh: 60,
+                                  bgColor: kSecondaryColor,
+                                  text: LocaleKeys.viewDetails.tr(),
+                                  press: () {
+                                    Navigator.of(context, rootNavigator: true)
+                                        .pushNamed(teacherMarkEntryScreen,
+                                            arguments: data.id!);
+                                  },
+                                )
+                              ],
+                            ),
+                          )
+                        else
+                          const SizedBox(),
                       ],
                     )
                   ],

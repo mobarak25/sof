@@ -200,20 +200,20 @@ class StudentProfileScreen extends StatelessWidget {
                                           state.profile.data!.permanentAddress!,
                                       textStyle: bBaseM,
                                     ),
-                                    const SizedBox(
-                                      height: 20,
-                                    ),
-                                    TextB(text: "Date of Birth".tr()),
-                                    const SizedBox(
-                                      height: 5,
-                                    ),
-                                    TextB(
-                                      text: getDate(
-                                          value:
-                                              state.profile.data!.dateOfBirth!,
-                                          formate: "dd MMMM, yyyy"),
-                                      textStyle: bBaseM,
-                                    ),
+                                    // const SizedBox(
+                                    //   height: 20,
+                                    // ),
+                                    // TextB(text: "Date of Birth".tr()),
+                                    // const SizedBox(
+                                    //   height: 5,
+                                    // ),
+                                    // TextB(
+                                    //   text: getDate(
+                                    //       value:
+                                    //           state.profile.data!.dateOfBirth!,
+                                    //       formate: "dd MMMM, yyyy"),
+                                    //   textStyle: bBaseM,
+                                    // ),
                                   ],
                                 ),
                               ),

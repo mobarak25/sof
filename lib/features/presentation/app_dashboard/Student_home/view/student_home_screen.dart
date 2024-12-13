@@ -20,7 +20,6 @@ import 'package:school_of_future/features/presentation/app_dashboard/Student_hom
 import 'package:school_of_future/features/presentation/app_dashboard/Student_home/widgets/next_class.dart';
 import 'package:school_of_future/features/presentation/app_dashboard/Student_home/widgets/subject_list.dart';
 import 'package:school_of_future/features/presentation/app_dashboard/Student_home/widgets/upcoming_homework_quiz_count.dart';
-import 'package:school_of_future/features/presentation/assignment/student_assignment_list/widgets/assignment_item.dart';
 
 class StudentHomeScreen extends StatelessWidget {
   const StudentHomeScreen({super.key});

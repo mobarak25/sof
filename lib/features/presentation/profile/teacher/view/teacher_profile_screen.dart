@@ -14,7 +14,6 @@ import 'package:school_of_future/core/widgets/text.dart';
 import 'package:school_of_future/features/presentation/profile/teacher/bloc/teacher_profile_bloc.dart';
 import 'package:school_of_future/features/presentation/profile/teacher/widgets/app_youtube_player.dart';
 import 'package:school_of_future/features/presentation/profile/teacher/widgets/profile_contact_item.dart';
-import 'package:school_of_future/features/presentation/profile/teacher/widgets/profile_profession.dart';
 
 class TeacherProfileScreen extends StatelessWidget {
   const TeacherProfileScreen({super.key});
@@ -26,12 +25,13 @@ class TeacherProfileScreen extends StatelessWidget {
     return BlocBuilder<TeacherProfileBloc, TeacherProfileState>(
       builder: (context, state) {
         final bloc = context.read<TeacherProfileBloc>();
+        final data = state.profile.data;
         return Body(
           isFullScreen: true,
           appBar: const FutureAppBar(
             title: "Teacher Profile",
           ),
-          child: state.profile.data != null
+          child: data != null
               ? ListView(
                   padding: const EdgeInsets.symmetric(horizontal: 15),
                   children: [
@@ -61,15 +61,18 @@ class TeacherProfileScreen extends StatelessWidget {
                                 children: [
                                   const Gap(65),
                                   TextB(
-                                    text: state.profile.data!.fullname!,
+                                    text: data.fullname ?? '',
                                     textStyle: bHead6B,
                                     alignMent: TextAlign.center,
                                   ),
                                   const Gap(12),
-                                  TextB(text: state.profile.data!.designation!),
+                                  TextB(
+                                      text: data.employment!
+                                              .employeeDesignation!.name ??
+                                          ''),
                                   const Gap(7),
-                                  TextB(text: state.profile.data!.schoolName!),
-                                  TextB(text: state.profile.data!.tagline!),
+                                  TextB(text: data.schoolName ?? ''),
+                                  TextB(text: data.tagline!),
                                   const Gap(20),
                                   Row(
                                     children: [
@@ -162,21 +165,23 @@ class TeacherProfileScreen extends StatelessWidget {
                                       ],
                                     ),
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(
+                                  const Padding(
+                                    padding: EdgeInsets.only(
                                       top: 16,
                                       left: 16,
                                       right: 16,
                                     ),
-                                    child: AppYouTubePlayer(
-                                      videoId:
-                                          state.profile.data!.bioMediaUrl ==
-                                                  null
-                                              ? 'e9P8uGkdwko'
-                                              : state.profile.data!.bioMediaUrl!
-                                                  .split('=')
-                                                  .last,
-                                    ),
+                                    child: YoutubeVideoPlayerFlutter(),
+
+                                    //  AppYouTubePlayer(
+                                    //   videoId:
+                                    //       state.profile.data!.bioMediaUrl ==
+                                    //               null
+                                    //           ? 'e9P8uGkdwko'
+                                    //           : state.profile.data!.bioMediaUrl!
+                                    //               .split('=')
+                                    //               .last,
+                                    // ),
                                   ),
                                   HtmlText(
                                     padding: const EdgeInsets.symmetric(
@@ -188,9 +193,6 @@ class TeacherProfileScreen extends StatelessWidget {
                                 ],
                               ),
                             ),
-                            const Gap(15),
-                            //=======Prifessional Profiles=========
-                            const ProfileProfession(),
 
                             //===========Contact===================
                             const Gap(15),
@@ -319,7 +321,7 @@ class TeacherProfileScreen extends StatelessWidget {
                                     height: 10,
                                   ),
                                   ...List.generate(
-                                    3,
+                                    data.exprience!.length,
                                     (index) => Container(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 15, vertical: 15),
@@ -338,23 +340,23 @@ class TeacherProfileScreen extends StatelessWidget {
                                             textStyle: bHead5M,
                                             fontColor: bGray32,
                                           ),
-                                          const SizedBox(
-                                            width: 11,
-                                          ),
+                                          const Gap(11),
                                           Column(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             mainAxisSize: MainAxisSize.min,
                                             children: [
-                                              const TextB(
-                                                text: "title",
+                                              TextB(
+                                                text: data.exprience![index]
+                                                        .designation ??
+                                                    '',
                                                 textStyle: bBody1B,
                                               ),
-                                              const SizedBox(
-                                                height: 4,
-                                              ),
+                                              const Gap(4),
                                               TextB(
-                                                text: "bodyText",
+                                                text: data.exprience![index]
+                                                        .organizationName ??
+                                                    '',
                                                 textStyle: bSub2M,
                                                 fontColor: kTextDefaultColor
                                                     .withOpacity(0.5),
@@ -400,15 +402,12 @@ class TeacherProfileScreen extends StatelessWidget {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             TextB(
-                                              text:
-                                                  LocaleKeys.qualification.tr(),
+                                              text: LocaleKeys.proProfiles.tr(),
                                               textStyle: bBody1B,
                                             ),
                                           ],
                                         ),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
+                                        const Gap(5),
                                         Container(
                                           height: 3,
                                           width: 40,
@@ -421,7 +420,7 @@ class TeacherProfileScreen extends StatelessWidget {
                                     height: 10,
                                   ),
                                   ...List.generate(
-                                    3,
+                                    data.professionalProfiles!.length,
                                     (index) => Container(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 15, vertical: 15),
@@ -440,23 +439,29 @@ class TeacherProfileScreen extends StatelessWidget {
                                             textStyle: bHead5M,
                                             fontColor: bGray32,
                                           ),
-                                          const SizedBox(
-                                            width: 11,
-                                          ),
+                                          const Gap(11),
                                           Column(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             mainAxisSize: MainAxisSize.min,
                                             children: [
-                                              const TextB(
-                                                text: "title",
+                                              TextB(
+                                                text: data
+                                                        .professionalProfiles![
+                                                            index]
+                                                        .key ??
+                                                    '',
                                                 textStyle: bBody1B,
                                               ),
                                               const SizedBox(
                                                 height: 4,
                                               ),
                                               TextB(
-                                                text: "bodyText",
+                                                text: data
+                                                        .professionalProfiles![
+                                                            index]
+                                                        .value ??
+                                                    '',
                                                 textStyle: bSub2M,
                                                 fontColor: kTextDefaultColor
                                                     .withOpacity(0.5),

@@ -22,8 +22,8 @@ class Data {
   final String? employeeNumber;
   final String? categoryName;
   final String? shortCode;
-  final String? gender;
-  final int? maritalStatus;
+  final dynamic gender;
+  final dynamic maritalStatus;
   final String? dob;
   final dynamic signature;
   final dynamic birthCertificateNo;
@@ -31,9 +31,9 @@ class Data {
   final dynamic passportNo;
   final dynamic phone;
   final dynamic altPhone;
-  final String? mobile;
+  final dynamic mobile;
   final String? smsNumber;
-  final dynamic email;
+  final String? email;
   final dynamic altEmail;
   final dynamic presentAddress;
   final dynamic permanentAddress;
@@ -48,20 +48,19 @@ class Data {
   final dynamic bioMediaUrl;
   final dynamic bio;
   final int? childrenHas;
-  final String? religion;
+  final dynamic religion;
   final dynamic emergencyContactName;
   final dynamic emergencyContactRelation;
   final String? schoolName;
-  final String? employeeType;
-  final String? departmentName;
-  final String? designation;
+  final Employment? employment;
+  final List<Exprience>? exprience;
   final String? tagline;
   final int? yearOfExperience;
   final dynamic classesPerWeek;
   final dynamic gradeName;
-  final List<dynamic>? professionalProfiles;
+  final List<ProfessionalProfile>? professionalProfiles;
 
-  Data({
+  const Data({
     this.id,
     this.userId,
     this.fullname,
@@ -98,9 +97,8 @@ class Data {
     this.emergencyContactName,
     this.emergencyContactRelation,
     this.schoolName,
-    this.employeeType,
-    this.departmentName,
-    this.designation,
+    this.employment,
+    this.exprience,
     this.tagline,
     this.yearOfExperience,
     this.classesPerWeek,
@@ -145,16 +143,21 @@ class Data {
         emergencyContactName: json["emergency_contact_name"],
         emergencyContactRelation: json["emergency_contact_relation"],
         schoolName: json["school_name"],
-        employeeType: json["employee_type"],
-        departmentName: json["department_name"],
-        designation: json["designation"],
+        employment: json["employment"] == null
+            ? null
+            : Employment.fromJson(json["employment"]),
+        exprience: json["exprience"] == null
+            ? []
+            : List<Exprience>.from(
+                json["exprience"]!.map((x) => Exprience.fromJson(x))),
         tagline: json["tagline"],
         yearOfExperience: json["year_of_experience"],
         classesPerWeek: json["classes_per_week"],
         gradeName: json["grade_name"],
         professionalProfiles: json["professional_profiles"] == null
             ? []
-            : List<dynamic>.from(json["professional_profiles"]!.map((x) => x)),
+            : List<ProfessionalProfile>.from(json["professional_profiles"]!
+                .map((x) => ProfessionalProfile.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -194,15 +197,156 @@ class Data {
         "emergency_contact_name": emergencyContactName,
         "emergency_contact_relation": emergencyContactRelation,
         "school_name": schoolName,
-        "employee_type": employeeType,
-        "department_name": departmentName,
-        "designation": designation,
+        "employment": employment?.toJson(),
+        "exprience": exprience == null
+            ? []
+            : List<dynamic>.from(exprience!.map((x) => x.toJson())),
         "tagline": tagline,
         "year_of_experience": yearOfExperience,
         "classes_per_week": classesPerWeek,
         "grade_name": gradeName,
         "professional_profiles": professionalProfiles == null
             ? []
-            : List<dynamic>.from(professionalProfiles!.map((x) => x)),
+            : List<dynamic>.from(professionalProfiles!.map((x) => x.toJson())),
+      };
+}
+
+class Employment {
+  final int? id;
+  final int? employeeId;
+  final int? departmentId;
+  final int? designationId;
+  final dynamic employeeType;
+  final EmployeeDe? employeeDepartment;
+  final EmployeeDe? employeeDesignation;
+
+  Employment({
+    this.id,
+    this.employeeId,
+    this.departmentId,
+    this.designationId,
+    this.employeeType,
+    this.employeeDepartment,
+    this.employeeDesignation,
+  });
+
+  factory Employment.fromJson(Map<String, dynamic> json) => Employment(
+        id: json["id"],
+        employeeId: json["employee_id"],
+        departmentId: json["department_id"],
+        designationId: json["designation_id"],
+        employeeType: json["employee_type"],
+        employeeDepartment: json["employee_department"] == null
+            ? null
+            : EmployeeDe.fromJson(json["employee_department"]),
+        employeeDesignation: json["employee_designation"] == null
+            ? null
+            : EmployeeDe.fromJson(json["employee_designation"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "employee_id": employeeId,
+        "department_id": departmentId,
+        "designation_id": designationId,
+        "employee_type": employeeType,
+        "employee_department": employeeDepartment?.toJson(),
+        "employee_designation": employeeDesignation?.toJson(),
+      };
+}
+
+class EmployeeDe {
+  final int? id;
+  final String? name;
+
+  EmployeeDe({
+    this.id,
+    this.name,
+  });
+
+  factory EmployeeDe.fromJson(Map<String, dynamic> json) => EmployeeDe(
+        id: json["id"],
+        name: json["name"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "name": name,
+      };
+}
+
+class Exprience {
+  final int? id;
+  final String? organizationName;
+  final String? designation;
+  final String? department;
+  final int? employeeId;
+  final DateTime? startDate;
+  final dynamic endDate;
+  final int? currentlyWorking;
+
+  Exprience({
+    this.id,
+    this.organizationName,
+    this.designation,
+    this.department,
+    this.employeeId,
+    this.startDate,
+    this.endDate,
+    this.currentlyWorking,
+  });
+
+  factory Exprience.fromJson(Map<String, dynamic> json) => Exprience(
+        id: json["id"],
+        organizationName: json["organization_name"],
+        designation: json["designation"],
+        department: json["department"],
+        employeeId: json["employee_id"],
+        startDate: json["start_date"] == null
+            ? null
+            : DateTime.parse(json["start_date"]),
+        endDate: json["end_date"],
+        currentlyWorking: json["currently_working"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "organization_name": organizationName,
+        "designation": designation,
+        "department": department,
+        "employee_id": employeeId,
+        "start_date":
+            "${startDate!.year.toString().padLeft(4, '0')}-${startDate!.month.toString().padLeft(2, '0')}-${startDate!.day.toString().padLeft(2, '0')}",
+        "end_date": endDate,
+        "currently_working": currentlyWorking,
+      };
+}
+
+class ProfessionalProfile {
+  final int? id;
+  final int? userId;
+  final String? key;
+  final String? value;
+
+  ProfessionalProfile({
+    this.id,
+    this.userId,
+    this.key,
+    this.value,
+  });
+
+  factory ProfessionalProfile.fromJson(Map<String, dynamic> json) =>
+      ProfessionalProfile(
+        id: json["id"],
+        userId: json["user_id"],
+        key: json["key"],
+        value: json["value"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "user_id": userId,
+        "key": key,
+        "value": value,
       };
 }
